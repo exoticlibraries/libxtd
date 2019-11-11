@@ -20,12 +20,15 @@
 #define s_assert_not_null(x) s_assert(x!=NULL)
 #define s_assert_true(x) s_assert(x)
 #define s_assert_false(x) s_assert(!x)
+#define s_assert_equal(x,y) s_assert(x==y)
+#define s_assert_not_equal(x,y) s_assert(x!=y)
 
 int TEST_COUNT = 0;
 int PASSED_TEST_COUNT = 0;
 int FAILED_TEST_COUNT = 0;
 
-S_API inline void s_assert(int x) {
+S_API inline void s_assert(int x) 
+{
 	TEST_COUNT++;
 	if (x == 1) {
 		PASSED_TEST_COUNT++;
@@ -36,9 +39,24 @@ S_API inline void s_assert(int x) {
 	}
 }
 
-S_API inline void s_test_runner_analyse() {
+S_API inline void s_test_runner_analyse() 
+{
 	fprintf(stdout, "Synthesis: Tested: %i | Passing: %i | Failing: %i \n", 
 								TEST_COUNT, PASSED_TEST_COUNT, FAILED_TEST_COUNT);
+}
+
+S_API inline void s_assert_chars_equal(char* chars1, char* chars2)
+{
+	sstring *str1;
+	sstring *str2;
+
+    if (sstring_new(&str1, chars1) != S_OK || sstring_new(&str2, chars2) != S_OK) {
+        s_assert_true(SFALSE);
+        return;
+    }
+	s_assert(sstring_equals(str1, str2));
+	sstring_destroy(str1);
+	sstring_destroy(str2);
 }
 
 #endif

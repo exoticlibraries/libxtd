@@ -23,5 +23,8 @@ int main(int argc, char **argv)
 
     s_test_runner_analyse();
     sstring_destroy(str);
+    sstring_destroy(str1);
+    sstring_destroy(str2);
+    sstring_destroy(str3);
     return 0;
 }
