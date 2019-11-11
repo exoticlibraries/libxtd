@@ -19,6 +19,8 @@ int main(int argc, char **argv)
     sstring_concat(str, "你们好āa");
     s_assert_chars_equal(sstring_get_value(str), "好And你们好āa");
     s_assert_equal(9, sstring_length(str));
+    s_assert_true(sstring_starts_with(str, "好"));
+    s_assert_true(sstring_ends_with(str, "好āa"));
     
     s_test_runner_analyse();
     sstring_destroy(str);

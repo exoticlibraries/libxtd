@@ -203,7 +203,25 @@ S_API enum sbool sstring_equals_no_case(sstring *str1, sstring *str2)
 */
 S_API enum sbool sstring_starts_with_from(sstring *str, char* chars, size_t from)
 {
+    int i, j;
+    size_t str_len;
+    size_t chars_len;
 
+    if (str == NULL) {
+        return SFALSE;
+    }
+    str_len = strlen(str->value);
+    chars_len = strlen(chars);
+    j = chars_len+from;
+    if (chars_len > str_len) {
+        return SFALSE;
+    }
+    for (i=from; i < j; i++) {
+        if (str->value[i] != chars[i-from]) {
+            return SFALSE;
+        }
+    }
+    return STRUE;    
 }
 
 /*
@@ -211,7 +229,7 @@ S_API enum sbool sstring_starts_with_from(sstring *str, char* chars, size_t from
 */
 S_API enum sbool sstring_starts_with(sstring *str, char* chars)
 {
-
+    return sstring_starts_with_from(str, chars, 0);
 }
 
 /*
@@ -219,7 +237,7 @@ S_API enum sbool sstring_starts_with(sstring *str, char* chars)
 */
 S_API enum sbool sstring_ends_with(sstring *str, char* chars)
 {
-
+    return sstring_starts_with_from(str, chars, strlen(str->value) - strlen(chars));
 }
 
 /*
