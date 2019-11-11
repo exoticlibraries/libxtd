@@ -4,15 +4,43 @@
 	:license: GNU Lesser General Public License v3.0 Copyright (c)
 	:author: Azeez Adewale <azeezadewale98@gmail.com>
 	:date: 10 November 2019
-	:filename: string.h
+	:filename: sstring.h
 **/
 
 #include "../include/sstring.h"
 
-size_t s_utf8len(char *s)
+/*
+    Get the correct length of any character array including 
+    characters encoded with utf8. The *strlen* in the `<string.h`> 
+    gives the full length of char array including utf8 
+    continuation characters.
+
+    The correct length is claculated by only counting characters 
+    that it top two bits is not set to 10 i.e characters less than 
+    `0x80` or greater than `0xbf`, and ignoring the continuation 
+    characters.
+
+    A temporary char array is created for effective and quick loop 
+    and to prevent destruction of the char array on returning from 
+    the function. 
+
+    **Parameters**:	
+		chars : char*
+            the character array to find it length
+	
+	**return**:
+		the correct length of character arrays in any encoding
+*/
+S_API size_t s_utf8len(char *chars)
 {
-    size_t len = 0;
-    for (; *s; ++s) if ((*s & 0xC0) != 0x80) ++len;
+    char *tmp_chars;
+    size_t len ;
+
+    tmp_chars = chars;
+    len = 0;
+    for (; *tmp_chars; ++tmp_chars) if ((*tmp_chars & 0xC0) != 0x80) ++len;
+    tmp_chars = NULL;
+    s_free(tmp_chars);
     return len;
 }
 
