@@ -34,23 +34,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "sbool.h"
 
 #define sct_free(x) free(x); x = NULL;
+
+#define sct_assert_true(x) if (x == 1) \
+							fprintf(stdout, "Assertion Passed\n"); \
+							else 								\
+							fprintf(stderr, "Assertion Failed\n");
 
 enum sct_stat {
 
     SCT_OK                   = 0,
 	SCT_ERR_ALLOC            = 1,
-
-};
-
-/*
-
-*/
-enum sct_bool {
-
-    SCT_TRUE                   = 1,
-	SCT_FALSE	               = 0
 
 };
 

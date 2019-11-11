@@ -18,17 +18,17 @@ SCT_API size_t 				sstring_length(sstring *str);
 
 SCT_API enum sct_stat		sstring_concat(sstring *str, char* chars);
 SCT_API enum sct_stat		sstring_set_value(sstring *str, char* chars);
-SCT_API enum sct_bool		sstring_is_empty(sstring *str);
-SCT_API enum sct_bool		sstring_equals(sstring *str1, sstring *str2);
-SCT_API enum sct_bool		sstring_equals_no_case(sstring *str1, sstring *str2);
-SCT_API enum sct_bool		sstring_starts_with_from(sstring *str, char* chars, size_t from);
-SCT_API enum sct_bool		sstring_starts_with(sstring *str, char* chars);
-SCT_API enum sct_bool		sstring_ends_with(sstring *str, char* chars);
-SCT_API enum sct_bool		sstring_index_of_from(sstring *str, char char_, size_t from);
-SCT_API enum sct_bool		sstring_index_of(sstring *str, char char_);
-SCT_API enum sct_bool		sstring_last_index_of_from(sstring *str, char char_, size_t from);
-SCT_API enum sct_bool		sstring_last_index_of(sstring *str, char char_);
-SCT_API enum sct_bool		sstring_contains(sstring *str1, char *chars);
+SCT_API enum sbool		sstring_is_empty(sstring *str);
+SCT_API enum sbool		sstring_equals(sstring *str1, sstring *str2);
+SCT_API enum sbool		sstring_equals_no_case(sstring *str1, sstring *str2);
+SCT_API enum sbool		sstring_starts_with_from(sstring *str, char* chars, size_t from);
+SCT_API enum sbool		sstring_starts_with(sstring *str, char* chars);
+SCT_API enum sbool		sstring_ends_with(sstring *str, char* chars);
+SCT_API enum sbool		sstring_index_of_from(sstring *str, char char_, size_t from);
+SCT_API enum sbool		sstring_index_of(sstring *str, char char_);
+SCT_API enum sbool		sstring_last_index_of_from(sstring *str, char char_, size_t from);
+SCT_API enum sbool		sstring_last_index_of(sstring *str, char char_);
+SCT_API enum sbool		sstring_contains(sstring *str1, char *chars);
 
 SCT_API void 				sstring_lower(sstring *str);
 SCT_API void 				sstring_upper(sstring *str);
