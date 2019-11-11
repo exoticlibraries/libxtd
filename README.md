@@ -1,2 +1,2 @@
-# super-c-types
+# libsupertypes
 A library of generic and complex data types for C

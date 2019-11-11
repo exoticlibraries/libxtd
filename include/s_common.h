@@ -4,11 +4,11 @@
 	:license: GNU Lesser General Public License v3.0 Copyright (c) 
 	:author: Azeez Adewale <azeezadewale98@gmail.com>
 	:date: 10 November 2019
-	:filename: sct_common.h
+	:filename: s_common.h
 */
 
-#ifndef SCT_COMMON_H
-#define SCT_COMMON_H
+#ifndef S_COMMON_H
+#define S_COMMON_H
 
 #ifdef _WIN32
 /*
@@ -26,9 +26,9 @@
 #define SIMPLE_WINDLLEXPORT 0
 #endif
 #if SIMPLE_WINDLLEXPORT
-#define SCT_API __declspec(dllexport)
+#define S_API __declspec(dllexport)
 #else
-#define SCT_API extern
+#define S_API extern
 #endif
 
 #include <stdlib.h>
@@ -36,17 +36,12 @@
 #include <stdio.h>
 #include "sbool.h"
 
-#define sct_free(x) free(x); x = NULL;
+#define s_free(x) free(x); x = NULL;
 
-#define sct_assert_true(x) if (x == 1) \
-							fprintf(stdout, "Assertion Passed\n"); \
-							else 								\
-							fprintf(stderr, "Assertion Failed\n");
+enum s_stat {
 
-enum sct_stat {
-
-    SCT_OK                   = 0,
-	SCT_ERR_ALLOC            = 1,
+    S_OK                   = 0,
+	S_ERR_ALLOC            = 1,
 
 };
 

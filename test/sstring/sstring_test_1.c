@@ -5,7 +5,7 @@
 int main(int argc, char **argv) 
 {
     sstring *str;
-    if (string_new(&str, "Hello World") != SCT_OK) {
+    if (string_new(&str, "Hello World") != S_OK) {
         printf("Init failed\n");
         return 1;
     }

@@ -12,7 +12,7 @@
 /*
 
 */
-SCT_API enum sct_stat sstring_new(sstring **out, char* chars) 
+SCT_API enum s_stat sstring_new(sstring **out, char* chars) 
 {
     return sstring_new_len(out, chars, strlen(chars));
 }
@@ -20,7 +20,7 @@ SCT_API enum sct_stat sstring_new(sstring **out, char* chars)
 /*
 
 */
-SCT_API enum sct_stat sstring_new_len(sstring **out, char* chars, size_t str_size)
+SCT_API enum s_stat sstring_new_len(sstring **out, char* chars, size_t str_size)
 {
     sstring *str;
     int x ;
@@ -67,7 +67,7 @@ SCT_API size_t sstring_length(sstring *str)
 /*
 
 */
-SCT_API enum sct_stat sstring_concat(sstring *str, char* chars)
+SCT_API enum s_stat sstring_concat(sstring *str, char* chars)
 {
     char* concat_value;
     size_t str_size;
@@ -77,15 +77,15 @@ SCT_API enum sct_stat sstring_concat(sstring *str, char* chars)
     strcpy(concat_value, str->value);
     strcat(concat_value, chars);
 
-    enum sct_stat status = sstring_set_value(str, concat_value);
-    sct_free(concat_value);
+    enum s_stat status = sstring_set_value(str, concat_value);
+    s_free(concat_value);
     return status;
 }
 
 /*
 
 */
-SCT_API enum sct_stat sstring_set_value(sstring *str, char* chars)
+SCT_API enum s_stat sstring_set_value(sstring *str, char* chars)
 {
     int x ;
     int str_size;
