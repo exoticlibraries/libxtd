@@ -19,7 +19,7 @@
 */
 enum sbool {
 
-    STRUE                   = 1,
+	STRUE                   = 1,
 	SFALSE	                = 0
 
 };
