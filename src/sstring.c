@@ -9,6 +9,13 @@
 
 #include "../include/sstring.h"
 
+size_t s_utf8len(char *s)
+{
+    size_t len = 0;
+    for (; *s; ++s) if ((*s & 0xC0) != 0x80) ++len;
+    return len;
+}
+
 /*
 
 */
@@ -39,7 +46,7 @@ S_API enum s_stat sstring_new_len(sstring **out, char* chars, size_t str_size)
         str->value[x] = chars[x] ;
 	}
     str->value[str_size] = '\0' ;
-    str->size = str_size;
+    str->size = s_utf8len(str->value);
 
     *out = str;
     return S_OK;
@@ -101,7 +108,7 @@ S_API enum s_stat sstring_set_value(sstring *str, char* chars)
         str->value[x] = chars[x] ;
 	}
     str->value[str_size] = '\0' ;
-    str->size = str_size;
+    str->size = s_utf8len(str->value);
     return S_OK;
 }
 
