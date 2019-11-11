@@ -6,10 +6,10 @@ int main(int argc, char **argv)
 {
     sstring *str;
     if (string_new(&str, "Hello World") != SCT_OK) {
-        fprintf(stderr, "Init failed\n");
+        printf("Init failed\n");
         return 1;
     }
-    printf("Value: %s, Length: \n", string_get_value(str), string_length(str));
+    printf("Value: '%s', Length: %d\n", string_get_value(str), string_length(str));
     string_destroy(str);
     
 

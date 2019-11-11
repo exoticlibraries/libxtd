@@ -12,51 +12,54 @@
 /*
 
 */
-SCT_API enum sct_stat string_new(sstring **out, char* chars) 
+SCT_API enum sct_stat sstring_new(sstring **out, char* chars) 
 {
-    string_new_len(out, chars, strlen(chars));
+    return sstring_new_len(out, chars, strlen(chars));
 }
 
 /*
 
 */
-SCT_API enum sct_stat string_new_len(sstring **out, char* chars, size_t str_size)
+SCT_API enum sct_stat sstring_new_len(sstring **out, char* chars, size_t str_size)
 {
     sstring *str;
     int x ;
 
     str = (struct sstring*) malloc(sizeof(struct sstring));
     if (!str) {
-        return SCC_ERR_ALLOC;
+        return SCT_ERR_ALLOC;
     }
     str->value = (char*) malloc(str_size + 1);
     if (!str->value) {
         free((void*)str);
-        return SCC_ERR_ALLOC;
+        return SCT_ERR_ALLOC;
     }
 
     for ( x = 0 ; x < str_size ; x++ ) {
         str->value[x] = chars[x] ;
 	}
+    str->value[str_size] = '\0' ;
     str->size = str_size;
 
     *out = str;
+    return SCT_OK;
 }
 
 /*
  
  */
-SCT_API void string_destroy(sstring *str)
+SCT_API void sstring_destroy(sstring *str)
 {
-    str->size = 0;
     free(str->value);
+    str->value = NULL;
     free(str);
+    str = NULL;
 }
 
 /*
 
 */
-SCT_API size_t string_length(sstring *str)
+SCT_API size_t sstring_length(sstring *str)
 {
     return str->size;
 }
@@ -64,7 +67,59 @@ SCT_API size_t string_length(sstring *str)
 /*
 
 */
-SCT_API enum sct_stat string_concat(sstring **out, char* chars)
+SCT_API enum sct_stat sstring_concat(sstring *str, char* chars)
+{
+    char* concat_value;
+    size_t str_size;
+    
+    str_size = strlen(chars) + strlen(str->value);
+    concat_value = malloc(str_size+1);
+    strcpy(concat_value, str->value);
+    strcat(concat_value, chars);
+
+    enum sct_stat status = sstring_set_value(str, concat_value);
+    sct_free(concat_value);
+    return status;
+}
+
+/*
+
+*/
+SCT_API enum sct_stat sstring_set_value(sstring *str, char* chars)
+{
+    int x ;
+    int str_size;
+
+    str_size = strlen(chars);
+    free(str->value);
+    str->value = (char*) malloc(str_size + 1);
+    if (!str->value) {
+        return SCT_ERR_ALLOC;
+    }
+
+    for ( x = 0 ; x < str_size ; x++ ) {
+        str->value[x] = chars[x] ;
+	}
+    str->value[str_size] = '\0' ;
+    str->size = str_size;
+    return SCT_OK;
+}
+
+/*
+
+*/
+SCT_API enum sct_bool sstring_is_empty(sstring *str)
+{
+    if (str->size == 0) {
+        return SCT_TRUE;
+    }
+    return SCT_FALSE;
+}
+
+/*
+
+*/
+SCT_API enum sct_bool sstring_equals(sstring *str1, sstring *str2)
 {
     
 }
@@ -72,7 +127,7 @@ SCT_API enum sct_stat string_concat(sstring **out, char* chars)
 /*
 
 */
-SCT_API enum sct_stat string_set_value(sstring **out, char* chars)
+SCT_API enum sct_bool sstring_equals_no_case(sstring *str1, sstring *str2)
 {
 
 }
@@ -80,7 +135,7 @@ SCT_API enum sct_stat string_set_value(sstring **out, char* chars)
 /*
 
 */
-SCT_API enum sct_bool string_is_empty(sstring *str)
+SCT_API enum sct_bool sstring_starts_with_from(sstring *str, char* chars, size_t from)
 {
 
 }
@@ -88,7 +143,7 @@ SCT_API enum sct_bool string_is_empty(sstring *str)
 /*
 
 */
-SCT_API enum sct_bool string_equals(sstring *str1, sstring *str2)
+SCT_API enum sct_bool sstring_starts_with(sstring *str, char* chars)
 {
 
 }
@@ -96,7 +151,7 @@ SCT_API enum sct_bool string_equals(sstring *str1, sstring *str2)
 /*
 
 */
-SCT_API enum sct_bool string_equals_no_case(sstring *str1, sstring *str2)
+SCT_API enum sct_bool sstring_ends_with(sstring *str, char* chars)
 {
 
 }
@@ -104,7 +159,7 @@ SCT_API enum sct_bool string_equals_no_case(sstring *str1, sstring *str2)
 /*
 
 */
-SCT_API enum sct_bool string_starts_with_from(sstring *str, char* chars, size_t from)
+SCT_API enum sct_bool sstring_index_of_from(sstring *str, char char_, size_t from)
 {
 
 }
@@ -112,7 +167,7 @@ SCT_API enum sct_bool string_starts_with_from(sstring *str, char* chars, size_t 
 /*
 
 */
-SCT_API enum sct_bool string_starts_with(sstring *str, char* chars)
+SCT_API enum sct_bool sstring_index_of(sstring *str, char char_)
 {
 
 }
@@ -120,7 +175,7 @@ SCT_API enum sct_bool string_starts_with(sstring *str, char* chars)
 /*
 
 */
-SCT_API enum sct_bool string_ends_with(sstring *str, char* chars)
+SCT_API enum sct_bool sstring_last_index_of_from(sstring *str, char char_, size_t from)
 {
 
 }
@@ -128,7 +183,7 @@ SCT_API enum sct_bool string_ends_with(sstring *str, char* chars)
 /*
 
 */
-SCT_API enum sct_bool string_index_of_from(sstring *str, char char_, size_t from)
+SCT_API enum sct_bool sstring_last_index_of(sstring *str, char char_)
 {
 
 }
@@ -136,31 +191,7 @@ SCT_API enum sct_bool string_index_of_from(sstring *str, char char_, size_t from
 /*
 
 */
-SCT_API enum sct_bool string_index_of(sstring *str, char char_)
-{
-
-}
-
-/*
-
-*/
-SCT_API enum sct_bool string_last_index_of_from(sstring *str, char char_, size_t from)
-{
-
-}
-
-/*
-
-*/
-SCT_API enum sct_bool string_last_index_of(sstring *str, char char_)
-{
-
-}
-
-/*
-
-*/
-SCT_API enum sct_bool string_contains(sstring *str1, char *chars)
+SCT_API enum sct_bool sstring_contains(sstring *str1, char *chars)
 {
 
 }
@@ -169,7 +200,7 @@ SCT_API enum sct_bool string_contains(sstring *str1, char *chars)
 
 */
 
-SCT_API void string_lower(sstring **out)
+SCT_API void sstring_lower(sstring *str)
 {
 
 }
@@ -177,7 +208,7 @@ SCT_API void string_lower(sstring **out)
 /*
 
 */
-SCT_API void string_upper(sstring **out)
+SCT_API void sstring_upper(sstring *str)
 {
 
 }
@@ -185,7 +216,7 @@ SCT_API void string_upper(sstring **out)
 /*
 
 */
-SCT_API void string_trim(sstring **out)
+SCT_API void sstring_trim(sstring *str)
 {
 
 }
@@ -193,7 +224,7 @@ SCT_API void string_trim(sstring **out)
 /*
 
 */
-SCT_API void string_sub_string(sstring *str, size_t from, size_t to, sstring **out)
+SCT_API void sstring_sub_string(sstring *str, size_t from, size_t to, sstring *str1)
 {
 
 }
@@ -201,7 +232,7 @@ SCT_API void string_sub_string(sstring *str, size_t from, size_t to, sstring **o
 /*
 
 */
-SCT_API void string_replace(sstring **out, char *in)
+SCT_API void sstring_replace(sstring *str, char *in)
 {
 
 }
@@ -209,12 +240,12 @@ SCT_API void string_replace(sstring **out, char *in)
 /*
 
 */
-//SCT_API void string_split(List **out, sstring *str, char* chars);
+//SCT_API void sstring_split(List *out, sstring *str, char* chars);
 
 /*
 
 */
-SCT_API void string_format(sstring **out, char *in, ...)
+SCT_API void sstring_format(sstring *str, char *in, ...)
 {
 
 }
@@ -223,7 +254,7 @@ SCT_API void string_format(sstring **out, char *in, ...)
 
 */
 
-SCT_API char  string_chat_at(sstring *str, size_t index, char** out)
+SCT_API char  sstring_chat_at(sstring *str, size_t index, char** out)
 {
 
 }
@@ -231,7 +262,7 @@ SCT_API char  string_chat_at(sstring *str, size_t index, char** out)
 /*
 
 */
-SCT_API char*  string_get_value(sstring *str)
+SCT_API char*  sstring_get_value(sstring *str)
 {
     return str->value;
 }

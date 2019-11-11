@@ -33,11 +33,14 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+
+#define sct_free(x) free(x); x = NULL;
 
 enum sct_stat {
 
     SCT_OK                   = 0,
-	SCC_ERR_ALLOC            = 1,
+	SCT_ERR_ALLOC            = 1,
 
 };
 
@@ -47,7 +50,7 @@ enum sct_stat {
 enum sct_bool {
 
     SCT_TRUE                   = 1,
-	SCC_FALSE	               = 0
+	SCT_FALSE	               = 0
 
 };
 
