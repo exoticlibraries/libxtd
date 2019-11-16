@@ -17,11 +17,11 @@
 /*
 
 */
-enum sbool {
+typedef enum sbool {
 
 	STRUE                   = 1,
 	SFALSE	                = 0
 
-};
+} sbool;
 
 #endif

@@ -47,7 +47,7 @@ S_API size_t s_utf8len(char *chars)
 /*
 
 */
-S_API enum s_stat sstring_new(sstring **out, char* chars) 
+S_API s_stat sstring_new(sstring **out, char* chars) 
 {
     return sstring_new_len(out, chars, strlen(chars));
 }
@@ -55,7 +55,7 @@ S_API enum s_stat sstring_new(sstring **out, char* chars)
 /*
 
 */
-S_API enum s_stat sstring_new_len(sstring **out, char* chars, size_t str_size)
+S_API s_stat sstring_new_len(sstring **out, char* chars, size_t str_size)
 {
     sstring *str;
     int x ;
@@ -102,7 +102,7 @@ S_API size_t sstring_length(sstring *str)
 /*
 
 */
-S_API enum s_stat sstring_concat(sstring *str, char* chars)
+S_API s_stat sstring_concat(sstring *str, char* chars)
 {
     char* concat_value;
     size_t str_size;
@@ -112,7 +112,7 @@ S_API enum s_stat sstring_concat(sstring *str, char* chars)
     strcpy(concat_value, str->value);
     strcat(concat_value, chars);
 
-    enum s_stat status = sstring_set_value(str, concat_value);
+    s_stat status = sstring_set_value(str, concat_value);
     s_free(concat_value);
     return status;
 }
@@ -120,7 +120,7 @@ S_API enum s_stat sstring_concat(sstring *str, char* chars)
 /*
 
 */
-S_API enum s_stat sstring_set_value(sstring *str, char* chars)
+S_API s_stat sstring_set_value(sstring *str, char* chars)
 {
     int x ;
     int str_size;
@@ -143,7 +143,7 @@ S_API enum s_stat sstring_set_value(sstring *str, char* chars)
 /*
 
 */
-S_API enum sbool sstring_is_empty(sstring *str)
+S_API sbool sstring_is_empty(sstring *str)
 {
     if (str->size == 0) {
         return STRUE;
@@ -154,7 +154,7 @@ S_API enum sbool sstring_is_empty(sstring *str)
 /*
 
 */
-S_API enum sbool sstring_equals(sstring *str1, sstring *str2)
+S_API sbool sstring_equals(sstring *str1, sstring *str2)
 {
     int i;
 
@@ -177,7 +177,7 @@ S_API enum sbool sstring_equals(sstring *str1, sstring *str2)
 /*
 
 */
-S_API enum sbool sstring_equals_no_case(sstring *str1, sstring *str2)
+S_API sbool sstring_equals_no_case(sstring *str1, sstring *str2)
 {
     int i;
 
@@ -201,7 +201,7 @@ S_API enum sbool sstring_equals_no_case(sstring *str1, sstring *str2)
 /*
 
 */
-S_API enum sbool sstring_starts_with_from(sstring *str, char* chars, size_t from)
+S_API sbool sstring_starts_with_from(sstring *str, char* chars, size_t from)
 {
     int i, j;
     size_t str_len;
@@ -227,7 +227,7 @@ S_API enum sbool sstring_starts_with_from(sstring *str, char* chars, size_t from
 /*
 
 */
-S_API enum sbool sstring_starts_with(sstring *str, char* chars)
+S_API sbool sstring_starts_with(sstring *str, char* chars)
 {
     return sstring_starts_with_from(str, chars, 0);
 }
@@ -235,7 +235,7 @@ S_API enum sbool sstring_starts_with(sstring *str, char* chars)
 /*
 
 */
-S_API enum sbool sstring_ends_with(sstring *str, char* chars)
+S_API sbool sstring_ends_with(sstring *str, char* chars)
 {
     return sstring_starts_with_from(str, chars, strlen(str->value) - strlen(chars));
 }
@@ -261,13 +261,16 @@ S_API enum sbool sstring_ends_with(sstring *str, char* chars)
 */
 S_API size_t sstring_index_of_from(sstring *str, char* chars, size_t from)
 {
-    int i, j, k, l, m;
+    int i, j, k, l;
     size_t str_len;
     size_t chars_len;
     sstring *str1;
 
     if (str == NULL) {
         return -1;
+    }
+    if (from < 0) {
+        from = 0;
     }
     str_len = strlen(str->value);
     chars_len = strlen(chars);
@@ -282,8 +285,7 @@ S_API size_t sstring_index_of_from(sstring *str, char* chars, size_t from)
         sstring_destroy(str1);
         return -1;
     }
-    //TODO: remove fromm from actual length not strlen
-    for (i=0, l=-1, m=0; i < str_len; i++) {
+    for (i=0, l=-1; i < str_len; i++) {
         if ((str->value[i] & 0xC0) != 0x80) { ++l; } 
         if (l < from) { continue; } 
         if (str->value[i] == chars[0]) {
@@ -320,7 +322,43 @@ S_API size_t sstring_index_of(sstring *str, char* chars)
 */
 S_API size_t sstring_last_index_of_from(sstring *str, char* chars, size_t from)
 {
-    
+    int i, j, k, l, right_most;
+    size_t str_len;
+    size_t chars_len;
+    sstring *str1;
+
+    if (str == NULL) {
+        return -1;
+    }
+    if (from < 0) {
+        return -1;
+    }
+    str_len = strlen(str->value);
+    chars_len = strlen(chars);
+    right_most = str_len - chars_len;
+    if (chars_len == 0) {
+        return from;
+    }
+    if (from > right_most) {
+        from = right_most;
+    }
+    if (chars_len > str_len-from) {
+        return -1;
+    } else if (chars_len == str_len-from) {
+        sstring_new_len(&str1, chars, chars_len);
+        if (sstring_equals(str, str1) == STRUE) {
+            sstring_destroy(str1);
+            return 0;
+        }
+        sstring_destroy(str1);
+        return -1;
+    }
+    printf("'");
+    for (i=str_len-1, l=-1; i > -1 ; i--) {
+        printf("%c", str->value[i]);
+    }
+    printf("'\n");
+    return -1;
 }
 
 /*
@@ -328,13 +366,13 @@ S_API size_t sstring_last_index_of_from(sstring *str, char* chars, size_t from)
 */
 S_API size_t sstring_last_index_of(sstring *str, char* chars)
 {
-    
+    return sstring_last_index_of_from(str, chars, strlen(chars));
 }
 
 /*
 
 */
-S_API enum sbool sstring_contains(sstring *str1, char *chars)
+S_API sbool sstring_contains(sstring *str1, char *chars)
 {
 
 }

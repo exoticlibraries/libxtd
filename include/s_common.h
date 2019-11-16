@@ -38,11 +38,11 @@
 
 #define s_free(x) free(x); x = NULL;
 
-enum s_stat {
+typedef enum s_stat {
 
     S_OK                   = 0,
 	S_ERR_ALLOC            = 1,
 
-};
+} s_stat;
 
 #endif
