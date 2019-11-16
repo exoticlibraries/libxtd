@@ -42,6 +42,7 @@ typedef enum s_stat {
 
     S_OK                   = 0,
 	S_ERR_ALLOC            = 1,
+	S_ERR_FAIL             = 2
 
 } s_stat;
 

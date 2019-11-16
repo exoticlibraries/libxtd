@@ -120,6 +120,17 @@ S_API s_stat sstring_concat(sstring *str, char* chars)
 /*
 
 */
+S_API s_stat sstring_concat_char(sstring *str, char char_) 
+{
+    int len = strlen(str->value);
+    str->value[len] = char_;
+    str->value[len+1] = '\0';
+    return S_OK;
+}
+
+/*
+
+*/
 S_API s_stat sstring_set_value(sstring *str, char* chars)
 {
     int x ;
@@ -277,7 +288,9 @@ S_API size_t sstring_index_of_from(sstring *str, char* chars, size_t from)
     if (chars_len > str_len-from) {
         return -1;
     } else if (chars_len == str_len-from) {
-        sstring_new_len(&str1, chars, chars_len);
+        if (sstring_new_len(&str1, chars, chars_len) != S_OK) {
+            return -1;
+        }
         if (sstring_equals(str, str1) == STRUE) {
             sstring_destroy(str1);
             return 0;
@@ -289,10 +302,10 @@ S_API size_t sstring_index_of_from(sstring *str, char* chars, size_t from)
         if ((str->value[i] & 0xC0) != 0x80) { ++l; } 
         if (l < from) { continue; } 
         if (str->value[i] == chars[0]) {
-            if (chars_len == 1) return i;
+            if (chars_len == 1) return l;
             j = 0; k = i;
             while (chars[++j] == str->value[++k]) {}
-            if (chars_len+from==j+from) return l-from;
+            if (chars_len==j) return l-from;
         }
     }
     return -1;
@@ -345,7 +358,9 @@ S_API size_t sstring_last_index_of_from(sstring *str, char* chars, size_t from)
     if (chars_len > str_len-from) {
         return -1;
     } else if (chars_len == str_len-from) {
-        sstring_new_len(&str1, chars, chars_len);
+        if (sstring_new_len(&str1, chars, chars_len) != S_OK) {
+            return -1;
+        }
         if (sstring_equals(str, str1) == STRUE) {
             sstring_destroy(str1);
             return 0;
@@ -353,11 +368,21 @@ S_API size_t sstring_last_index_of_from(sstring *str, char* chars, size_t from)
         sstring_destroy(str1);
         return -1;
     }
-    printf("'");
     for (i=str_len-1, l=-1; i > -1 ; i--) {
-        printf("%c", str->value[i]);
+        //printf("%c", str->value[i]);
+        if ((str->value[i] & 0xC0) != 0x80) { ++l; } 
+        if (l < from) { continue; } 
+        //printf("%c,%c\n", str->value[i], chars[chars_len-1]);
+        if (str->value[i] == chars[chars_len-1]) {
+            if (chars_len == 1) return str_len-l-1;
+            j = chars_len-1; k = i;
+            while (str->value[--k] == chars[--j]) {
+                //printf("%c,%c\n", str->value[k], chars[j]);
+            }
+            //printf("::%i,%i,%i,%i\n",chars_len,from,j,k);
+            if (j==-1) return str_len-l-chars_len;
+        }
     }
-    printf("'\n");
     return -1;
 }
 
@@ -373,6 +398,30 @@ S_API size_t sstring_last_index_of(sstring *str, char* chars)
 
 */
 S_API sbool sstring_contains(sstring *str1, char *chars)
+{
+
+}
+
+/*
+
+*/
+S_API s_stat sstring_substring_to(sstring *str1, size_t begin, size_t end, sstring **out)
+{
+
+}
+
+/*
+
+*/
+S_API s_stat sstring_substring(sstring *str1, size_t begin, sstring **out)
+{
+
+}
+
+/*
+
+*/
+S_API s_stat sstring_reverse(sstring *str1, sstring **out)
 {
 
 }
@@ -432,12 +481,42 @@ S_API void sstring_format(sstring *str, char *in, ...)
 }
 
 /*
-
+    //use for substring
 */
-
-S_API char  sstring_chat_at(sstring *str, size_t index, char** out)
+S_API char* sstring_chars_at(sstring *str, size_t index)
 {
+    int i,j,l;
+    size_t str_len;
+    sstring* str1;
+    char* value ;
 
+    if (sstring_new_len(&str1, "", 0) != S_OK) {
+        return "";
+    }
+    if (str == NULL) {
+        goto return_label;
+    }
+    str_len = strlen(str->value);
+    if (index >= str_len) {
+        goto return_label;
+    }
+    for (i=0, l=-1; i < str_len; i++) {
+        if ((str->value[i] & 0xC0) != 0x80) { ++l; }
+        if (l==index) {
+            j = i;
+            sstring_concat_char(str1, str->value[i]); 
+            for (++j; j < str_len; j++) {
+                if ((str->value[j] & 0xC0) != 0x80) { break; }
+                sstring_concat_char(str1, str->value[j]); 
+            }
+            goto return_label;
+        }
+    }
+    return_label:
+        value = malloc(strlen(str1->value));
+        strcpy(value,str1->value);
+        sstring_destroy(str1);
+        return value;
 }
 
 /*
