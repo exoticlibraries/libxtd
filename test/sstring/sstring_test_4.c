@@ -6,9 +6,6 @@
 int main(int argc, char **argv) 
 {
     sstring *str;
-    sstring *str1;
-    sstring *str2;
-    sstring *str3;
 
     if (sstring_new(&str, "Terry A Davis") != S_OK) {
         printf("Init failed\n");

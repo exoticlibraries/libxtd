@@ -72,7 +72,7 @@ S_API enum s_stat sstring_new_len(sstring **out, char* chars, size_t str_size)
 
     for ( x = 0 ; x < str_size ; x++ ) {
         str->value[x] = chars[x] ;
-	}
+    }
     str->value[str_size] = '\0' ;
     str->size = s_utf8len(str->value);
 
@@ -241,35 +241,94 @@ S_API enum sbool sstring_ends_with(sstring *str, char* chars)
 }
 
 /*
+    Get the index within the character array the occurence of 
+    the specified character if no occurence after start from 
+    value -1 is returned. 
+
+    The function work fine with utf8 encoded character sets.
+
+    **Parameters**:	
+		str : sstring*
+            the pointer to the sstring struct
+		char_ : char
+            a character to find it index
+		from : size_t
+            the index to start the search from
+	
+	**return**:
+		the index of the first occurence after the from index in 
+        the characters array.
+*/
+S_API size_t sstring_index_of_from(sstring *str, char* chars, size_t from)
+{
+    int i, j, k, l, m;
+    size_t str_len;
+    size_t chars_len;
+    sstring *str1;
+
+    if (str == NULL) {
+        return -1;
+    }
+    str_len = strlen(str->value);
+    chars_len = strlen(chars);
+    if (chars_len > str_len-from) {
+        return -1;
+    } else if (chars_len == str_len-from) {
+        sstring_new_len(&str1, chars, chars_len);
+        if (sstring_equals(str, str1) == STRUE) {
+            sstring_destroy(str1);
+            return 0;
+        }
+        sstring_destroy(str1);
+        return -1;
+    }
+    //TODO: remove fromm from actual length not strlen
+    for (i=0, l=-1, m=0; i < str_len; i++) {
+        if ((str->value[i] & 0xC0) != 0x80) { ++l; } 
+        if (l < from) { continue; } 
+        if (str->value[i] == chars[0]) {
+            if (chars_len == 1) return i;
+            j = 0; k = i;
+            while (chars[++j] == str->value[++k]) {}
+            if (chars_len+from==j+from) return l-from;
+        }
+    }
+    return -1;
+}
+
+/*
+    Get the index within the character array the first occurence 
+    of the specified character if no occurence -1 is returned.
+
+    **Parameters**:	
+		str : sstring*
+            the pointer to the sstring struct
+		chars : char*
+            a character to find it index
+	
+	**return**:
+		the index of the first occurence in the characters array.
+*/
+S_API size_t sstring_index_of(sstring *str, char* chars)
+{
+    return sstring_index_of_from(str, chars, 0);
+}
+
+/*
+    
 
 */
-S_API enum sbool sstring_index_of_from(sstring *str, char char_, size_t from)
+S_API size_t sstring_last_index_of_from(sstring *str, char* chars, size_t from)
 {
-
+    
 }
 
 /*
 
 */
-S_API enum sbool sstring_index_of(sstring *str, char char_)
+S_API size_t sstring_last_index_of(sstring *str, char* chars)
 {
-
-}
-
-/*
-
-*/
-S_API enum sbool sstring_last_index_of_from(sstring *str, char char_, size_t from)
-{
-
-}
-
-/*
-
-*/
-S_API enum sbool sstring_last_index_of(sstring *str, char char_)
-{
-
+    
 }
 
 /*
