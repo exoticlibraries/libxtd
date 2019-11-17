@@ -6,11 +6,11 @@
 
 int main(int argc, char **argv) 
 {
-    enum sbool bool1 = SFALSE;
-    enum sbool bool2 = STRUE;
-    enum sbool bool3 = FALSE;
-    enum sbool bool4 = FALSE;
-    enum sbool bool5 = TRUE;
+    sbool bool1 = SFALSE;
+    sbool bool2 = STRUE;
+    sbool bool3 = FALSE;
+    sbool bool4 = FALSE;
+    sbool bool5 = TRUE;
 
     s_assert_false(bool1);
     s_assert_true(bool2);

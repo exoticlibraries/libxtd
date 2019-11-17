@@ -6,24 +6,29 @@ Types to be implemented
 - [x] [sbool](./include/sbool.h) - boolean 
 - [x] [sstring](./include/sstring.h) - mutable string
 - [ ] sxstring - immutable string
-- [ ] sint - integer
-- [ ] suint - unsigned integer
-- [ ] schar - signed char
-- [ ] suchar - unsigned char
-- [ ] sshort - signed short
-- [ ] sushort - unsigned short
+- [x] sint - integer
+- [x] suint - unsigned integer
+- [x] schar - signed char
+- [x] suchar - unsigned char
+- [x] sshort - signed short
+- [x] sushort - unsigned short
 - [ ] sbyte
-- [ ] sfloat
-- [ ] slong - signed long
-- [ ] sulong - unsigned long
-- [ ] si8 - 8-bit signed integer
-- [ ] si16 - 16-bit signed integer
-- [ ] si32 - 32-bit signed integer
-- [ ] su64 - 64-bit signed integer
-- [ ] sui8 - 8-bit unsigned integer
-- [ ] sui16 - 16-bit unsigned integer
-- [ ] sui32 - 32-bit unsigned integer
-- [ ] sui64 - 64-bit unsigned integer
+- [x] sfloat
+- [x] sdouble
+- [x] slong - signed long
+- [x] sulong - unsigned long
+- [x] sssize - signed size
+- [x] ssize - unsigned size
+- [x] sint8 - 8-bit signed integer
+- [x] sint16 - 16-bit signed integer
+- [x] sint32 - 32-bit signed integer
+- [x] suint64 - 64-bit signed integer
+- [x] suint8 - 8-bit unsigned integer
+- [x] suint16 - 16-bit unsigned integer
+- [x] suint32 - 32-bit unsigned integer
+- [x] suint64 - 64-bit unsigned integer
+- [x] soffset - signed integer for file offset
+- [x] sintptr - signed integer that can hold any pointer
 - [ ] slist
 - [ ] smap
 - [ ] slinkedlist

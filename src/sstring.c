@@ -335,7 +335,7 @@ S_API size_t sstring_index_of(sstring *str, char* chars)
 */
 S_API size_t sstring_last_index_of_from(sstring *str, char* chars, size_t from)
 {
-    int i, j, k, l, right_most;
+    int i, j, k, l, m, right_most;
     size_t str_len;
     size_t chars_len;
     sstring *str1;
@@ -348,39 +348,27 @@ S_API size_t sstring_last_index_of_from(sstring *str, char* chars, size_t from)
     }
     str_len = strlen(str->value);
     chars_len = strlen(chars);
-    right_most = str_len - chars_len;
+    right_most = str->size - from;
     if (chars_len == 0) {
         return from;
     }
-    if (from > right_most) {
-        from = right_most;
-    }
-    if (chars_len > str_len-from) {
+    printf("$%i,%i,%i,%i\n", chars_len, str_len, from, right_most);
+    if (chars_len > from) {
         return -1;
-    } else if (chars_len == str_len-from) {
-        if (sstring_new_len(&str1, chars, chars_len) != S_OK) {
-            return -1;
-        }
-        if (sstring_equals(str, str1) == STRUE) {
-            sstring_destroy(str1);
-            return 0;
-        }
-        sstring_destroy(str1);
-        return -1;
-    }
-    for (i=str_len-1, l=-1; i > -1 ; i--) {
+    } 
+    for (i=right_most, l=-1, m=0; i > -1 ; --i,++m) {
         //printf("%c", str->value[i]);
-        if ((str->value[i] & 0xC0) != 0x80) { ++l; } 
-        if (l < from) { continue; } 
-        //printf("%c,%c\n", str->value[i], chars[chars_len-1]);
+        if ((str->value[i] & 0xC0) != 0x80) { ++l; }
+        printf("%c,%c,%i,%i,%i\n", str->value[i],chars[chars_len-1],m,l,from);
+        //if (l < from-m) { continue; } 
         if (str->value[i] == chars[chars_len-1]) {
-            if (chars_len == 1) return str_len-l-1;
+            if (chars_len == 1) return from-s_utf8len(chars);
             j = chars_len-1; k = i;
             while (str->value[--k] == chars[--j]) {
                 //printf("%c,%c\n", str->value[k], chars[j]);
             }
-            //printf("::%i,%i,%i,%i\n",chars_len,from,j,k);
-            if (j==-1) return str_len-l-chars_len;
+            printf("::%i,%i,%i,%i,%i,%i,%i,%i,%i\n",str->size,i,chars_len,s_utf8len(chars),from,j,k,l,m);
+            if (j==-1) return str->size - s_utf8len(chars) - m;
         }
     }
     return -1;
@@ -391,7 +379,7 @@ S_API size_t sstring_last_index_of_from(sstring *str, char* chars, size_t from)
 */
 S_API size_t sstring_last_index_of(sstring *str, char* chars)
 {
-    return sstring_last_index_of_from(str, chars, strlen(chars));
+    return sstring_last_index_of_from(str, chars, strlen(str->value));
 }
 
 /*

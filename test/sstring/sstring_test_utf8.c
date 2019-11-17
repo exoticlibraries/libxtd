@@ -6,7 +6,7 @@
 int main(int argc, char **argv) 
 {
     sstring *str;
-    if (sstring_new(&str, "x好āaas好And你们x好āa||x好āa") != S_OK) {
+    if (sstring_new(&str, "x好āaas好And你们x好āax好āa") != S_OK) {
         printf("Init failed\n");
         return 1;
     }
@@ -24,8 +24,8 @@ int main(int argc, char **argv)
     //s_assert_equal(sstring_index_of(str, "们"), 5);
     //s_assert_equal(sstring_index_of(str, "好"), 0);
     //s_assert_equal(sstring_index_of_from(str, "好", 2), 4);
-    //printf("::%i\n", sstring_last_index_of(str, "x好āa"));
-    printf("%s\n", sstring_chars_at(str, 18));
+    printf("::%i\n", sstring_last_index_of(str, "x好āa"));
+    printf("%s\n", sstring_chars_at(str, 16));
     //s_assert_equal(sstring_last_index_of_from(str, "like", 18), 0);
     
     //s_test_runner_analyse();

@@ -11,17 +11,16 @@
 #ifndef S_BOOL_H
 #define S_BOOL_H
 
+#ifndef FALSE
 #define FALSE (0)
+#endif
+#ifndef TRUE
 #define TRUE  (!FALSE)
+#endif
 
-/*
+#define SFALSE FALSE
+#define STRUE  TRUE
 
-*/
-typedef enum sbool {
-
-	STRUE                   = 1,
-	SFALSE	                = 0
-
-} sbool;
+typedef int sbool;
 
 #endif
