@@ -17,9 +17,9 @@ int main(int argc, char **argv)
     s_assert_chars_equal(sstring_get_value(str), "Hello World");
     s_assert_equal(sstring_length(str), 11);
 
-    sstring_concat(str, " From Azeez Adewale");
+    sstring_concat(str, " From Adewale Azeez");
     sstring_concat(str, " through super-c-types");
-    s_assert_chars_equal(sstring_get_value(str), "Hello World From Azeez Adewale through super-c-types");
+    s_assert_chars_equal(sstring_get_value(str), "Hello World From Adewale Azeez through super-c-types");
     s_assert_not_equal(sstring_length(str), 50);
 
     s_test_runner_analyse();

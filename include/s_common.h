@@ -1,8 +1,8 @@
 
 /*P
-	:copyright: 2019, Azeez Adewale
+	:copyright: 2019, Adewale Azeez
 	:license: GNU Lesser General Public License v3.0 Copyright (c) 
-	:author: Azeez Adewale <azeezadewale98@gmail.com>
+	:author: Adewale Azeez <azeezadewale98@gmail.com>
 	:date: 10 November 2019
 	:filename: s_common.h
 */

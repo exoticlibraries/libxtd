@@ -1,8 +1,8 @@
 
 /*P
-	:copyright: 2019, Azeez Adewale
+	:copyright: 2019, Adewale Azeez
 	:license: GNU Lesser General Public License v3.0 Copyright (c) 
-	:author: Azeez Adewale <azeezadewale98@gmail.com>
+	:author: Adewale Azeez <azeezadewale98@gmail.com>
 	:date: 10 November 2019
 	:filename: s_test_runner.h
 */
@@ -23,26 +23,26 @@
 #define s_assert_equal(x,y) s_assert(x==y)
 #define s_assert_not_equal(x,y) s_assert(x!=y)
 
-int TEST_COUNT = 0;
-int PASSED_TEST_COUNT = 0;
-int FAILED_TEST_COUNT = 0;
+int test_count = 0;
+int passed_test_count = 0;
+int failed_test_count = 0;
 
 S_API inline void s_assert(int x) 
 {
-	TEST_COUNT++;
+	test_count++;
 	if (x == 1) {
-		PASSED_TEST_COUNT++;
-		fprintf(stdout, "Test %i: Assertion Passed \n", TEST_COUNT);
+		passed_test_count++;
+		fprintf(stdout, "Test %i: Assertion Passed \n", test_count);
 	} else {
-		FAILED_TEST_COUNT++;
-		fprintf(stderr, "Test %i: Assertion Failed \n", TEST_COUNT);
+		failed_test_count++;
+		fprintf(stderr, "Test %i: Assertion Failed \n", test_count);
 	}
 }
 
 S_API inline void s_test_runner_analyse() 
 {
 	fprintf(stdout, "Synthesis: Tested: %i | Passing: %i | Failing: %i \n", 
-								TEST_COUNT, PASSED_TEST_COUNT, FAILED_TEST_COUNT);
+								test_count, passed_test_count, failed_test_count);
 }
 
 S_API inline void s_assert_chars_equal(char* chars1, char* chars2)

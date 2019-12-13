@@ -45,4 +45,5 @@ Types to be implemented
 - [ ] squeue
 - [ ] sarray
 
-
+https://developer.gnome.org/glib/2.62/glib-Basic-Types.html#gint
+https://github.com/srdja/Collections-C
