@@ -14,7 +14,7 @@ Types to be implemented
 - [x] lushort - unsigned short
 - [ ] lbyte
 - [x] lfloat
-- [x] sdouble
+- [x] ldouble
 - [x] llong - signed long
 - [x] lulong - unsigned long
 - [x] lint8 - 8-bit signed integer
@@ -25,7 +25,7 @@ Types to be implemented
 - [x] luint16 - 16-bit unsigned integer
 - [x] luint32 - 32-bit unsigned integer
 - [x] luint64 - 64-bit unsigned integer
-- [x] soffset - signed integer for file offset
+- [x] loffset - signed integer for file offset
 - [x] lintptr - signed integer that can hold any pointer
 - [ ] slist
 - [ ] smap

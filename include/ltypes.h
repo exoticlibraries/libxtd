@@ -38,9 +38,9 @@ typedef unsigned int      luint32;
 typedef signed long       lint64;
 typedef unsigned long     luint64;
 
-typedef double            sdouble;
+typedef double            ldouble;
 
-typedef lint64            soffset;
+typedef lint64            loffset;
 typedef signed long       lintptr;
 
 //lizes of the types
