@@ -47,16 +47,16 @@ LIBO_API inline void l_test_runner_analyse()
 
 LIBO_API inline void l_assert_charl_equal(char* chars1, char* chars2)
 {
-	sstring *str1;
-	sstring *str2;
+	lstring *str1;
+	lstring *str2;
 
-    if (sstring_new(&str1, chars1) != L_OK || sstring_new(&str2, chars2) != L_OK) {
+    if (lstring_new(&str1, chars1) != L_OK || lstring_new(&str2, chars2) != L_OK) {
         l_assert_true(SFALSE);
         return;
     }
-	l_assert(sstring_equals(str1, str2));
-	sstring_destroy(str1);
-	sstring_destroy(str2);
+	l_assert(lstring_equals(str1, str2));
+	lstring_destroy(str1);
+	lstring_destroy(str2);
 }
 
 #endif
