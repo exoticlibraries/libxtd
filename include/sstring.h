@@ -11,14 +11,14 @@ typedef struct sstring {
     size_t size  ;
 } sstring;
 
-S_API s_stat       sstring_new(sstring **out, char* chars);
-S_API s_stat       sstring_new_len(sstring **out, char* chars, size_t str_size);
-S_API s_stat       sstring_concat(sstring *str, char* chars);
-S_API s_stat       sstring_concat_char(sstring *str, char char_);
-S_API s_stat       sstring_set_value(sstring *str, char* chars);
-S_API s_stat       sstring_substring_to(sstring *str1, size_t begin, size_t end, sstring **out);
-S_API s_stat       sstring_substring(sstring *str1, size_t begin, sstring **out);
-S_API s_stat       sstring_reverse(sstring *str1, sstring **out);
+S_API libo_stat       sstring_new(sstring **out, char* chars);
+S_API libo_stat       sstring_new_len(sstring **out, char* chars, size_t str_size);
+S_API libo_stat       sstring_concat(sstring *str, char* chars);
+S_API libo_stat       sstring_concat_char(sstring *str, char char_);
+S_API libo_stat       sstring_set_value(sstring *str, char* chars);
+S_API libo_stat       sstring_substring_to(sstring *str1, size_t begin, size_t end, sstring **out);
+S_API libo_stat       sstring_substring(sstring *str1, size_t begin, sstring **out);
+S_API libo_stat       sstring_reverse(sstring *str1, sstring **out);
 
 S_API size_t       s_utf8len(char *chars);
 S_API size_t       sstring_length(sstring *str);

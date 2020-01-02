@@ -47,7 +47,7 @@ S_API size_t s_utf8len(char *chars)
 /*
 
 */
-S_API s_stat sstring_new(sstring **out, char* chars) 
+S_API libo_stat sstring_new(sstring **out, char* chars) 
 {
     return sstring_new_len(out, chars, strlen(chars));
 }
@@ -55,7 +55,7 @@ S_API s_stat sstring_new(sstring **out, char* chars)
 /*
 
 */
-S_API s_stat sstring_new_len(sstring **out, char* chars, size_t str_size)
+S_API libo_stat sstring_new_len(sstring **out, char* chars, size_t str_size)
 {
     sstring *str;
     int x ;
@@ -102,7 +102,7 @@ S_API size_t sstring_length(sstring *str)
 /*
 
 */
-S_API s_stat sstring_concat(sstring *str, char* chars)
+S_API libo_stat sstring_concat(sstring *str, char* chars)
 {
     char* concat_value;
     size_t str_size;
@@ -112,7 +112,7 @@ S_API s_stat sstring_concat(sstring *str, char* chars)
     strcpy(concat_value, str->value);
     strcat(concat_value, chars);
 
-    s_stat status = sstring_set_value(str, concat_value);
+    libo_stat status = sstring_set_value(str, concat_value);
     s_free(concat_value);
     return status;
 }
@@ -120,7 +120,7 @@ S_API s_stat sstring_concat(sstring *str, char* chars)
 /*
 
 */
-S_API s_stat sstring_concat_char(sstring *str, char char_) 
+S_API libo_stat sstring_concat_char(sstring *str, char char_) 
 {
     int len = strlen(str->value);
     str->value[len] = char_;
@@ -131,7 +131,7 @@ S_API s_stat sstring_concat_char(sstring *str, char char_)
 /*
 
 */
-S_API s_stat sstring_set_value(sstring *str, char* chars)
+S_API libo_stat sstring_set_value(sstring *str, char* chars)
 {
     int x ;
     int str_size;
@@ -393,7 +393,7 @@ S_API sbool sstring_contains(sstring *str1, char *chars)
 /*
 
 */
-S_API s_stat sstring_substring_to(sstring *str1, size_t begin, size_t end, sstring **out)
+S_API libo_stat sstring_substring_to(sstring *str1, size_t begin, size_t end, sstring **out)
 {
 
 }
@@ -401,7 +401,7 @@ S_API s_stat sstring_substring_to(sstring *str1, size_t begin, size_t end, sstri
 /*
 
 */
-S_API s_stat sstring_substring(sstring *str1, size_t begin, sstring **out)
+S_API libo_stat sstring_substring(sstring *str1, size_t begin, sstring **out)
 {
 
 }
@@ -409,7 +409,7 @@ S_API s_stat sstring_substring(sstring *str1, size_t begin, sstring **out)
 /*
 
 */
-S_API s_stat sstring_reverse(sstring *str1, sstring **out)
+S_API libo_stat sstring_reverse(sstring *str1, sstring **out)
 {
 
 }
