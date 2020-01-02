@@ -5,8 +5,8 @@
 
 int main(int argc, char **argv) 
 {
-    sint a = 1;
-    suint b = 86766;
+    lint a = 1;
+    luint b = 86766;
 	
 	l_assert_not_equal(a, b);
 	l_assert_equal(a, 1);

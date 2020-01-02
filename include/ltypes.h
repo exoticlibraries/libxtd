@@ -8,42 +8,40 @@
 */
 
 
-#ifndef LIBO_TYPELIBO_H
-#define LIBO_TYPELIBO_H
+#ifndef LIBO_TYPES_H
+#define LIBO_TYPES_H
 
-typedef int               sint;
-typedef unsigned int      suint;
+typedef int               lint;
+typedef unsigned int      luint;
 
-typedef short             sshort;
-typedef unsigned short    sushort;
+typedef short             lshort;
+typedef unsigned short    lushort;
 
-typedef char              schar;
-typedef unsigned char     suchar;
-typedef unsigned char     sbyte;
+typedef char              lchar;
+typedef unsigned char     luchar;
+typedef unsigned char     lbyte;
 
-typedef float             sfloat;
+typedef float             lfloat;
 
-typedef long              slong;
-typedef unsigned long     sulong;
-typedef unsigned long     ssize;
-typedef signed long       sssize;
+typedef long              llong;
+typedef unsigned long     lulong;
 
-typedef signed char       sint8;
-typedef unsigned char     suint8;
+typedef signed char       lint8;
+typedef unsigned char     luint8;
 
-typedef signed short      sint16;
-typedef unsigned short    suint16;
+typedef signed short      lint16;
+typedef unsigned short    luint16;
 
-typedef signed int        sint32;
-typedef unsigned int      suint32;
+typedef signed int        lint32;
+typedef unsigned int      luint32;
 
-typedef signed long       sint64;
-typedef unsigned long     suint64;
+typedef signed long       lint64;
+typedef unsigned long     luint64;
 
 typedef double            sdouble;
 
-typedef sint64            soffset;
-typedef signed long       sintptr;
+typedef lint64            soffset;
+typedef signed long       lintptr;
 
 //lizes of the types
 

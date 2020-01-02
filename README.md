@@ -6,29 +6,27 @@ Types to be implemented
 - [x] [lbool](./include/lbool.h) - boolean 
 - [x] [lstring](./include/lstring.h) - mutable string
 - [ ] sxstring - immutable string
-- [x] sint - integer
-- [x] suint - unsigned integer
-- [x] schar - signed char
-- [x] suchar - unsigned char
-- [x] sshort - signed short
-- [x] sushort - unsigned short
-- [ ] sbyte
-- [x] sfloat
+- [x] lint - integer
+- [x] luint - unsigned integer
+- [x] lchar - signed char
+- [x] luchar - unsigned char
+- [x] lshort - signed short
+- [x] lushort - unsigned short
+- [ ] lbyte
+- [x] lfloat
 - [x] sdouble
-- [x] slong - signed long
-- [x] sulong - unsigned long
-- [x] sssize - signed size
-- [x] ssize - unsigned size
-- [x] sint8 - 8-bit signed integer
-- [x] sint16 - 16-bit signed integer
-- [x] sint32 - 32-bit signed integer
-- [x] suint64 - 64-bit signed integer
-- [x] suint8 - 8-bit unsigned integer
-- [x] suint16 - 16-bit unsigned integer
-- [x] suint32 - 32-bit unsigned integer
-- [x] suint64 - 64-bit unsigned integer
+- [x] llong - signed long
+- [x] lulong - unsigned long
+- [x] lint8 - 8-bit signed integer
+- [x] lint16 - 16-bit signed integer
+- [x] lint32 - 32-bit signed integer
+- [x] luint64 - 64-bit signed integer
+- [x] luint8 - 8-bit unsigned integer
+- [x] luint16 - 16-bit unsigned integer
+- [x] luint32 - 32-bit unsigned integer
+- [x] luint64 - 64-bit unsigned integer
 - [x] soffset - signed integer for file offset
-- [x] sintptr - signed integer that can hold any pointer
+- [x] lintptr - signed integer that can hold any pointer
 - [ ] slist
 - [ ] smap
 - [ ] slinkedlist
