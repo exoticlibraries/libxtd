@@ -45,6 +45,6 @@ typedef double            sdouble;
 typedef sint64            soffset;
 typedef signed long       sintptr;
 
-//sizes of the types
+//lizes of the types
 
 #endif

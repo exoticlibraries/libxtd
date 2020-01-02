@@ -7,7 +7,7 @@
 	:filename: sstring.h
 **/
 
-#include "../include/sstring.h"
+#include "../include/lstring.h"
 
 /*
     Get the correct length of any character array including 

@@ -7,7 +7,7 @@
 	:filename: s_math.c
 */
 
-#include "../include/s_math.h"
+#include "../include/l_math.h"
 
 /*
 	Get the minimum number between two size_t 

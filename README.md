@@ -3,8 +3,8 @@ A library of generic and complex data types and data structures for C
 
 Types to be implemented
 
-- [x] [sbool](./include/sbool.h) - boolean 
-- [x] [sstring](./include/sstring.h) - mutable string
+- [x] [sbool](./include/lbool.h) - boolean 
+- [x] [sstring](./include/lstring.h) - mutable string
 - [ ] sxstring - immutable string
 - [x] sint - integer
 - [x] suint - unsigned integer
@@ -46,4 +46,4 @@ Types to be implemented
 - [ ] sarray
 
 https://developer.gnome.org/glib/2.62/glib-Basic-Types.html#gint
-https://github.com/srdja/Collections-C
+https://github.com/lrdja/Collections-C

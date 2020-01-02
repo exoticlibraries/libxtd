@@ -1,6 +1,6 @@
 
-#include "../../src/sstring.c"
-#include "../../include/s_test_runner.h"
+#include "../../lrc/lstring.c"
+#include "../../include/l_test_runner.h"
 #include <stdio.h>
 
 int main(int argc, char **argv) 
