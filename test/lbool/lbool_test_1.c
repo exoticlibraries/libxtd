@@ -12,14 +12,14 @@ int main(int argc, char **argv)
     sbool bool4 = FALSE;
     sbool bool5 = TRUE;
 
-    s_assert_false(bool1);
-    s_assert_true(bool2);
-    s_assert_false(bool3);
-    s_assert_false(bool4);
-    s_assert_true(bool5);
-    s_assert_equal(bool1, bool4);
-    s_assert_not_equal(bool1, bool2);
+    l_assert_false(bool1);
+    l_assert_true(bool2);
+    l_assert_false(bool3);
+    l_assert_false(bool4);
+    l_assert_true(bool5);
+    l_assert_equal(bool1, bool4);
+    l_assert_not_equal(bool1, bool2);
 
-    s_test_runner_analyse();
+    l_test_runner_analyse();
     return 0;
 }

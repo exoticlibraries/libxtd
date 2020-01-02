@@ -4,7 +4,7 @@
 	:license: GNU Lesser General Public License v3.0 Copyright (c) 
 	:author: Adewale Azeez <azeezadewale98@gmail.com>
 	:date: 10 November 2019
-	:filename: s_common.h
+	:filename: l_common.h
 */
 
 #ifndef LIBO_COMMON_H
@@ -36,7 +36,7 @@
 #include <stdio.h>
 #include "sbool.h"
 
-#define s_free(x) free(x); x = NULL;
+#define l_free(x) free(x); x = NULL;
 
 typedef enum libo_stat {
 

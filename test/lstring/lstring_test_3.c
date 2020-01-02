@@ -15,13 +15,13 @@ int main(int argc, char **argv)
         printf("Init failed\n");
         return 1;
     }
-    s_assert_not_null(str);
-    s_assert_false(sstring_equals(str, str1));
-    s_assert_true(sstring_equals(str, str2));
-    s_assert_false(sstring_equals(str2, str3));
-    s_assert_true(sstring_equals_no_case(str2, str3));
+    l_assert_not_null(str);
+    l_assert_false(sstring_equals(str, str1));
+    l_assert_true(sstring_equals(str, str2));
+    l_assert_false(sstring_equals(str2, str3));
+    l_assert_true(sstring_equall_no_case(str2, str3));
 
-    s_test_runner_analyse();
+    l_test_runner_analyse();
     sstring_destroy(str);
     sstring_destroy(str1);
     sstring_destroy(str2);
