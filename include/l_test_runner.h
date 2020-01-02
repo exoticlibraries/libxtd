@@ -50,7 +50,7 @@ LIBO_API inline void l_assert_charl_equal(char* chars1, char* chars2)
 	sstring *str1;
 	sstring *str2;
 
-    if (sstring_new(&str1, chars1) != LIBO_OK || sstring_new(&str2, chars2) != LIBO_OK) {
+    if (sstring_new(&str1, chars1) != L_OK || sstring_new(&str2, chars2) != L_OK) {
         l_assert_true(SFALSE);
         return;
     }

@@ -40,9 +40,9 @@
 
 typedef enum libo_stat {
 
-    LIBO_OK                   = 0,
-	LIBO_ERR_ALLOC            = 1,
-	LIBO_ERR_FAIL             = 2
+    L_OK                   = 0,
+	L_ERR_ALLOC            = 1,
+	L_ERR_FAIL             = 2
 
 } libo_stat;
 
