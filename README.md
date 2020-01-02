@@ -5,7 +5,7 @@ Types to be implemented
 
 - [x] [lbool](./include/lbool.h) - boolean 
 - [x] [lstring](./include/lstring.h) - mutable string
-- [ ] sxstring - immutable string
+- [ ] lxstring - immutable string
 - [x] lint - integer
 - [x] luint - unsigned integer
 - [x] lchar - signed char
@@ -27,21 +27,21 @@ Types to be implemented
 - [x] luint64 - 64-bit unsigned integer
 - [x] loffset - signed integer for file offset
 - [x] lintptr - signed integer that can hold any pointer
-- [ ] slist
-- [ ] smap
-- [ ] slinkedlist
-- [ ] sitem
-- [ ] sring
-- [ ] sset
-- [ ] sstack
-- [ ] streemap
-- [ ] svector
-- [ ] stuple
-- [ ] shashtable
-- [ ] shashset
-- [ ] stree
-- [ ] squeue
-- [ ] sarray
+- [ ] llist
+- [ ] lmap
+- [ ] llinkedlist
+- [ ] litem
+- [ ] lring
+- [ ] lset
+- [ ] lstack
+- [ ] ltreemap
+- [ ] lvector
+- [ ] ltuple
+- [ ] lhashtable
+- [ ] lhashset
+- [ ] ltree
+- [ ] lqueue
+- [ ] larray
 
 https://developer.gnome.org/glib/2.62/glib-Basic-Types.html#gint
 https://github.com/lrdja/Collections-C

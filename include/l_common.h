@@ -38,12 +38,12 @@
 
 #define l_free(x) free(x); x = NULL;
 
-typedef enum libo_stat {
+typedef enum l_stat {
 
     L_OK                   = 0,
 	L_ERR_ALLOC            = 1,
 	L_ERR_FAIL             = 2
 
-} libo_stat;
+} l_stat;
 
 #endif

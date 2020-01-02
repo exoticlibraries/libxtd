@@ -11,14 +11,14 @@ typedef struct lstring {
     size_t size  ;
 } lstring;
 
-LIBO_API libo_stat       lstring_new(lstring **out, char* chars);
-LIBO_API libo_stat       lstring_new_len(lstring **out, char* chars, size_t str_size);
-LIBO_API libo_stat       lstring_concat(lstring *str, char* chars);
-LIBO_API libo_stat       lstring_concat_char(lstring *str, char char_);
-LIBO_API libo_stat       lstring_set_value(lstring *str, char* chars);
-LIBO_API libo_stat       lstring_substring_to(lstring *str1, size_t begin, size_t end, lstring **out);
-LIBO_API libo_stat       lstring_substring(lstring *str1, size_t begin, lstring **out);
-LIBO_API libo_stat       lstring_reverse(lstring *str1, lstring **out);
+LIBO_API l_stat       lstring_new(lstring **out, char* chars);
+LIBO_API l_stat       lstring_new_len(lstring **out, char* chars, size_t str_size);
+LIBO_API l_stat       lstring_concat(lstring *str, char* chars);
+LIBO_API l_stat       lstring_concat_char(lstring *str, char char_);
+LIBO_API l_stat       lstring_set_value(lstring *str, char* chars);
+LIBO_API l_stat       lstring_substring_to(lstring *str1, size_t begin, size_t end, lstring **out);
+LIBO_API l_stat       lstring_substring(lstring *str1, size_t begin, lstring **out);
+LIBO_API l_stat       lstring_reverse(lstring *str1, lstring **out);
 
 LIBO_API size_t       l_utf8len(char *chars);
 LIBO_API size_t       lstring_length(lstring *str);
