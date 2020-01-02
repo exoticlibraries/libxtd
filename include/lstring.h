@@ -27,13 +27,13 @@ LIBO_API size_t       sstring_index_of(sstring *str, char* chars);
 LIBO_API size_t       sstring_last_index_of_from(sstring *str, char* chars, size_t from);
 LIBO_API size_t       sstring_last_index_of(sstring *str, char* chars);
 
-LIBO_API sbool        sstring_is_empty(sstring *str);
-LIBO_API sbool        sstring_equals(sstring *str1, sstring *str2);
-LIBO_API sbool        sstring_equals_no_case(sstring *str1, sstring *str2);
-LIBO_API sbool        sstring_starts_with_from(sstring *str, char* chars, size_t from);
-LIBO_API sbool        sstring_starts_with(sstring *str, char* chars);
-LIBO_API sbool        sstring_ends_with(sstring *str, char* chars);
-LIBO_API sbool        sstring_contains(sstring *str1, char *chars);
+LIBO_API lbool        sstring_is_empty(sstring *str);
+LIBO_API lbool        sstring_equals(sstring *str1, sstring *str2);
+LIBO_API lbool        sstring_equals_no_case(sstring *str1, sstring *str2);
+LIBO_API lbool        sstring_starts_with_from(sstring *str, char* chars, size_t from);
+LIBO_API lbool        sstring_starts_with(sstring *str, char* chars);
+LIBO_API lbool        sstring_ends_with(sstring *str, char* chars);
+LIBO_API lbool        sstring_contains(sstring *str1, char *chars);
 
 LIBO_API void          sstring_lower(sstring *str);
 LIBO_API void          sstring_upper(sstring *str);

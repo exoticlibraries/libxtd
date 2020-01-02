@@ -4,7 +4,7 @@
 	:license: GNU Lesser General Public License v3.0 Copyright (c) 
 	:author: Adewale Azeez <azeezadewale98@gmail.com>
 	:date: 11 November 2019
-	:filename: sbool.h
+	:filename: lbool.h
 */
 
 
@@ -21,6 +21,6 @@
 #define SFALSE FALSE
 #define STRUE  TRUE
 
-typedef int sbool;
+typedef int lbool;
 
 #endif

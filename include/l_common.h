@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "sbool.h"
+#include "lbool.h"
 
 #define l_free(x) free(x); x = NULL;
 

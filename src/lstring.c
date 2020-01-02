@@ -154,7 +154,7 @@ LIBO_API libo_stat sstring_set_value(sstring *str, char* chars)
 /*
 
 */
-LIBO_API sbool sstring_il_empty(sstring *str)
+LIBO_API lbool sstring_il_empty(sstring *str)
 {
     if (str->size == 0) {
         return STRUE;
@@ -165,7 +165,7 @@ LIBO_API sbool sstring_il_empty(sstring *str)
 /*
 
 */
-LIBO_API sbool sstring_equals(sstring *str1, sstring *str2)
+LIBO_API lbool sstring_equals(sstring *str1, sstring *str2)
 {
     int i;
 
@@ -188,7 +188,7 @@ LIBO_API sbool sstring_equals(sstring *str1, sstring *str2)
 /*
 
 */
-LIBO_API sbool sstring_equall_no_case(sstring *str1, sstring *str2)
+LIBO_API lbool sstring_equall_no_case(sstring *str1, sstring *str2)
 {
     int i;
 
@@ -212,7 +212,7 @@ LIBO_API sbool sstring_equall_no_case(sstring *str1, sstring *str2)
 /*
 
 */
-LIBO_API sbool sstring_startl_with_from(sstring *str, char* chars, size_t from)
+LIBO_API lbool sstring_startl_with_from(sstring *str, char* chars, size_t from)
 {
     int i, j;
     size_t str_len;
@@ -238,7 +238,7 @@ LIBO_API sbool sstring_startl_with_from(sstring *str, char* chars, size_t from)
 /*
 
 */
-LIBO_API sbool sstring_startl_with(sstring *str, char* chars)
+LIBO_API lbool sstring_startl_with(sstring *str, char* chars)
 {
     return sstring_startl_with_from(str, chars, 0);
 }
@@ -246,7 +246,7 @@ LIBO_API sbool sstring_startl_with(sstring *str, char* chars)
 /*
 
 */
-LIBO_API sbool sstring_endl_with(sstring *str, char* chars)
+LIBO_API lbool sstring_endl_with(sstring *str, char* chars)
 {
     return sstring_startl_with_from(str, chars, strlen(str->value) - strlen(chars));
 }
@@ -385,7 +385,7 @@ LIBO_API size_t sstring_last_index_of(sstring *str, char* chars)
 /*
 
 */
-LIBO_API sbool sstring_contains(sstring *str1, char *chars)
+LIBO_API lbool sstring_contains(sstring *str1, char *chars)
 {
 
 }

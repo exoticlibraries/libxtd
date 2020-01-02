@@ -6,11 +6,11 @@
 
 int main(int argc, char **argv) 
 {
-    sbool bool1 = SFALSE;
-    sbool bool2 = STRUE;
-    sbool bool3 = FALSE;
-    sbool bool4 = FALSE;
-    sbool bool5 = TRUE;
+    lbool bool1 = SFALSE;
+    lbool bool2 = STRUE;
+    lbool bool3 = FALSE;
+    lbool bool4 = FALSE;
+    lbool bool5 = TRUE;
 
     l_assert_false(bool1);
     l_assert_true(bool2);

@@ -3,7 +3,7 @@ A library of generic and complex data types and data structures for C
 
 Types to be implemented
 
-- [x] [sbool](./include/lbool.h) - boolean 
+- [x] [lbool](./include/lbool.h) - boolean 
 - [x] [sstring](./include/lstring.h) - mutable string
 - [ ] sxstring - immutable string
 - [x] sint - integer
