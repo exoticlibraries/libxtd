@@ -7,8 +7,8 @@
 	:filename: s_common.h
 */
 
-#ifndef S_COMMON_H
-#define S_COMMON_H
+#ifndef LIBO_COMMON_H
+#define LIBO_COMMON_H
 
 #ifdef _WIN32
 /*
@@ -26,9 +26,9 @@
 #define SIMPLE_WINDLLEXPORT 0
 #endif
 #if SIMPLE_WINDLLEXPORT
-#define S_API __declspec(dllexport)
+#define LIBO_API __declspec(dllexport)
 #else
-#define S_API extern
+#define LIBO_API extern
 #endif
 
 #include <stdlib.h>
@@ -40,9 +40,9 @@
 
 typedef enum libo_stat {
 
-    S_OK                   = 0,
-	S_ERR_ALLOC            = 1,
-	S_ERR_FAIL             = 2
+    LIBO_OK                   = 0,
+	LIBO_ERR_ALLOC            = 1,
+	LIBO_ERR_FAIL             = 2
 
 } libo_stat;
 

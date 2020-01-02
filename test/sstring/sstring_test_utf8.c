@@ -6,7 +6,7 @@
 int main(int argc, char **argv) 
 {
     sstring *str;
-    if (sstring_new(&str, "x好āaas好And你们x好āax好āa") != S_OK) {
+    if (sstring_new(&str, "x好āaas好And你们x好āax好āa") != LIBO_OK) {
         printf("Init failed\n");
         return 1;
     }

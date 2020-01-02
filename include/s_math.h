@@ -7,11 +7,11 @@
 	:filename: s_math.h
 */
 
-#ifndef S_MATH_H
-#define S_MATH_H
+#ifndef LIBO_MATH_H
+#define LIBO_MATH_H
 
 #include "s_common.h"
 
-S_API size_t               s_min(size_t num1, size_t num2);
+LIBO_API size_t               s_min(size_t num1, size_t num2);
 
 #endif

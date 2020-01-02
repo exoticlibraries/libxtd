@@ -31,7 +31,7 @@
 	**return**:
 		the correct length of character arrays in any encoding
 */
-S_API size_t s_utf8len(char *chars)
+LIBO_API size_t s_utf8len(char *chars)
 {
     char *tmp_chars;
     size_t len ;
@@ -47,7 +47,7 @@ S_API size_t s_utf8len(char *chars)
 /*
 
 */
-S_API libo_stat sstring_new(sstring **out, char* chars) 
+LIBO_API libo_stat sstring_new(sstring **out, char* chars) 
 {
     return sstring_new_len(out, chars, strlen(chars));
 }
@@ -55,19 +55,19 @@ S_API libo_stat sstring_new(sstring **out, char* chars)
 /*
 
 */
-S_API libo_stat sstring_new_len(sstring **out, char* chars, size_t str_size)
+LIBO_API libo_stat sstring_new_len(sstring **out, char* chars, size_t str_size)
 {
     sstring *str;
     int x ;
 
     str = (struct sstring*) malloc(sizeof(struct sstring));
     if (!str) {
-        return S_ERR_ALLOC;
+        return LIBO_ERR_ALLOC;
     }
     str->value = (char*) malloc(str_size + 1);
     if (!str->value) {
         free((void*)str);
-        return S_ERR_ALLOC;
+        return LIBO_ERR_ALLOC;
     }
 
     for ( x = 0 ; x < str_size ; x++ ) {
@@ -77,13 +77,13 @@ S_API libo_stat sstring_new_len(sstring **out, char* chars, size_t str_size)
     str->size = s_utf8len(str->value);
 
     *out = str;
-    return S_OK;
+    return LIBO_OK;
 }
 
 /*
  
  */
-S_API void sstring_destroy(sstring *str)
+LIBO_API void sstring_destroy(sstring *str)
 {
     free(str->value);
     str->value = NULL;
@@ -94,7 +94,7 @@ S_API void sstring_destroy(sstring *str)
 /*
 
 */
-S_API size_t sstring_length(sstring *str)
+LIBO_API size_t sstring_length(sstring *str)
 {
     return str->size;
 }
@@ -102,7 +102,7 @@ S_API size_t sstring_length(sstring *str)
 /*
 
 */
-S_API libo_stat sstring_concat(sstring *str, char* chars)
+LIBO_API libo_stat sstring_concat(sstring *str, char* chars)
 {
     char* concat_value;
     size_t str_size;
@@ -120,18 +120,18 @@ S_API libo_stat sstring_concat(sstring *str, char* chars)
 /*
 
 */
-S_API libo_stat sstring_concat_char(sstring *str, char char_) 
+LIBO_API libo_stat sstring_concat_char(sstring *str, char char_) 
 {
     int len = strlen(str->value);
     str->value[len] = char_;
     str->value[len+1] = '\0';
-    return S_OK;
+    return LIBO_OK;
 }
 
 /*
 
 */
-S_API libo_stat sstring_set_value(sstring *str, char* chars)
+LIBO_API libo_stat sstring_set_value(sstring *str, char* chars)
 {
     int x ;
     int str_size;
@@ -140,7 +140,7 @@ S_API libo_stat sstring_set_value(sstring *str, char* chars)
     free(str->value);
     str->value = (char*) malloc(str_size + 1);
     if (!str->value) {
-        return S_ERR_ALLOC;
+        return LIBO_ERR_ALLOC;
     }
 
     for ( x = 0 ; x < str_size ; x++ ) {
@@ -148,13 +148,13 @@ S_API libo_stat sstring_set_value(sstring *str, char* chars)
 	}
     str->value[str_size] = '\0' ;
     str->size = s_utf8len(str->value);
-    return S_OK;
+    return LIBO_OK;
 }
 
 /*
 
 */
-S_API sbool sstring_is_empty(sstring *str)
+LIBO_API sbool sstring_is_empty(sstring *str)
 {
     if (str->size == 0) {
         return STRUE;
@@ -165,7 +165,7 @@ S_API sbool sstring_is_empty(sstring *str)
 /*
 
 */
-S_API sbool sstring_equals(sstring *str1, sstring *str2)
+LIBO_API sbool sstring_equals(sstring *str1, sstring *str2)
 {
     int i;
 
@@ -188,7 +188,7 @@ S_API sbool sstring_equals(sstring *str1, sstring *str2)
 /*
 
 */
-S_API sbool sstring_equals_no_case(sstring *str1, sstring *str2)
+LIBO_API sbool sstring_equals_no_case(sstring *str1, sstring *str2)
 {
     int i;
 
@@ -212,7 +212,7 @@ S_API sbool sstring_equals_no_case(sstring *str1, sstring *str2)
 /*
 
 */
-S_API sbool sstring_starts_with_from(sstring *str, char* chars, size_t from)
+LIBO_API sbool sstring_starts_with_from(sstring *str, char* chars, size_t from)
 {
     int i, j;
     size_t str_len;
@@ -238,7 +238,7 @@ S_API sbool sstring_starts_with_from(sstring *str, char* chars, size_t from)
 /*
 
 */
-S_API sbool sstring_starts_with(sstring *str, char* chars)
+LIBO_API sbool sstring_starts_with(sstring *str, char* chars)
 {
     return sstring_starts_with_from(str, chars, 0);
 }
@@ -246,7 +246,7 @@ S_API sbool sstring_starts_with(sstring *str, char* chars)
 /*
 
 */
-S_API sbool sstring_ends_with(sstring *str, char* chars)
+LIBO_API sbool sstring_ends_with(sstring *str, char* chars)
 {
     return sstring_starts_with_from(str, chars, strlen(str->value) - strlen(chars));
 }
@@ -270,7 +270,7 @@ S_API sbool sstring_ends_with(sstring *str, char* chars)
 		the index of the first occurence after the from index in 
         the characters array.
 */
-S_API size_t sstring_index_of_from(sstring *str, char* chars, size_t from)
+LIBO_API size_t sstring_index_of_from(sstring *str, char* chars, size_t from)
 {
     int i, j, k, l;
     size_t str_len;
@@ -288,7 +288,7 @@ S_API size_t sstring_index_of_from(sstring *str, char* chars, size_t from)
     if (chars_len > str_len-from) {
         return -1;
     } else if (chars_len == str_len-from) {
-        if (sstring_new_len(&str1, chars, chars_len) != S_OK) {
+        if (sstring_new_len(&str1, chars, chars_len) != LIBO_OK) {
             return -1;
         }
         if (sstring_equals(str, str1) == STRUE) {
@@ -324,7 +324,7 @@ S_API size_t sstring_index_of_from(sstring *str, char* chars, size_t from)
 	**return**:
 		the index of the first occurence in the characters array.
 */
-S_API size_t sstring_index_of(sstring *str, char* chars)
+LIBO_API size_t sstring_index_of(sstring *str, char* chars)
 {
     return sstring_index_of_from(str, chars, 0);
 }
@@ -333,7 +333,7 @@ S_API size_t sstring_index_of(sstring *str, char* chars)
     
 
 */
-S_API size_t sstring_last_index_of_from(sstring *str, char* chars, size_t from)
+LIBO_API size_t sstring_last_index_of_from(sstring *str, char* chars, size_t from)
 {
     int i, j, k, l, m, right_most;
     size_t str_len;
@@ -377,7 +377,7 @@ S_API size_t sstring_last_index_of_from(sstring *str, char* chars, size_t from)
 /*
 
 */
-S_API size_t sstring_last_index_of(sstring *str, char* chars)
+LIBO_API size_t sstring_last_index_of(sstring *str, char* chars)
 {
     return sstring_last_index_of_from(str, chars, strlen(str->value));
 }
@@ -385,7 +385,7 @@ S_API size_t sstring_last_index_of(sstring *str, char* chars)
 /*
 
 */
-S_API sbool sstring_contains(sstring *str1, char *chars)
+LIBO_API sbool sstring_contains(sstring *str1, char *chars)
 {
 
 }
@@ -393,7 +393,7 @@ S_API sbool sstring_contains(sstring *str1, char *chars)
 /*
 
 */
-S_API libo_stat sstring_substring_to(sstring *str1, size_t begin, size_t end, sstring **out)
+LIBO_API libo_stat sstring_substring_to(sstring *str1, size_t begin, size_t end, sstring **out)
 {
 
 }
@@ -401,7 +401,7 @@ S_API libo_stat sstring_substring_to(sstring *str1, size_t begin, size_t end, ss
 /*
 
 */
-S_API libo_stat sstring_substring(sstring *str1, size_t begin, sstring **out)
+LIBO_API libo_stat sstring_substring(sstring *str1, size_t begin, sstring **out)
 {
 
 }
@@ -409,7 +409,7 @@ S_API libo_stat sstring_substring(sstring *str1, size_t begin, sstring **out)
 /*
 
 */
-S_API libo_stat sstring_reverse(sstring *str1, sstring **out)
+LIBO_API libo_stat sstring_reverse(sstring *str1, sstring **out)
 {
 
 }
@@ -418,7 +418,7 @@ S_API libo_stat sstring_reverse(sstring *str1, sstring **out)
 
 */
 
-S_API void sstring_lower(sstring *str)
+LIBO_API void sstring_lower(sstring *str)
 {
 
 }
@@ -426,7 +426,7 @@ S_API void sstring_lower(sstring *str)
 /*
 
 */
-S_API void sstring_upper(sstring *str)
+LIBO_API void sstring_upper(sstring *str)
 {
 
 }
@@ -434,7 +434,7 @@ S_API void sstring_upper(sstring *str)
 /*
 
 */
-S_API void sstring_trim(sstring *str)
+LIBO_API void sstring_trim(sstring *str)
 {
 
 }
@@ -442,7 +442,7 @@ S_API void sstring_trim(sstring *str)
 /*
 
 */
-S_API void sstring_sub_string(sstring *str, size_t from, size_t to, sstring *str1)
+LIBO_API void sstring_sub_string(sstring *str, size_t from, size_t to, sstring *str1)
 {
 
 }
@@ -450,7 +450,7 @@ S_API void sstring_sub_string(sstring *str, size_t from, size_t to, sstring *str
 /*
 
 */
-S_API void sstring_replace(sstring *str, char *in)
+LIBO_API void sstring_replace(sstring *str, char *in)
 {
 
 }
@@ -458,12 +458,12 @@ S_API void sstring_replace(sstring *str, char *in)
 /*
 
 */
-//S_API void sstring_split(List *out, sstring *str, char* chars);
+//LIBO_API void sstring_split(List *out, sstring *str, char* chars);
 
 /*
 
 */
-S_API void sstring_format(sstring *str, char *in, ...)
+LIBO_API void sstring_format(sstring *str, char *in, ...)
 {
 
 }
@@ -471,14 +471,14 @@ S_API void sstring_format(sstring *str, char *in, ...)
 /*
     //use for substring
 */
-S_API char* sstring_chars_at(sstring *str, size_t index)
+LIBO_API char* sstring_chars_at(sstring *str, size_t index)
 {
     int i,j,l;
     size_t str_len;
     sstring* str1;
     char* value ;
 
-    if (sstring_new_len(&str1, "", 0) != S_OK) {
+    if (sstring_new_len(&str1, "", 0) != LIBO_OK) {
         return "";
     }
     if (str == NULL) {
@@ -510,7 +510,7 @@ S_API char* sstring_chars_at(sstring *str, size_t index)
 /*
 
 */
-S_API char*  sstring_get_value(sstring *str)
+LIBO_API char*  sstring_get_value(sstring *str)
 {
     return str->value;
 }

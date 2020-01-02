@@ -6,7 +6,7 @@
 int main(int argc, char **argv) 
 {
     sstring *str;
-    if (sstring_new(&str, "Hello World") != S_OK) {
+    if (sstring_new(&str, "Hello World") != LIBO_OK) {
         printf("Init failed\n");
         return 1;
     }

@@ -8,8 +8,8 @@
 */
 
 
-#ifndef S_BOOL_H
-#define S_BOOL_H
+#ifndef LIBO_BOOL_H
+#define LIBO_BOOL_H
 
 #ifndef FALSE
 #define FALSE (0)

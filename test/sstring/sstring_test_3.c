@@ -10,8 +10,8 @@ int main(int argc, char **argv)
     sstring *str2;
     sstring *str3;
 
-    if (sstring_new(&str, "Terry A Davis") != S_OK || sstring_new(&str1, "The Programmer") != S_OK 
-        || sstring_new(&str2, "Terry A Davis") != S_OK || sstring_new(&str3, "terry a davis") != S_OK) {
+    if (sstring_new(&str, "Terry A Davis") != LIBO_OK || sstring_new(&str1, "The Programmer") != LIBO_OK 
+        || sstring_new(&str2, "Terry A Davis") != LIBO_OK || sstring_new(&str3, "terry a davis") != LIBO_OK) {
         printf("Init failed\n");
         return 1;
     }

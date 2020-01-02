@@ -8,8 +8,8 @@
 */
 
 
-#ifndef S_TYPES_H
-#define S_TYPES_H
+#ifndef LIBO_TYPELIBO_H
+#define LIBO_TYPELIBO_H
 
 typedef int               sint;
 typedef unsigned int      suint;

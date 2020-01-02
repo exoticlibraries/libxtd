@@ -8,8 +8,8 @@
 */
 
 
-#ifndef S_TEST_RUNNER_H
-#define S_TEST_RUNNER_H
+#ifndef LIBO_TEST_RUNNER_H
+#define LIBO_TEST_RUNNER_H
 
 #include <stdio.h>
 #include "s_common.h"
@@ -27,7 +27,7 @@ int test_count = 0;
 int passed_test_count = 0;
 int failed_test_count = 0;
 
-S_API inline void s_assert(int x) 
+LIBO_API inline void s_assert(int x) 
 {
 	test_count++;
 	if (x == 1) {
@@ -39,18 +39,18 @@ S_API inline void s_assert(int x)
 	}
 }
 
-S_API inline void s_test_runner_analyse() 
+LIBO_API inline void s_test_runner_analyse() 
 {
 	fprintf(stdout, "Synthesis: Tested: %i | Passing: %i | Failing: %i \n", 
 								test_count, passed_test_count, failed_test_count);
 }
 
-S_API inline void s_assert_chars_equal(char* chars1, char* chars2)
+LIBO_API inline void s_assert_chars_equal(char* chars1, char* chars2)
 {
 	sstring *str1;
 	sstring *str2;
 
-    if (sstring_new(&str1, chars1) != S_OK || sstring_new(&str2, chars2) != S_OK) {
+    if (sstring_new(&str1, chars1) != LIBO_OK || sstring_new(&str2, chars2) != LIBO_OK) {
         s_assert_true(SFALSE);
         return;
     }

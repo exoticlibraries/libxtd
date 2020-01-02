@@ -7,7 +7,7 @@ int main(int argc, char **argv)
 {
     sstring *str;
 
-    if (sstring_new(&str, "The Best day of my Life") != S_OK) {
+    if (sstring_new(&str, "The Best day of my Life") != LIBO_OK) {
         printf("Init failed\n");
         return 1;
     }

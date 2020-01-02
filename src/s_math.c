@@ -13,7 +13,7 @@
 	Get the minimum number between two size_t 
 	number 
 */
-S_API size_t s_min(size_t num1, size_t num2) {
+LIBO_API size_t s_min(size_t num1, size_t num2) {
 	return ((num1) < (num2) ? (num1) : (num2));
 }
 
@@ -21,6 +21,6 @@ S_API size_t s_min(size_t num1, size_t num2) {
 	Get the maximum number between two size_t 
 	number 
 */
-S_API size_t s_max(size_t num1, size_t num2) {
+LIBO_API size_t s_max(size_t num1, size_t num2) {
 	return ((num1) > (num2) ? (num1) : (num2));
 }
