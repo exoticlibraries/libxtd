@@ -1,6 +1,6 @@
 
 #include "../../include/lbool.h"
-#include "../../lrc/lstring.c"
+#include "../../src/lstring.c"
 #include "../../include/l_test_runner.h"
 #include <stdio.h>
 

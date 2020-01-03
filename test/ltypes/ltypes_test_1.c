@@ -1,5 +1,6 @@
 
 #include "../../include/ltypes.h"
+#include "../../src/lstring.c"
 #include "../../include/l_test_runner.h"
 #include <stdio.h>
 
