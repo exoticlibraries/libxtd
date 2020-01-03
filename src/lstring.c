@@ -62,12 +62,12 @@ LIBO_API l_stat lstring_new_len(lstring **out, char* chars, size_t str_size)
 
     str = (struct lstring*) malloc(sizeof(struct lstring));
     if (!str) {
-        return LIBO_ERR_ALLOC;
+        return L_ERR_ALLOC;
     }
     str->value = (char*) malloc(str_size + 1);
     if (!str->value) {
         free((void*)str);
-        return LIBO_ERR_ALLOC;
+        return L_ERR_ALLOC;
     }
 
     for ( x = 0 ; x < str_size ; x++ ) {
@@ -77,7 +77,7 @@ LIBO_API l_stat lstring_new_len(lstring **out, char* chars, size_t str_size)
     str->size = l_utf8len(str->value);
 
     *out = str;
-    return LIBO_OK;
+    return L_OK;
 }
 
 /*
@@ -125,7 +125,7 @@ LIBO_API l_stat lstring_concat_char(lstring *str, char char_)
     int len = strlen(str->value);
     str->value[len] = char_;
     str->value[len+1] = '\0';
-    return LIBO_OK;
+    return L_OK;
 }
 
 /*
@@ -140,7 +140,7 @@ LIBO_API l_stat lstring_set_value(lstring *str, char* chars)
     free(str->value);
     str->value = (char*) malloc(str_size + 1);
     if (!str->value) {
-        return LIBO_ERR_ALLOC;
+        return L_ERR_ALLOC;
     }
 
     for ( x = 0 ; x < str_size ; x++ ) {
@@ -148,7 +148,7 @@ LIBO_API l_stat lstring_set_value(lstring *str, char* chars)
 	}
     str->value[str_size] = '\0' ;
     str->size = l_utf8len(str->value);
-    return LIBO_OK;
+    return L_OK;
 }
 
 /*
@@ -288,7 +288,7 @@ LIBO_API size_t lstring_index_of_from(lstring *str, char* chars, size_t from)
     if (charl_len > str_len-from) {
         return -1;
     } else if (charl_len == str_len-from) {
-        if (lstring_new_len(&str1, chars, charl_len) != LIBO_OK) {
+        if (lstring_new_len(&str1, chars, charl_len) != L_OK) {
             return -1;
         }
         if (lstring_equals(str, str1) == STRUE) {
@@ -478,7 +478,7 @@ LIBO_API char* lstring_charl_at(lstring *str, size_t index)
     lstring* str1;
     char* value ;
 
-    if (lstring_new_len(&str1, "", 0) != LIBO_OK) {
+    if (lstring_new_len(&str1, "", 0) != L_OK) {
         return "";
     }
     if (str == NULL) {

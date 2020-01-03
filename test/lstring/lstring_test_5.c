@@ -7,7 +7,7 @@ int main(int argc, char **argv)
 {
     lstring *str;
 
-    if (lstring_new(&str, "The Best day of my Life") != LIBO_OK) {
+    if (lstring_new(&str, "The Best day of my Life") != L_OK) {
         printf("Init failed\n");
         return 1;
     }

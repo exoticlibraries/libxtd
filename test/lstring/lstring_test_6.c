@@ -7,7 +7,7 @@ int main(int argc, char **argv)
 {
     lstring *str;
 
-    if (lstring_new(&str, "like do you slide to all your Night like this, like this") != LIBO_OK) {
+    if (lstring_new(&str, "like do you slide to all your Night like this, like this") != L_OK) {
         printf("Init failed\n");
         return 1;
     }

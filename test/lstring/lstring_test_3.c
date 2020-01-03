@@ -10,8 +10,8 @@ int main(int argc, char **argv)
     lstring *str2;
     lstring *str3;
 
-    if (lstring_new(&str, "Terry A Davis") != LIBO_OK || lstring_new(&str1, "The Programmer") != LIBO_OK 
-        || lstring_new(&str2, "Terry A Davis") != LIBO_OK || lstring_new(&str3, "terry a davis") != LIBO_OK) {
+    if (lstring_new(&str, "Terry A Davis") != L_OK || lstring_new(&str1, "The Programmer") != L_OK 
+        || lstring_new(&str2, "Terry A Davis") != L_OK || lstring_new(&str3, "terry a davis") != L_OK) {
         printf("Init failed\n");
         return 1;
     }
