@@ -4,10 +4,7 @@ SRC_PATH=../src/
 LTYPES_PATH=./ltypes/
 EXT=.exe
 
-all: before_test
-
-before_test:
-	mkdir -p $(EXEC_PATH)
+all: ltypes_test ltypes_test_1
 
 ltypes_test: 
 	gcc -o $(EXEC_PATH)/ltypes_test_1$(EXT) $(LTYPES_PATH)/ltypes_test_1.c $(SRC_PATH)/lstring.c
