@@ -4,7 +4,7 @@ SRC_PATH=../src/
 LTYPES_TEST_PATH=./ltypes/
 LBOOL_TEST_PATH=./lbool/
 LSTRING_TEST_PATH=./lstring/
-EXT=.exe
+EXT=
 
 all: compile line run
 
