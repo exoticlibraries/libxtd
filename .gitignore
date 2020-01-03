@@ -52,3 +52,9 @@ Mkfile.old
 dkms.conf
 
 build/
+
+# CMake
+*/CMakeFiles/
+*CMakeCache.txt
+*.cmake
+
