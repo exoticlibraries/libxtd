@@ -20,12 +20,12 @@
 #undef _WIN32_WINNT
 #endif
 #define _WIN32_WINNT 0x502
-#define SIMPLE_WINDLLEXPORT 1
+#define LIBOTYPES_WINDLLEXPORT 1
 /* Linux */
 #else
-#define SIMPLE_WINDLLEXPORT 0
+#define LIBOTYPES_WINDLLEXPORT 0
 #endif
-#if SIMPLE_WINDLLEXPORT
+#if LIBOTYPES_WINDLLEXPORT
 #define LIBO_API __declspec(dllexport)
 #else
 #define LIBO_API extern
