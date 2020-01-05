@@ -38,7 +38,7 @@
 
 #define l_free(x) free(x); x = NULL;
 
-typedef enum l_stat {
+LIBO_API typedef enum l_stat {
 
     L_OK                   = 0,
 	L_ERR_ALLOC            = 1,
