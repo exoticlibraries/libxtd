@@ -44,4 +44,7 @@ Types to be implemented
 - [ ] larray
 
 https://developer.gnome.org/glib/2.62/glib-Basic-Types.html#gint
-https://github.com/lrdja/Collections-C
+https://github.com/srdja/Collections-C
+
+
+file ending with .single does not have left and side bar

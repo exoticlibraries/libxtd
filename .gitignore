@@ -60,3 +60,6 @@ build/
 *CMakeCache.txt
 *.cmake
 
+# IDE Folders
+*.vscode/
+
