@@ -1,50 +1,34 @@
-# libsuperctypes
-A library of generic and complex data types and data structures for C
+
+# libopen-types
+
+A library of data types and structures for C.
 
 Types to be implemented
 
-- [x] [lbool](./include/lbool.h) - boolean 
-- [x] [lstring](./include/lstring.h) - mutable string
-- [ ] lxstring - immutable string
-- [x] lint - integer
-- [x] luint - unsigned integer
-- [x] lchar - signed char
-- [x] luchar - unsigned char
-- [x] lshort - signed short
-- [x] lushort - unsigned short
-- [ ] lbyte
-- [x] lfloat
-- [x] ldouble
-- [x] llong - signed long
-- [x] lulong - unsigned long
-- [x] lint8 - 8-bit signed integer
-- [x] lint16 - 16-bit signed integer
-- [x] lint32 - 32-bit signed integer
-- [x] luint64 - 64-bit signed integer
-- [x] luint8 - 8-bit unsigned integer
-- [x] luint16 - 16-bit unsigned integer
-- [x] luint32 - 32-bit unsigned integer
-- [x] luint64 - 64-bit unsigned integer
-- [x] loffset - signed integer for file offset
-- [x] lintptr - signed integer that can hold any pointer
-- [ ] llist
-- [ ] lmap
-- [ ] llinkedlist
-- [ ] litem
-- [ ] lring
-- [ ] lset
-- [ ] lstack
-- [ ] ltreemap
-- [ ] lvector
-- [ ] ltuple
-- [ ] lhashtable
-- [ ] lhashset
-- [ ] ltree
-- [ ] lqueue
-- [ ] larray
+- [ ] array
+- [ ] list
+- [ ] map
+- [ ] single linkedlist
+- [ ] double linked list
+- [ ] item
+- [ ] ring
+- [ ] set
+- [ ] stack
+- [ ] treemap
+- [ ] vector
+- [ ] tuple
+- [ ] hashtable
+- [ ] hashset
+- [ ] tree
+- [ ] queue
+- [ ] array
+- [ ] heap
+- [ ] string
+- [ ] xstring
 
-https://developer.gnome.org/glib/2.62/glib-Basic-Types.html#gint
-https://github.com/srdja/Collections-C
+## Useful Links
 
-
-file ending with .single does not have left and side bar
+ - [Collections-C](https://github.com/srdja/Collections-C)
+ - [.NET Documentation](https://docs.microsoft.com/en-us/dotnet/)
+ - [cmd.exe](https://en.wikipedia.org/wiki/Cmd.exe)
+ - [Unix Shell](https://en.wikipedia.org/wiki/Unix_shell)

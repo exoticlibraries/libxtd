@@ -9,6 +9,10 @@
 #ifndef LIBOPEN_TYPECONF_H
 #define LIBOPEN_TYPECONF_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef _WIN32
 /*
 **  Windows 
@@ -32,12 +36,18 @@
 
 #define l_free(x) free(x); x = NULL;
 
-LIBOPEN_API typedef enum l_stat {
+LIBOPEN_API enum libopen_stat {
 
-    L_OK                   = 0,
-	L_ERR_ALLOC            = 1,
-	L_ERR_FAIL             = 2
+    L_OK                   = 0, // the operation successful
+	L_ERR_ALLOC            = 1, // unable to allocate memory for a pointer
+	L_ERR_FAIL             = 2  // an operation fails
 
-} l_stat;
+} libopen_stat;
+
+#define LIBOPEN_ARRAY_MAX_CAPACITY ((size_t) - 1)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
