@@ -29,6 +29,3 @@ Types to be implemented
 ## Useful Links
 
  - [Collections-C](https://github.com/srdja/Collections-C)
- - [.NET Documentation](https://docs.microsoft.com/en-us/dotnet/)
- - [cmd.exe](https://en.wikipedia.org/wiki/Cmd.exe)
- - [Unix Shell](https://en.wikipedia.org/wiki/Unix_shell)
