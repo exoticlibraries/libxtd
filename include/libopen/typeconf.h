@@ -36,13 +36,26 @@ extern "C" {
 
 #define l_free(x) free(x); x = NULL;
 
+/**
+    The status codes for operation in the libopen-types 
+    library.
+*/
 LIBOPEN_API enum libopen_stat {
 
-    L_OK                   = 0, // the operation successful
-	L_ERR_ALLOC            = 1, // unable to allocate memory for a pointer
-	L_ERR_FAIL             = 2  // an operation fails
+    L_OK                   = 0, ///< the operation successful
+    L_ERR_ALLOC            = 1, ///< unable to allocate memory for a pointer
+    L_ERR_FAIL             = 2  ///< an operation fails
 
-} libopen_stat;
+};
+
+/**
+    The order in which to sort datas or to order iterate over 
+    a collection.
+*/
+LIBOPEN_API enum iterator_order {
+    L_ITERATOR_ASC        = 0, ///< ascending order
+    L_ITERATOR_DESC       = 1  ///< descending order
+};
 
 #define LIBOPEN_ARRAY_MAX_CAPACITY ((size_t) - 1)
 

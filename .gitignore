@@ -55,6 +55,10 @@ build/
 *build/
 */build/
 
+dist/
+*dist/
+*/dist/
+
 # CMake
 */CMakeFiles/
 *CMakeCache.txt
@@ -62,4 +66,7 @@ build/
 
 # IDE Folders
 *.vscode/
+
+# Others
+*.tmp
 
