@@ -1,4 +1,4 @@
-/*! gcc {0} -I../../include/ ../../src/xarray.c -o out.exe; ./out.exe */
+/*! g++ {0} -I../../include/ ../../src/xarray.c -o out.exe; ./out.exe */
 
 
 #include <exotic/cester.h>
