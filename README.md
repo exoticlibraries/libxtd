@@ -1,5 +1,5 @@
 
-# libopen-types
+# xtypes-types
 
 A library of data types and structures for C.
 

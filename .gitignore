@@ -62,11 +62,27 @@ dist/
 # CMake
 */CMakeFiles/
 *CMakeCache.txt
+*CMakeFiles/
+*.vcx*
+*.sln
+*CMakeCache*
 *.cmake
+*Makefile*
 
 # IDE Folders
 *.vscode/
 
 # Others
 *.tmp
+*/expand.*
+*result.txt
+*.swb
+*.swp
+*.swo
+
+*.xml
+*.tap
+*.tmp
+
+out
 
