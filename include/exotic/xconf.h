@@ -1,19 +1,26 @@
 
 /**
-    \copyright GNU General Public License v3.0 Copyright (c) 2019, Adewale Azeez 
+    \copyright MIT License Copyright (c) 2020, Adewale Azeez 
     \author Adewale Azeez <azeezadewale98@gmail.com>
     \date 07 April 2020
-    \file typeconf.h
+    \file xconf.h
 */
 
-#ifndef EXOTICPEN_TYPECONF_H
-#define EXOTICPEN_TYPECONF_H
+#ifndef EXOTIC_TYPECONF_H
+#define EXOTIC_TYPECONF_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include <stdio.h>
 #include <stddef.h>
+#include <stdlib.h>
+#ifndef XTYPES_DONT_USE_BUILTIN
+    #include <string.h>
+#else
+    #include "__xsupplement.h" /* define the builtin functions manually */
+#endif
 
 #ifdef _WIN32
 /*
@@ -30,10 +37,14 @@ extern "C" {
 #else
 #define EXOTICTYPES_WINDLLEXPORT 0
 #endif
-#if EXOTICTYPES_WINDLLEXPORT
-#define EXOTICPEN_API __declspec(dllexport)
+#ifndef __cplusplus
+    #if EXOTICTYPES_WINDLLEXPORT
+        #define EXOTIC_API __declspec(dllexport) /**< the platform is windows use windows export keyword __declspec(dllexport) */ 
+    #else
+        #define EXOTIC_API extern                /**< Keyword to export the functions to allow ussage dynamically. NOT USED. IGNORED  */
+    #endif
 #else
-#define EXOTICPEN_API extern
+    #define EXOTIC_API
 #endif
 
 #define x_free(x) free(x); x = NULL;
@@ -41,17 +52,33 @@ extern "C" {
 /**
     Define bool to be unsigned
 */
+#ifndef __cplusplus
+#ifndef bool
 typedef unsigned bool;
+#ifndef TRUE
+    #define TRUE 1
+#endif
+#ifndef FALSE
+    #define FALSE 0
+#endif
+#endif
+#endif
 
 /**
-    The status codes for operation in the xtypes-types 
+    The status codes for operation in the x-types 
     library.
 */
-EXOTICPEN_API enum xtypes_stat {
+EXOTIC_API enum x_stat {
 
-    X_OK                   = 0, ///< the operation successful
-    X_ERR_ALLOC            = 1, ///< unable to allocate memory for a pointer
-    X_ERR_FAIL             = 2  ///< an operation fails
+    X_OK = 0,                       /**< the operation successful */
+    X_ALLOC_ERR,                    /**< unable to allocate memory for a pointer */
+    X_INVALID_CAPACITY_ERR,         /**< the capacity is more than available for the data type */
+    X_OUT_OF_RANGE_ERR,             /**< unable to allocate memory for a pointer */
+    X_MAX_CAPACITY_ERR,             /**< the data type is full */
+    X_VALUE_NOT_FOUND_ERR,          /**< the data type is full */  
+    X_FAILED_TO_CLEANUP_ERR,        /**< the data type is full */    
+    X_CRITICAL_ERR,                 /**< the data type is full */
+    X_ERR_FAIL                      /**< an operation fails */
 
 };
 
@@ -59,12 +86,12 @@ EXOTICPEN_API enum xtypes_stat {
     The order in which to sort datas or to order iterate over 
     a collection.
 */
-EXOTICPEN_API enum iterator_order {
-    X_ITERATOR_ASC        = 0, ///< ascending order
-    X_ITERATOR_DESC       = 1  ///< descending order
+EXOTIC_API enum iterator_order {
+    X_ITERATOR_ASC        = 0, /**< ascending order */
+    X_ITERATOR_DESC       = 1  /**< descending order */
 };
 
-#define EXOTICPEN_ARRAY_MAX_CAPACITY ((size_t) - 1)
+#define X_ARRAY_MAX_CAPACITY ((size_t) - 1)
 
 #ifdef __cplusplus
 }
