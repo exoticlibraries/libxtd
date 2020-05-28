@@ -82,11 +82,11 @@ enum x_stat    array_add_all_at              (Array *arr, Array *from_arr, size_
 enum x_stat    array_remove                  (Array *arr, void *item);
 enum x_stat    array_remove_at               (Array *arr, size_t index, void **out);
 enum x_stat    array_remove_last             (Array *arr, void **out);
-void           array_remove_all              (Array *arr);
+enum x_stat    array_remove_all              (Array *arr);
 void           array_remove_if               (Array *arr, bool (*predicate) (const void*));
-void           array_remove_range            (Array *arr, size_t from_index, size_t to_index);
+enum x_stat    array_remove_range            (Array *arr, size_t from_index, size_t to_index);
 void           array_free_element_if         (Array *arr, bool (*predicate) (const void*));
-void           array_free_all_elements       (Array *arr); /* try calling array_map to free elements */
+void           array_free_all_elements       (Array *arr);
 
 enum x_stat    array_get_at                  (Array *arr, size_t index, void **out);
 enum x_stat    array_get_last                (Array *arr, void **out);

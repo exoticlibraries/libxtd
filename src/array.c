@@ -258,29 +258,86 @@ enum x_stat array_remove_last(Array *arr, void **out) {
 /**
 
 */
-void array_remove_all(Array *arr) {
+enum x_stat array_remove_all(Array *arr) {
+    enum x_stat status;
     
+    while (arr->size > 0) {
+        status = array_remove_last(arr, NULL);
+        if (status != X_OK) {
+            return status;
+        }
+    }
+    
+    return X_OK;
 }
 
 /**
 
 */
 void array_remove_if(Array *arr, bool (*predicate) (const void*)) {
+    size_t index;
     
+    for (index = 0; index < arr->size; ++index) {
+        if (predicate(arr->buffer[index]) == TRUE) {
+            array_remove_at(arr, index, NULL);
+            --index;
+        }
+    }
 }
 
 /**
 
 */
-void array_remove_range(Array *arr, size_t from_index, size_t to_index) {
+enum x_stat array_remove_range(Array *arr, size_t from_index, size_t to_index) {
+    size_t index, remove_count;
     
+    if (from_index > arr->size || to_index > arr->size) {
+        return X_OUT_OF_RANGE_ERR;
+    }
+    if (from_index > to_index) {
+        return X_INDEXES_OVERLAP_ERR;
+    }
+    index = from_index;
+    do {
+        if (array_remove_at(arr, index, NULL) != X_OK) {
+            return X_ERR;
+        }
+    } while (++from_index <= to_index);
+    
+    
+    return X_OK;
 }
 
 /**
 
 */
 void array_free_element_if(Array *arr, bool (*predicate) (const void*)) {
+    size_t index;
+    void *out;
     
+    for (index = 0; index < arr->size; ++index) {
+        if (predicate(arr->buffer[index]) == TRUE) {
+            array_remove_at(arr, index, &out);
+            free(out);
+            --index;
+        }
+    }
+}
+
+/**
+
+*/
+void array_free_all_elements(Array *arr) {
+    enum x_stat status;
+    void *out;
+    
+    while (arr->size > 0) {
+        status = array_remove_last(arr, &out);
+        if (status == X_OK) {
+            free(out);
+        }
+        
+    }
 }
 
 /**
@@ -304,13 +361,6 @@ enum x_stat array_get_last(Array *arr, void **out) {
     }
 
     return array_get_at(arr, arr->size - 1, out);
-}
-
-/**
-
-*/
-void array_free_all_elements(Array *arr) {
-    
 }
 
 enum x_stat array_index_of(Array *arr, void *item, size_t *index) {

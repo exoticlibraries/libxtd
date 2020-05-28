@@ -12,8 +12,28 @@ CESTER_COMMENT(
 )
 
 CESTER_BODY(
+typedef struct a_struct__ {
+    int index ;
+    char* value;
+} AStruct;
+
 void *failing_malloc(size_t size) {
     return NULL;
+}
+
+bool remove_if_between_2_and_6(const void* item) {
+    int num;
+    
+    num = *((int*)item);
+    return num > 2 && num < 6;
+}
+
+bool remove_free_if_predicate(const void* item) {
+    AStruct *a_struct;
+    
+    a_struct = (AStruct *) item;
+    return a_struct->index == 1 || 
+           cester_string_starts_with(a_struct->value, "second");
 }
 )
 
@@ -177,11 +197,117 @@ CESTER_TEST(test_array_add_all, _,
     array_destroy(array3);
 )
 
-CESTER_TODO_TEST(test_array_remove, _, 
+CESTER_TEST(test_array_remove, _, 
+    Array *array;
+    enum x_stat status;
+    char* name;
+    char* license;
+    char* reason;
+    char* language;
     
+    reason = "for fltk IDE";
+    status = array_new(&array);
+    cester_assert_int_eq(status, X_OK);
+    array_add(array, "libxtypes");
+    array_add(array, "MIT License");
+    array_add(array, "for fltk IDE");
+    array_add(array, "Adewale Azeez");
+    array_add(array, "Open Source");
+    array_add(array, "C");
+    cester_assert_int_eq(6, array_size(array));
+    
+    array_remove_last(array, (void*)&language);
+    cester_assert_str_equal("C", language);
+    cester_assert_int_eq(5, array_size(array));
+    
+    array_remove(array, reason);
+    cester_assert_int_eq(4, array_size(array));
+    
+    array_remove_at(array, 0, (void*)&name);
+    cester_assert_str_equal("libxtypes", name);
+    cester_assert_int_eq(3, array_size(array));
+    
+    status = array_remove_all(array);
+    cester_assert_int_eq(status, X_OK);
+    cester_assert_int_eq(0, array_size(array));
+    
+    array_destroy(array);
 )
 
-CESTER_TODO_TEST(test_array_remove_two, _, 
+CESTER_TEST(test_array_remove_if, _, 
+    Array *array;
+    enum x_stat status;
+    int one;
+    int two;
+    int three;
+    int four;
+    int five;
+    int six;
+    int seven;
+    
+    one = 1;
+    two = 2;
+    three = 3;
+    four = 4;
+    five = 5;
+    six = 6;
+    seven = 7;
+    status = array_new(&array);
+    cester_assert_int_eq(status, X_OK);
+    array_add(array, &one);
+    array_add(array, &two);
+    array_add(array, &three);
+    array_add(array, &four);
+    array_add(array, &five);
+    array_add(array, &six);
+    array_add(array, &seven);
+    
+    cester_assert_int_eq(7, array_size(array));
+    array_remove_if(array, remove_if_between_2_and_6);
+    cester_assert_int_eq(4, array_size(array));    
+    
+    status = array_remove_range(array, 1, 3);
+    cester_assert_int_eq(status, X_OK);
+    cester_assert_int_eq(1, array_size(array));   
+    
+    array_destroy(array);
+)
+
+CESTER_TEST(test_array_remove_free, _, 
+    Array *array;
+    enum x_stat status;
+    AStruct *a_struct1;
+    AStruct *a_struct2;
+    AStruct *a_struct3;
+    AStruct *a_struct4;
+    
+    a_struct1 =  (AStruct *) malloc(sizeof(AStruct));
+    a_struct2 =  (AStruct *) malloc(sizeof(AStruct));
+    a_struct3 =  (AStruct *) malloc(sizeof(AStruct));
+    a_struct1->index = 1;
+    a_struct2->value = "second struct";
+    
+    status = array_new(&array);
+    cester_assert_int_eq(status, X_OK);
+    array_add(array, a_struct1);
+    array_add(array, a_struct2);
+    array_add(array, a_struct3);
+    cester_assert_str_equal("second struct", a_struct2->value);
+
+    cester_assert_int_eq(3, array_size(array));
+    array_free_element_if(array, remove_free_if_predicate);
+    cester_assert_int_eq(1, array_size(array));
+    a_struct4 =  (AStruct *) malloc(sizeof(AStruct)); /* this init claim the available memory to confirm freed pointers */
+    cester_assert_str_not_equal("second struct", a_struct2->value);
+    array_add(array, a_struct4);
+    
+    array_free_all_elements(array);
+    cester_assert_int_eq(0, array_size(array));
+    
+    array_destroy(array);
+)
+
+CESTER_TODO_TEST(test_array_get, _, 
     
 )
 
@@ -207,7 +333,7 @@ CESTER_TODO_TEST(test_array_add_get, _,
 )
 
 CESTER_OPTIONS(
-    /* CESTER_VERBOSE(); */
+    CESTER_NO_MEMTEST();
     CESTER_MINIMAL();
 )
 

@@ -77,8 +77,9 @@ EXOTIC_API enum x_stat {
     X_MAX_CAPACITY_ERR,             /**< the data type is full */
     X_VALUE_NOT_FOUND_ERR,          /**< the data type is full */  
     X_FAILED_TO_CLEANUP_ERR,        /**< the data type is full */    
-    X_CRITICAL_ERR,                 /**< the data type is full */
-    X_ERR_FAIL                      /**< an operation fails */
+    X_INDEXES_OVERLAP_ERR,          /**< Two index value overlap each other */
+    X_CRITICAL_ERR,                 /**< An error impossible to recover from occur. The program should terminate immediately if encountered */
+    X_ERR                           /**< An operation fails */
 
 };
 
