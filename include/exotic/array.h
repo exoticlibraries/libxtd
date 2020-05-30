@@ -50,6 +50,9 @@ typedef struct array_struct {
     void *(*memory_calloc) (size_t blocks, size_t size);    /**<  memory allocator used to allocate the array and it buffer. calloc */
     void  (*memory_free)   (void *block);                   /**<  the free funtion to release the memory of the array and it buffer */
     void **buffer;                                          /**<  the pointer to the items in the array */
+    
+    /*Iterator iter; */
+    /*MicroCache cache_micro; */
 } Array;
 
 
@@ -90,6 +93,12 @@ void           array_free_all_elements       (Array *arr);
 
 enum x_stat    array_get_at                  (Array *arr, size_t index, void **out);
 enum x_stat    array_get_last                (Array *arr, void **out);
+enum x_stat    array_index_of                (Array *arr, void *item, size_t *index);
+enum x_stat    array_index_of_from           (Array *arr, void *item, size_t *index, size_t from_index);
+enum x_stat    array_index_of_in_range       (Array *arr, void *item, size_t *index, size_t from_index, size_t to_index);
+enum x_stat    array_last_index_of           (Array *arr, void *item, size_t *index);
+enum x_stat    array_last_index_of_from      (Array *arr, void *item, size_t *index, size_t from_index);
+enum x_stat    array_last_index_of_in_range  (Array *arr, void *item, size_t *index, size_t from_index, size_t to_index);
 
 enum x_stat    array_slice                   (Array *arr, size_t from_index, size_t to_index, Array **out);
 enum x_stat    array_shallow_copy            (Array *arr, Array **out);
@@ -103,13 +112,6 @@ void           array_reverse_in_range        (Array *arr, size_t from_index, siz
 bool           array_contains                (Array *arr, void *item);
 size_t         array_element_count           (Array *arr, void *item);
 void           array_sort                    (Array *arr, int (*cmp) (const void*, const void*));
-
-enum x_stat    array_index_of                (Array *arr, void *item, size_t *index);
-enum x_stat    array_index_of_from           (Array *arr, void *item, size_t *index, size_t from_index);
-enum x_stat    array_index_of_in_range       (Array *arr, void *item, size_t *index, size_t from_index, size_t to_index);
-enum x_stat    array_last_index_of           (Array *arr, void *item, size_t *index);
-enum x_stat    array_last_index_of_from      (Array *arr, void *item, size_t *index, size_t from_index);
-enum x_stat    array_last_index_of_in_range  (Array *arr, void *item, size_t *index, size_t from_index, size_t to_index);
 
 size_t         array_size                    (Array *arr);
 bool           array_is_empty                (Array *arr);

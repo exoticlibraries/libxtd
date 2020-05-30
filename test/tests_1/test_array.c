@@ -286,6 +286,7 @@ CESTER_TEST(test_array_remove_free, _,
     a_struct3 =  (AStruct *) malloc(sizeof(AStruct));
     a_struct1->index = 1;
     a_struct2->value = "second struct";
+    a_struct3->value = "third struct";
     
     status = array_new(&array);
     cester_assert_int_eq(status, X_OK);
@@ -297,8 +298,7 @@ CESTER_TEST(test_array_remove_free, _,
     cester_assert_int_eq(3, array_size(array));
     array_free_element_if(array, remove_free_if_predicate);
     cester_assert_int_eq(1, array_size(array));
-    a_struct4 =  (AStruct *) malloc(sizeof(AStruct)); /* this init claim the available memory to confirm freed pointers */
-    cester_assert_str_not_equal("second struct", a_struct2->value);
+    a_struct4 =  (AStruct *) malloc(10000);
     array_add(array, a_struct4);
     
     array_free_all_elements(array);
@@ -307,8 +307,62 @@ CESTER_TEST(test_array_remove_free, _,
     array_destroy(array);
 )
 
-CESTER_TODO_TEST(test_array_get, _, 
+CESTER_TEST(test_array_get, _,
+    Array *array;
+    AStruct *a_struct;
+    AStruct *nu_struct;
+    char* name;
+    int num;
+    int* nu_num;
+    enum x_stat status;
     
+    a_struct = (AStruct *) malloc(sizeof(AStruct));
+    num = 212122323;
+    status = array_new(&array);
+    cester_assert_int_eq(status, X_OK);
+    status = array_add(array, a_struct);
+    cester_assert_int_eq(status, X_OK);
+    status = array_add(array, "libxtypes");
+    cester_assert_int_eq(status, X_OK);
+    status = array_add(array, &num);
+    cester_assert_int_eq(status, X_OK);
+    
+    cester_assert_str_not_equal(name, "libxtypes");
+    status = array_get_at(array, 1, (void*)&name);
+    cester_assert_int_eq(status, X_OK);
+    cester_assert_str_equal(name, "libxtypes");
+    
+    status = array_get_last(array, (void*)&nu_num);
+    cester_assert_int_eq(status, X_OK);
+    cester_assert_int_eq(*nu_num, num);
+    
+    cester_assert_ptr_not_equal(nu_struct, a_struct);
+    status = array_get_at(array, 0, (void*)&nu_struct);
+    cester_assert_int_eq(status, X_OK);
+    cester_assert_ptr_equal(nu_struct, a_struct);
+    
+    free(a_struct);
+    array_destroy(array);
+)
+
+CESTER_TEST(test_array_index_of, _, 
+    Array *array;
+    enum x_stat status;
+    int num1 = 20;
+    int num2 = 30;
+    int num3 = 40;
+    int num4 = 50;
+    int num5 = 60;
+    
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status);
+    array_add(array, &num1);
+    array_add(array, &num2);
+    array_add(array, &num3);
+    array_add(array, &num4);
+    array_add(array, &num5);
+    
+    array_destroy(array);
 )
 
 CESTER_TODO_TEST(test_array_size_and_capacity, _, 

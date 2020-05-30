@@ -291,11 +291,11 @@ void array_remove_if(Array *arr, bool (*predicate) (const void*)) {
 enum x_stat array_remove_range(Array *arr, size_t from_index, size_t to_index) {
     size_t index, remove_count;
     
-    if (from_index > arr->size || to_index > arr->size) {
-        return X_OUT_OF_RANGE_ERR;
-    }
     if (from_index > to_index) {
         return X_INDEXES_OVERLAP_ERR;
+    }
+    if (to_index > arr->size) {
+        return X_OUT_OF_RANGE_ERR;
     }
     index = from_index;
     do {
@@ -363,16 +363,60 @@ enum x_stat array_get_last(Array *arr, void **out) {
     return array_get_at(arr, arr->size - 1, out);
 }
 
+/**
+
+*/
 enum x_stat array_index_of(Array *arr, void *item, size_t *index) {
+    return array_index_of_in_range(arr, item, index, 0, arr->size);
+}
+
+/**
+    Search for an item from a specific index within the array
+*/
+enum x_stat array_index_of_from(Array *arr, void *item, size_t *index, size_t from_index) {
+    return array_index_of_in_range(arr, item, index, from_index, arr->size);
+}
+
+/**
+
+*/
+enum x_stat array_index_of_in_range(Array *arr, void *item, size_t *index, size_t from_index, size_t to_index) {
     size_t i;
     
-    for (i = 0; i < arr->size; ++i) {
+    if (from_index > to_index) {
+        return X_INDEXES_OVERLAP_ERR;
+    }
+    if (to_index > arr->size) {
+        return X_OUT_OF_RANGE_ERR;
+    }
+    for (i = from_index; i < to_index; ++i) {
         if (arr->buffer[i] == item) {
             *index = i;
             return X_OK;
         }
     }
     return X_OUT_OF_RANGE_ERR;
+}
+
+/**
+
+*/
+enum x_stat array_last_index_of(Array *arr, void *item, size_t *index) {
+    
+}
+
+/**
+
+*/
+enum x_stat array_last_index_of_from(Array *arr, void *item, size_t *index, size_t from_index) {
+    
+}
+
+/**
+
+*/
+enum x_stat array_last_index_of_in_range(Array *arr, void *item, size_t *index, size_t from_index, size_t to_index) {
+    
 }
 
 /**
