@@ -26,6 +26,11 @@ Types to be implemented
 - [ ] string
 - [ ] xstring
 
+## How it works 
+
+Get lot of ideas from https://docs.microsoft.com/en-us/dotnet/api/ 
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/
+
 ## Useful Links
 
  - [Collections-C](https://github.com/srdja/Collections-C)

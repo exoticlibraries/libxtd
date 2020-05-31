@@ -1,4 +1,3 @@
-/*! gcc -ansi -pedantic-errors {0} -I../../include/ ../../src/array.c -o out.exe; ./out.exe */
 /*! gcc {0} -I../../include/ ../../src/array.c -o out.exe; ./out.exe */
 
 #define XTYPES_DONT_USE_BUILTIN
@@ -345,7 +344,7 @@ CESTER_TEST(test_array_get, _,
     array_destroy(array);
 )
 
-CESTER_TEST(test_array_index_of, _, 
+CESTER_TEST(test_array_index_of, _,
     Array *array;
     enum x_stat status;
     int num1 = 20;
@@ -353,6 +352,7 @@ CESTER_TEST(test_array_index_of, _,
     int num3 = 40;
     int num4 = 50;
     int num5 = 60;
+    size_t index;
     
     status = array_new(&array);
     cester_assert_int_eq(X_OK, status);
@@ -361,6 +361,80 @@ CESTER_TEST(test_array_index_of, _,
     array_add(array, &num3);
     array_add(array, &num4);
     array_add(array, &num5);
+    
+    status = array_index_of(array, &num3, &index);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(2, index);
+    
+    status = array_index_of(array, &num5, &index);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(4, index);
+    
+    status = array_index_of_from(array, &num3, &index, 2);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(0, index);
+    
+    status = array_index_of_from(array, &num4, &index, 2);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(1, index);
+    
+    status = array_index_of_in_range(array, &num4, &index, 0, 3);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(3, index);
+    
+    status = array_index_of_in_range(array, &num5, &index, 2, array_size(array));
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(2, index);
+    
+    status = array_index_of_in_range(array, &num3, &index, 2, 4);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(0, index);
+    
+    index = -1;
+    status = array_index_of_from(array, &num1, &index, 3);
+    cester_assert_int_eq(X_OUT_OF_RANGE_ERR, status);
+    cester_assert_int_eq(-1, index);
+    
+    status = array_index_of_in_range(array, &num4, &index, 20, array_size(array));
+    cester_assert_int_eq(X_INDEXES_OVERLAP_ERR, status);
+    
+    array_destroy(array);
+)
+
+CESTER_TEST(test_array_last_index_of, _,
+    Array *array;
+    enum x_stat status;
+    int num1 = 20;
+    int num2 = 40;
+    size_t index;
+    
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status);
+    array_add(array, &num1);
+    array_add(array, &num1);
+    array_add(array, &num2);
+    array_add(array, &num1);
+    array_add(array, &num1);
+    
+    status = array_last_index_of(array, &num2, &index);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(2, index);
+    
+    status = array_last_index_of(array, &num1, &index);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(4, index);
+    
+    status = array_last_index_of_from(array, &num1, &index, 2);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(4, index);
+    
+    status = array_last_index_of_in_range(array, &num1, &index, 0, 2);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(1, index);
+    
+    status = array_last_index_of_in_range(array, &num1, &index, 0, 4);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(4, index);
     
     array_destroy(array);
 )

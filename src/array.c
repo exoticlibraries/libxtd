@@ -367,14 +367,14 @@ enum x_stat array_get_last(Array *arr, void **out) {
 
 */
 enum x_stat array_index_of(Array *arr, void *item, size_t *index) {
-    return array_index_of_in_range(arr, item, index, 0, arr->size);
+    return array_index_of_in_range(arr, item, index, 0, arr->size - 1);
 }
 
 /**
     Search for an item from a specific index within the array
 */
 enum x_stat array_index_of_from(Array *arr, void *item, size_t *index, size_t from_index) {
-    return array_index_of_in_range(arr, item, index, from_index, arr->size);
+    return array_index_of_in_range(arr, item, index, from_index, arr->size - 1);
 }
 
 /**
@@ -389,7 +389,42 @@ enum x_stat array_index_of_in_range(Array *arr, void *item, size_t *index, size_
     if (to_index > arr->size) {
         return X_OUT_OF_RANGE_ERR;
     }
-    for (i = from_index; i < to_index; ++i) {
+    for (i = from_index; i <= to_index; ++i) {
+        if (arr->buffer[i] == item) {
+            *index = i - from_index;
+            return X_OK;
+        }
+    }
+    return X_OUT_OF_RANGE_ERR;
+}
+
+/**
+
+*/
+enum x_stat array_last_index_of(Array *arr, void *item, size_t *index) {
+    return array_last_index_of_in_range(arr, item, index, 0, arr->size - 1);
+}
+
+/**
+
+*/
+enum x_stat array_last_index_of_from(Array *arr, void *item, size_t *index, size_t from_index) {
+    return array_last_index_of_in_range(arr, item, index, from_index, arr->size - 1);
+}
+
+/**
+
+*/
+enum x_stat array_last_index_of_in_range(Array *arr, void *item, size_t *index, size_t from_index, size_t to_index) {
+    size_t i;
+    
+    if (from_index > to_index) {
+        return X_INDEXES_OVERLAP_ERR;
+    }
+    if (to_index > arr->size) {
+        return X_OUT_OF_RANGE_ERR;
+    }
+    for (i = to_index; i >= from_index ; --i) {
         if (arr->buffer[i] == item) {
             *index = i;
             return X_OK;
@@ -401,21 +436,35 @@ enum x_stat array_index_of_in_range(Array *arr, void *item, size_t *index, size_
 /**
 
 */
-enum x_stat array_last_index_of(Array *arr, void *item, size_t *index) {
+enum x_stat array_slice(Array *arr, size_t from_index, size_t to_index, Array **out) {
     
 }
 
 /**
 
 */
-enum x_stat array_last_index_of_from(Array *arr, void *item, size_t *index, size_t from_index) {
+enum x_stat array_shallow_copy(Array *arr, Array **out) {
     
 }
 
 /**
 
 */
-enum x_stat array_last_index_of_in_range(Array *arr, void *item, size_t *index, size_t from_index, size_t to_index) {
+enum x_stat array_shallow_copy_in_range(Array *arr, size_t from_index, size_t to_index, Array **out) {
+    
+}
+
+/**
+
+*/
+enum x_stat array_deep_copy(Array *arr, void *(*cpy) (void*), Array **out) {
+    
+}
+
+/**
+
+*/
+enum x_stat array_deep_copy_in_range(Array *arr, size_t from_index, size_t to_index, void *(*cpy) (void*), Array **out) {
     
 }
 
