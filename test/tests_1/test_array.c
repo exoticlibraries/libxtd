@@ -4,8 +4,6 @@
 #include <exotic/cester.h>
 #include <exotic/array.h>
 
-/* see https://github.com/CoffeeTableEspresso/CGenerics/blob/master/vect.c for typed */
-
 CESTER_COMMENT(
     Test the Array data type. 
     Create as many test as posible 

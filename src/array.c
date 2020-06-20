@@ -65,13 +65,13 @@ enum x_stat array_new_config(ArrayConfig* const conf, Array **out) {
         return X_INVALID_CAPACITY_ERR;
     }
 
-    arr = conf->memory_calloc(1, sizeof(Array));
+    arr = (Array *)conf->memory_calloc(1, sizeof(Array));
 
     if (!arr) {
         return X_ALLOC_ERR;
     }
 
-    buffer = conf->memory_alloc(conf->capacity * sizeof(void*));
+    buffer = (void **) conf->memory_alloc(conf->capacity * sizeof(void*));
 
     if (!buffer) {
         conf->memory_free(arr);
@@ -505,7 +505,7 @@ static enum x_stat expand_capacity(Array *arr) {
     } else {
         arr->capacity = tmp_capacity;
     }
-    new_buffer = arr->memory_alloc(tmp_capacity * sizeof(void*));
+    new_buffer = (void **) arr->memory_alloc(tmp_capacity * sizeof(void*));
     if (!new_buffer) {
         return X_ALLOC_ERR;
     }

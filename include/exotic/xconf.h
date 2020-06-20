@@ -52,18 +52,15 @@ extern "C" {
 /**
     Define bool to be unsigned
 */
-#ifndef __cplusplus
-#ifndef bool
-typedef unsigned bool;
+#ifndef bool 
+#define bool unsigned
+#endif
 #ifndef TRUE
     #define TRUE 1
 #endif
 #ifndef FALSE
     #define FALSE 0
 #endif
-#endif
-#endif
-
 /**
     The status codes for operation in the x-types 
     library.
