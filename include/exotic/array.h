@@ -100,18 +100,17 @@ enum x_stat    array_last_index_of           (Array *arr, void *item, size_t *in
 enum x_stat    array_last_index_of_from      (Array *arr, void *item, size_t *index, size_t from_index);
 enum x_stat    array_last_index_of_in_range  (Array *arr, void *item, size_t *index, size_t from_index, size_t to_index);
 
-enum x_stat    array_slice                   (Array *arr, size_t from_index, size_t to_index, Array **out);
-enum x_stat    array_shallow_copy            (Array *arr, Array **out);
+enum x_stat    array_copy_fn_in_range        (Array *arr, size_t from_index, size_t to_index, void *(*cpy_fn) (void*), Array **out);
+enum x_stat    array_copy_fn                 (Array *arr, void *(*cpy_fn) (void*), Array **out);
 enum x_stat    array_shallow_copy_in_range   (Array *arr, size_t from_index, size_t to_index, Array **out);
-enum x_stat    array_deep_copy               (Array *arr, void *(*cpy) (void*), Array **out);
-enum x_stat    array_deep_copy_in_range      (Array *arr, size_t from_index, size_t to_index, void *(*cpy) (void*), Array **out);
+enum x_stat    array_shallow_copy            (Array *arr, Array **out);
 
 enum x_stat    array_trim_to_size            (Array *arr);
 void           array_reverse                 (Array *arr);
 void           array_reverse_in_range        (Array *arr, size_t from_index, size_t to_index);
 bool           array_contains                (Array *arr, void *item);
 size_t         array_element_count           (Array *arr, void *item);
-void           array_sort                    (Array *arr, int (*cmp) (const void*, const void*));
+void           array_sort                    (Array *arr, unsigned (*cmp) (const void*, const void*));
 
 size_t         array_size                    (Array *arr);
 bool           array_is_empty                (Array *arr);

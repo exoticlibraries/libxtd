@@ -10,6 +10,10 @@
 
 static enum x_stat expand_capacity(Array *arr);
 
+void* xtypes_internal_array_shallow_copy_fn(void *item) {
+    return item;
+}
+
 /**
     
 */
@@ -436,36 +440,50 @@ enum x_stat array_last_index_of_in_range(Array *arr, void *item, size_t *index, 
 /**
 
 */
-enum x_stat array_slice(Array *arr, size_t from_index, size_t to_index, Array **out) {
+enum x_stat array_copy_fn_in_range(Array *arr, size_t from_index, size_t to_index, void *(*cpy_fn) (void*), Array **out) {
+    size_t i;
+    Array *tmp = arr->memory_alloc(sizeof(Array));
+
+    if (!tmp) {
+        return X_ALLOC_ERR;
+    }
+    if (!(tmp->buffer = arr->memory_calloc(arr->capacity, sizeof(void*)))) {
+        arr->memory_free(tmp);
+        return X_ALLOC_ERR;
+    }
+    tmp->expand_rate   = arr->expand_rate;
+    tmp->size          = arr->size;
+    tmp->capacity      = arr->capacity;
+    tmp->memory_alloc  = arr->memory_alloc;
+    tmp->memory_calloc = arr->memory_calloc;
+    tmp->memory_free   = arr->memory_free;
+    for (i = from_index; i < to_index; ++i) {
+        tmp->buffer[i] = cpy_fn(arr->buffer[i]);
+    }
+    *out = tmp;
     
+    return X_OK;
 }
 
 /**
 
 */
-enum x_stat array_shallow_copy(Array *arr, Array **out) {
-    
+enum x_stat array_copy_fn(Array *arr, void *(*cpy_fn) (void*), Array **out) {
+    return array_copy_fn_in_range(arr, 0, arr->size, cpy_fn, out);
 }
 
 /**
 
 */
 enum x_stat array_shallow_copy_in_range(Array *arr, size_t from_index, size_t to_index, Array **out) {
-    
+    return array_copy_fn_in_range(arr, from_index, to_index, xtypes_internal_array_shallow_copy_fn, out);
 }
 
 /**
 
 */
-enum x_stat array_deep_copy(Array *arr, void *(*cpy) (void*), Array **out) {
-    
-}
-
-/**
-
-*/
-enum x_stat array_deep_copy_in_range(Array *arr, size_t from_index, size_t to_index, void *(*cpy) (void*), Array **out) {
-    
+enum x_stat array_shallow_copy(Array *arr, Array **out) {
+    return array_copy_fn(arr, xtypes_internal_array_shallow_copy_fn, out);
 }
 
 /**

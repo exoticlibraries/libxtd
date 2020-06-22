@@ -1,4 +1,4 @@
-/*! gcc {0} -I../../include/ ../../src/array.c -o out.exe; ./out.exe */
+/*! gcc -ansi -pedantic-errors {0} -I../../../include/ ../../../src/array.c -o out; ./out */
 
 #define XTYPES_DONT_USE_BUILTIN
 #include <exotic/cester.h>
@@ -16,7 +16,7 @@ typedef struct a_struct__ {
     char* value;
 } AStruct;
 
-void *failing_malloc(size_t size) {
+void* failing_malloc(size_t size) {
     return NULL;
 }
 
@@ -34,6 +34,16 @@ bool remove_free_if_predicate(const void* item) {
     return a_struct->index == 1 || 
            cester_string_starts_with(a_struct->value, "second");
 }
+
+void* test_copy_function(void* item) {
+    AStruct *a_struct = (AStruct *) item;
+    AStruct *new_a_struct =  (AStruct *) malloc(sizeof(AStruct));
+    
+    new_a_struct->value = a_struct->value;
+    new_a_struct->index = a_struct->index;
+    return new_a_struct;
+}
+
 )
 
 CESTER_TEST(test_array_init, _, 
@@ -439,19 +449,111 @@ CESTER_TEST(test_array_last_index_of, _,
     array_destroy(array);
 )
 
+CESTER_TEST(test_array_copy_fn, _, 
+    Array *array1;
+    Array *array2;
+    AStruct *a_struct;
+    AStruct *get_a_struct1;
+    AStruct *get_a_struct2;
+    enum x_stat status;
+    
+    status = array_new(&array1);
+    cester_assert_int_eq(X_OK, status);
+    status = array_new(&array2);
+    cester_assert_int_eq(X_OK, status);    
+    a_struct =  (AStruct *) malloc(sizeof(AStruct));
+    a_struct->value = "Testing 1234 !@##$$";
+    
+    array_add(array1, (void*) a_struct);    
+    status = array_copy_fn(array1, test_copy_function, &array2);
+    cester_assert_int_eq(X_OK, status);
+    
+    array_get_at(array1, 0, (void*)&(get_a_struct1));
+    array_get_at(array2, 0, (void*)&(get_a_struct2));
+    cester_assert_str_equal(get_a_struct1->value, get_a_struct2->value);
+    cester_assert_ptr_not_equal(get_a_struct1, get_a_struct2);
+    
+    array_destroy(array1);
+    array_destroy(array2);
+)
+
+CESTER_TEST(test_array_shallow_copy, _, 
+    Array *array1;
+    Array *array2;
+    char *value1;
+    char *value2;
+    enum x_stat status;
+    
+    status = array_new(&array1);
+    cester_assert_int_eq(X_OK, status);
+    status = array_new(&array2);
+    cester_assert_int_eq(X_OK, status);
+    
+    array_add(array1, (void*) "One");
+    array_add(array1, (void*) "Two");
+    array_add(array1, (void*) "Three");
+    
+    array_get_at(array1, 0, (void*)&(value1));
+    cester_assert_str_equal(value1, "One");
+    array_get_at(array1, 2, (void*)&(value1));
+    cester_assert_str_not_equal(value1, "Two");
+    cester_assert_str_equal(value1, "Three");
+    
+    status = array_shallow_copy(array1, &array2);
+    cester_assert_int_eq(X_OK, status);
+    
+    array_get_at(array1, 0, (void*)&(value1));
+    array_get_at(array2, 0, (void*)&(value2));
+    cester_assert_str_equal(value1, value2);
+    cester_assert_ptr_equal(value1, value2);
+    
+    array_get_at(array1, 1, (void*)&(value1));
+    array_get_at(array2, 1, (void*)&(value2));
+    cester_assert_str_equal(value1, value2);
+    cester_assert_ptr_equal(value1, value2);
+    
+    array_get_at(array1, 2, (void*)&(value1));
+    array_get_at(array2, 2, (void*)&(value2));
+    cester_assert_str_equal(value1, value2);
+    cester_assert_ptr_equal(value1, value2);
+    
+    array_destroy(array1);
+    array_destroy(array2);
+)
+
+CESTER_TEST(test_array_shallow_copy_2, _, 
+    Array *array1;
+    Array *array2;
+    AStruct *a_struct;
+    AStruct *get_a_struct1;
+    AStruct *get_a_struct2;
+    enum x_stat status;
+    
+    status = array_new(&array1);
+    cester_assert_int_eq(X_OK, status);
+    status = array_new(&array2);
+    cester_assert_int_eq(X_OK, status);    
+    a_struct =  (AStruct *) malloc(sizeof(AStruct));
+    a_struct->value = "Testing 1234 !@##$$";
+    
+    array_add(array1, (void*) a_struct);    
+    status = array_shallow_copy(array1, &array2);
+    cester_assert_int_eq(X_OK, status);
+    
+    array_get_at(array1, 0, (void*)&(get_a_struct1));
+    array_get_at(array2, 0, (void*)&(get_a_struct2));
+    cester_assert_str_equal(get_a_struct1->value, get_a_struct2->value);
+    cester_assert_ptr_equal(get_a_struct1, get_a_struct2);
+    
+    array_destroy(array1);
+    array_destroy(array2);
+)
+
 CESTER_TODO_TEST(test_array_size_and_capacity, _, 
     
 )
 
 CESTER_TODO_TEST(test_array_iterator, _, 
-    
-)
-
-CESTER_TODO_TEST(test_array_deep_copy, _, 
-    
-)
-
-CESTER_TODO_TEST(test_array_shallow_copy, _, 
     
 )
 
