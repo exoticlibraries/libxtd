@@ -15,6 +15,9 @@ extern "C" {
 #endif
 
 #include "xconf.h"
+#ifndef XTYPES_NO_ITERATOR
+#include "iterator.h"
+#endif
 
 #define DEFAULT_ARRAY_CAPACITY 4
 #define DEFAULT_ARRAY_EXPANSION_RATE 2
@@ -50,8 +53,9 @@ typedef struct array_struct {
     void *(*memory_calloc) (size_t blocks, size_t size);    /**<  memory allocator used to allocate the array and it buffer. calloc */
     void  (*memory_free)   (void *block);                   /**<  the free funtion to release the memory of the array and it buffer */
     void **buffer;                                          /**<  the pointer to the items in the array */
-    
-    /*Iterator iter; */
+#ifndef XTYPES_NO_ITERATOR    
+    Iterator* iter;                                         /**<  the iterator object for iterating the array */
+#endif
     /*MicroCache cache_micro; */
 } Array;
 
@@ -105,21 +109,19 @@ enum x_stat    array_copy_fn                 (Array *arr, void *(*cpy_fn) (void*
 enum x_stat    array_shallow_copy_in_range   (Array *arr, size_t from_index, size_t to_index, Array **out);
 enum x_stat    array_shallow_copy            (Array *arr, Array **out);
 
-enum x_stat    array_trim_to_size            (Array *arr);
+void           array_map                     (Array *arr, void (*fn) (void*));
+enum x_stat    array_filter                  (Array *arr, bool (*predicate) (const void*), Array **out);
+void           array_reduce                  (Array *arr, void (*fn) (void*, void*), void *output);
+
 void           array_reverse                 (Array *arr);
-void           array_reverse_in_range        (Array *arr, size_t from_index, size_t to_index);
 bool           array_contains                (Array *arr, void *item);
 size_t         array_element_count           (Array *arr, void *item);
-void           array_sort                    (Array *arr, unsigned (*cmp) (const void*, const void*));
+void           array_sort                    (Array *arr, int (*cmp) (const void*, const void*));
 
+enum x_stat    array_trim_to_size            (Array *arr);
 size_t         array_size                    (Array *arr);
 bool           array_is_empty                (Array *arr);
 size_t         array_capacity                (Array *arr);
-
-void           array_map                     (Array *arr, void (*fn) (void*));
-enum x_stat    array_filter                  (Array *arr, bool (*predicate) (const void*));
-enum x_stat    array_filter_out              (Array *arr, bool (*predicate) (const void*), Array **out);
-char*          array_to_string               (Array *arr);
 
 #ifdef __cplusplus
 }

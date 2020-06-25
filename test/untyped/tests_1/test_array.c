@@ -20,7 +20,7 @@ void* failing_malloc(size_t size) {
     return NULL;
 }
 
-bool remove_if_between_2_and_6(const void* item) {
+bool if_between_2_and_6(const void* item) {
     int num;
     
     num = *((int*)item);
@@ -43,6 +43,46 @@ void* test_copy_function(void* item) {
     new_a_struct->index = a_struct->index;
     return new_a_struct;
 }
+
+void validate_between_2_and_6(void* item) {
+    int num;
+    
+    num = *((int*)item);
+    cester_assert_true(num > 2 && num < 6);
+}
+
+void add_int_values(void* item, void* result) {
+    int num;
+    
+    num = *((int*)item);
+    *((int*)result) += + num;
+}
+
+void flatten_array_fn(void* item, void* result) {
+    Array *arr = (Array*) item;
+    Array *result_array = (Array*) result;
+    
+    array_add_all(result_array, arr);
+}
+
+int cpm_int_for_sort_asc(const void *item1, const void *item2) {
+    int num1;
+    int num2;
+    
+    num1 = *(*((int**) item1));
+    num2 = *(*((int**) item2));
+    return num1 - num2;
+}
+
+int cpm_int_for_sort_dsc(const void *item1, const void *item2) {
+    int num1;
+    int num2;
+    
+    num1 = *(*((int**) item1));
+    num2 = *(*((int**) item2));
+    return num2 - num1;
+}
+
 
 )
 
@@ -272,7 +312,7 @@ CESTER_TEST(test_array_remove_if, _,
     array_add(array, &seven);
     
     cester_assert_int_eq(7, array_size(array));
-    array_remove_if(array, remove_if_between_2_and_6);
+    array_remove_if(array, if_between_2_and_6);
     cester_assert_int_eq(4, array_size(array));    
     
     status = array_remove_range(array, 1, 3);
@@ -549,17 +589,409 @@ CESTER_TEST(test_array_shallow_copy_2, _,
     array_destroy(array2);
 )
 
-CESTER_TODO_TEST(test_array_size_and_capacity, _, 
+CESTER_TEST(test_array_map, _, 
+    Array *array; 
+    enum x_stat status;
+    int three;
+    int four;
+    int five;
+   
+    three = 3;
+    four = 4;
+    five = 5; 
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status);
+    array_add(array, &three);
+    array_add(array, &four);
+    array_add(array, &five);
     
+    cester_assert_int_eq(3, array_size(array));
+    array_map(array, validate_between_2_and_6);
+    
+    array_destroy(array);
 )
 
-CESTER_TODO_TEST(test_array_iterator, _, 
+CESTER_TEST(test_array_reduce, _, 
+    Array *array; 
+    enum x_stat status;
+    int var1;
+    int var2;
+    int var3;
+    int result;
+   
+    var1 = 5;
+    var2 = 10;
+    var3 = 15; 
+    result = 0;
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status);
+    array_add(array, &var1);
+    array_add(array, &var2);
+    array_add(array, &var3);
     
+    cester_assert_int_eq(3, array_size(array));
+    array_reduce(array, add_int_values, &result);
+    cester_assert_int_eq(result, 30);
+    
+    array_destroy(array);
 )
 
-CESTER_TODO_TEST(test_array_add_get, _, 
-    /* test add_at and get and get_at */
-    /* see test_array_add_all and test get_at */
+CESTER_TEST(test_array_reduce_2_flatten_array, _,
+    Array *array; 
+    Array *array1;
+    Array *array2;
+    Array *array3;
+    enum x_stat status;
+    int initial_size;
+    
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status);
+    status = array_new(&array1);
+    cester_assert_int_eq(X_OK, status);
+    status = array_new(&array2);
+    cester_assert_int_eq(X_OK, status);
+    status = array_new(&array3);
+    cester_assert_int_eq(X_OK, status);
+    
+    array_add(array, (void*) array1);
+    array_add(array, (void*) array2);
+    array_add(array, (void*) array3);
+    
+    array_add(array1, "one");
+    array_add(array1, "two");
+    array_add(array1, "three");
+    
+    array_add(array2, "four");
+    array_add(array2, "five");
+    array_add(array2, "six");
+    
+    array_add(array3, "seven");
+    array_add(array3, "eight");
+    array_add(array3, "nine");
+    array_add(array3, "ten");
+    
+    initial_size = array_size(array);
+    array_reduce(array, flatten_array_fn, (void*) array);
+    cester_assert_int_eq(array_size(array), initial_size + 
+                                            array_size(array1) + 
+                                            array_size(array2) + 
+                                            array_size(array3));
+    
+    array_destroy(array);
+    array_destroy(array1);
+    array_destroy(array2);
+    array_destroy(array3);
+)
+
+CESTER_TEST(test_array_filter, _, 
+    Array *array; 
+    Array *filtered_out;
+    enum x_stat status;
+    int one;
+    int two;
+    int three;
+    int four;
+    int five;
+    int six;
+    int seven;
+    
+    one = 1;
+    two = 2;
+    three = 3;
+    four = 4;
+    five = 5;
+    six = 6;
+    seven = 7;    
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status);
+    array_add(array, &one);
+    array_add(array, &two);
+    array_add(array, &three);
+    array_add(array, &four);
+    array_add(array, &five);
+    array_add(array, &six);
+    array_add(array, &seven);
+    
+    status = array_filter(array, if_between_2_and_6, &filtered_out);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_ne(0, array_size(filtered_out));
+    cester_assert_int_ne(array_size(array), array_size(filtered_out));
+    array_map(filtered_out, validate_between_2_and_6);
+    
+    array_destroy(array);
+    array_destroy(filtered_out);
+)
+
+CESTER_TEST(test_array_reverse, _, 
+    Array *array; 
+    enum x_stat status;
+    int one;
+    int two;
+    int three;
+    int four;
+    int five;
+    int six;
+    int seven;
+    size_t i;
+    void* get_value;
+    int num1;
+    int num2;
+    
+    one = 1;
+    two = 2;
+    three = 3;
+    four = 4;
+    five = 5;
+    six = 6;
+    seven = 7;    
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status);
+    array_add(array, &one);
+    array_add(array, &two);
+    array_add(array, &three);
+    array_add(array, &four);
+    array_add(array, &five);
+    array_add(array, &six);
+    array_add(array, &seven);
+    
+    for (i = 0; i < array_size(array) -1; ++i) {
+        array_get_at(array, i, (void*) &get_value);
+        num1 = *((int*)get_value);
+        array_get_at(array, i+1, (void*) &get_value);
+        num2 = *((int*)get_value);
+        
+        cester_assert_int_lt(num1, num2);
+    }
+    array_reverse(array);    
+    for (i = 0; i < array_size(array) - 1; ++i) {
+        array_get_at(array, i, (void*) &get_value);
+        num1 = *((int*)get_value);
+        array_get_at(array, i+1, (void*) &get_value);
+        num2 = *((int*)get_value);
+        
+        cester_assert_int_gt(num1, num2);
+    }
+    
+    array_destroy(array);
+)
+
+CESTER_TEST(test_array_contains, _, 
+    Array *array;
+    enum x_stat status;
+    
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status);
+    array_add(array, "Adewale");
+    array_add(array, "Exotic Libraries");
+    
+    cester_assert_true(array_contains(array, "Exotic Libraries"));
+    cester_assert_true(array_contains(array, "Adewale"));
+    cester_assert_false(array_contains(array, "libxtypes"));
+    
+    array_destroy(array);
+)
+
+CESTER_TEST(test_array_element_count, _, 
+    Array *array;
+    enum x_stat status;
+    
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status);
+    array_add(array, "Adewale");
+    array_add(array, "Exotic Libraries");
+    array_add(array, "Exotic Libraries");
+    array_add(array, "libxtypes");
+    array_add(array, "Adewale");
+    array_add(array, "Exotic Libraries");
+    array_add(array, "libxtypes");
+    array_add(array, "libxtypes");
+    array_add(array, "libxtypes");
+    array_add(array, "Adewale");
+    array_add(array, "Exotic Libraries");
+    array_add(array, "Exotic Libraries");
+    array_add(array, "libxtypes");
+    array_add(array, "libxtypes");
+    array_add(array, "libxtypes");
+    
+    cester_assert_int_eq(3, array_element_count(array, "Adewale"));
+    cester_assert_int_eq(5, array_element_count(array, "Exotic Libraries"));
+    cester_assert_int_eq(7, array_element_count(array, "libxtypes"));
+    
+    array_destroy(array);
+)
+
+CESTER_TEST(test_array_sort, _, 
+    Array *array; 
+    enum x_stat status;
+    size_t i;
+    int one;
+    int two;
+    int three;
+    int four;
+    int five;
+    void* get_value;
+    int num1;
+    int num2;
+   
+    one = 1;
+    two = 2;
+    three = 3;
+    four = 4;
+    five = 5; 
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status);
+    array_add(array, &two);
+    array_add(array, &one);
+    array_add(array, &five);
+    array_add(array, &four);
+    array_add(array, &three);
+    
+    array_sort(array, cpm_int_for_sort_asc);
+    for (i = 0; i < array_size(array) - 1; ++i) {
+        array_get_at(array, i, (void*) &get_value);
+        num1 = *((int*)get_value);
+        array_get_at(array, i+1, (void*) &get_value);
+        num2 = *((int*)get_value);
+        
+        cester_assert_int_lt(num1, num2);
+    }
+    array_sort(array, cpm_int_for_sort_dsc);
+    for (i = 0; i < array_size(array) - 1; ++i) {
+        array_get_at(array, i, (void*) &get_value);
+        num1 = *((int*)get_value);
+        array_get_at(array, i+1, (void*) &get_value);
+        num2 = *((int*)get_value);
+        
+        cester_assert_int_gt(num1, num2);
+    }
+    
+    array_destroy(array);
+)
+
+CESTER_TEST(test_array_size_and_capacity_trim_is_empty, _, 
+    Array *array; 
+    enum x_stat status;
+    int one;
+    int two;
+    int three;
+    int four;
+    
+    one = 1;
+    two = 2;
+    three = 3;
+    four = 4;  
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_true(array_is_empty(array));
+    array_add(array, &one);
+    array_add(array, &two);
+    array_add(array, &three);
+    array_add(array, &four);
+    array_add(array, &four);
+    
+    cester_assert_false(array_is_empty(array));
+    cester_assert_int_eq(5, array_size(array));
+    cester_assert_int_ne(array_capacity(array), array_size(array));
+    cester_assert_int_gt(array_capacity(array), 4);
+    status = array_trim_to_size(array);
+    cester_assert_int_eq(X_OK, status);
+    cester_assert_int_eq(array_capacity(array), array_size(array));
+    
+    array_destroy(array);
+)
+
+CESTER_TEST(test_array_iterator_raw, _,
+    Array *array;
+    enum x_stat status;
+    int i;
+    void *value;
+    
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status); 
+    array_add(array, "Hello");
+    array_add(array, "World");
+    array_add(array, "This");
+    array_add(array, "is libxtypes");
+    
+    i = 0;
+    cester_assert_false(array_contains(array, "Whole"));
+    cester_assert_true(array_contains(array, "is libxtypes"));
+    while (ITERATOR_HAS_NEXT(array)) {
+        value = ITERATOR_NEXT(array);
+        if (array->iter->index == 0) {
+            array_add(array, "Whole");
+            array_add(array, "Wide");
+        }
+        if (cester_string_starts_with(value, "This")) {
+            array_remove(array, "is libxtypes");
+        }
+        if (array->iter->index > 2) {
+            array_remove(array, "Wide");
+        }
+        ++i;
+        ++array->iter->index;
+    }
+    cester_assert_true(array_contains(array, "Whole"));
+    cester_assert_false(array_contains(array, "is libxtypes"));
+    cester_assert_int_eq(i, array_size(array));
+    
+    array_destroy(array);
+)
+
+CESTER_TEST(test_array_iterator, _,
+    Array *array;
+    enum x_stat status;
+    size_t i;
+    
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status); 
+    array_add(array, "Hello");
+    array_add(array, "World");
+    array_add(array, "This");
+    array_add(array, "is libxtypes");
+    
+    i = 0;
+    FOREACH(array, element, {
+        ++i;
+    })
+    cester_assert_int_eq(i, array_size(array));
+    
+    array_destroy(array);
+)
+
+CESTER_TEST(test_array_iterator_with_index, _,
+    Array *array;
+    enum x_stat status;
+    int i;
+    
+    status = array_new(&array);
+    cester_assert_int_eq(X_OK, status); 
+    array_add(array, "Hello");
+    array_add(array, "World");
+    array_add(array, "This");
+    array_add(array, "is libxtypes");
+    
+    i = 0;
+    cester_assert_false(array_contains(array, "Whole"));
+    cester_assert_true(array_contains(array, "is libxtypes"));
+    FOREACH_INDEX(array, index, element, {
+        if (index == 0) {
+            array_add(array, "Whole");
+            array_add(array, "Wide");
+        }
+        if (cester_string_starts_with(element, "This")) {
+            array_remove(array, "is libxtypes");
+        }
+        if (index > 2) {
+            array_remove(array, "Wide");
+        }
+        ++i;
+    })
+    cester_assert_true(array_contains(array, "Whole"));
+    cester_assert_false(array_contains(array, "is libxtypes"));
+    cester_assert_int_eq(i, array_size(array));
+    
+    array_destroy(array);
 )
 
 CESTER_OPTIONS(

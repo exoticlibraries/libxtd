@@ -18,6 +18,7 @@ extern "C" {
 #include <stdlib.h>
 #ifndef XTYPES_DONT_USE_BUILTIN
     #include <string.h>
+    #define xtypes_qsort qsort
 #else
     #include "__xsupplement.h" /* define the builtin functions manually */
 #endif
@@ -66,7 +67,6 @@ extern "C" {
     library.
 */
 EXOTIC_API enum x_stat {
-
     X_OK = 0,                       /**< the operation successful */
     X_ALLOC_ERR,                    /**< unable to allocate memory for a pointer */
     X_INVALID_CAPACITY_ERR,         /**< the capacity is more than available for the data type */
@@ -76,6 +76,8 @@ EXOTIC_API enum x_stat {
     X_FAILED_TO_CLEANUP_ERR,        /**< the data type is full */    
     X_INDEXES_OVERLAP_ERR,          /**< Two index value overlap each other */
     X_CRITICAL_ERR,                 /**< An error impossible to recover from occur. The program should terminate immediately if encountered */
+    X_NO_OP,                        /**< No operation caried out */
+    X_ITER_END,                     /**< The loop has reached the end of the iteration */
     X_ERR                           /**< An operation fails */
 
 };
