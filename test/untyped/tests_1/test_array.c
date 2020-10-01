@@ -1,4 +1,4 @@
-/*! gcc -ansi -pedantic-errors {0} -I../../../include/ ../../../src/array.c -o out; ./out */
+/*! gcc {0} -I../../../include/ ../../../src/array.c -o out; ./out */
 
 #define XTYPES_DONT_USE_BUILTIN
 #include <exotic/cester.h>
