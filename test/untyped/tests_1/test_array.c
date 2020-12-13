@@ -1,4 +1,4 @@
-/*! gcc {0} -I../../../include/ ../../../src/array.c -o out; ./out */
+/*! gcc {0} -I../../../include/ -I../../../../libcester/include/ ../../../src/array.c -o out; ./out */
 
 #define XTYPES_DONT_USE_BUILTIN
 #include <exotic/cester.h>
@@ -918,7 +918,7 @@ CESTER_TEST(test_array_iterator_raw, _,
     cester_assert_true(array_contains(array, "is libxtypes"));
     while (ITERATOR_HAS_NEXT(array)) {
         value = ITERATOR_NEXT(array);
-        if (array->iter->index == 0) {
+        if (array->iter->index == 1) {
             array_add(array, "Whole");
             array_add(array, "Wide");
         }
@@ -929,7 +929,6 @@ CESTER_TEST(test_array_iterator_raw, _,
             array_remove(array, "Wide");
         }
         ++i;
-        ++array->iter->index;
     }
     cester_assert_true(array_contains(array, "Whole"));
     cester_assert_false(array_contains(array, "is libxtypes"));
@@ -951,7 +950,7 @@ CESTER_TEST(test_array_iterator, _,
     array_add(array, "is libxtypes");
     
     i = 0;
-    FOREACH(array, element, {
+    FOREACH(array, void *element, {
         ++i;
     })
     cester_assert_int_eq(i, array_size(array));
@@ -974,7 +973,7 @@ CESTER_TEST(test_array_iterator_with_index, _,
     i = 0;
     cester_assert_false(array_contains(array, "Whole"));
     cester_assert_true(array_contains(array, "is libxtypes"));
-    FOREACH_INDEX(array, index, element, {
+    FOREACH_INDEX(array, size_t index, void *element, {
         if (index == 0) {
             array_add(array, "Whole");
             array_add(array, "Wide");

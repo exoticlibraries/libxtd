@@ -56,11 +56,17 @@ extern "C" {
 #ifndef bool 
 #define bool unsigned
 #endif
-#ifndef TRUE
-    #define TRUE 1
-#endif
 #ifndef FALSE
     #define FALSE 0
+#endif
+#ifndef TRUE
+    #define TRUE !FALSE
+#endif
+#ifndef false
+    #define false 0
+#endif
+#ifndef true
+    #define true !false
 #endif
 /**
     The status codes for operation in the x-types 

@@ -75,6 +75,7 @@ dist/
 # Others
 *.tmp
 */expand.*
+*expand.*
 *result.txt
 *.swb
 *.swp

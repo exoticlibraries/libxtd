@@ -16,7 +16,7 @@ extern "C" {
 
 #include "xconf.h"
 #ifndef XTYPES_NO_ITERATOR
-#include "iterator.h"
+#include "xiterator.h"
 #endif
 
 #define DEFAULT_ARRAY_CAPACITY 4

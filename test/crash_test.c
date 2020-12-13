@@ -1,12 +1,8 @@
-/*! g++ {0} -I../include/ ../src/array.c -o out.exe; ./out.exe */
+/*! g++ {0} -I../include/ -I../../libmetaref/include/ -o out.exe; ./out.exe */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <exotic/array.h>
 #include <exotic/cester.h>
-
-#include <iostream>
-#include <vector>
 
 /*#define GenerateArray(T) typedef struct array_struct_##T {\
     size_t capacity; \
@@ -69,24 +65,69 @@ int main(int argc, char **argv)
     
 }*/
 
-CESTER_SKIP_TEST(xtypes_array, inst, 
-    Array *array;
-    long long i = 999999999999;
+#ifndef INC_1
+#define INC_1
+#include <exotic/metaref.h>
+//#include <exotic/xoptional.h>
+
+#define SETUP_OPTIONAL_FOR(type)  typedef struct xoptional_##type##_s { \
+    bool is_present ;\
+    type value;\
+} xoptional_##type;\
+\
+xoptional_##type xoptional_##type##_new(type value) {\
+    xoptional_##type _x_gen_optional;\
+    if (value == NULL) {\
+        _x_gen_optional.is_present = FALSE;\
+    } else {\
+        _x_gen_optional.is_present = TRUE;\
+         _x_gen_optional.value = value;\
+    }\
+    return _x_gen_optional;\
+}\
+\
+void (*xoption_if_##type##_present_func_ptr) (type value);\
+\
+void xoptional_##type##_if_present(xoptional_##type optional, \
+        void (*xoption_if_##type##_present_func_ptr) (type value)) {\
+    if (xoptional_is_present(optional))  { \
+        xoption_if_##type##_present_func_ptr(optional.value); \
+    }\
+}\
+
+
+#define xoptional(type) xoptional_##type 
+
+#define xoptional_new(type) xoptional_##type##_new 
+
+#define xoptional_is_present(optional) (optional.is_present == TRUE)
+
+#define xoptional_is_empty(optional) (optional.is_present == FALSE)
+
+#define xoptional_get(optional) (optional.value)
+
+#define xoptional_if_present(type) xoptional_##type##_if_present
+
+SETUP_OPTIONAL_FOR(int)
+
+void printer(int value) {
     
-    array_new(&array);
-    while(i-->0) {
-        array_add(array, &i);
-    }
+}
+
+void myptr(int value) {
+    printf("The value In: %d\n", value);
+}
+
+#endif
+
+CESTER_TEST(crash_code, inst,
+    xoptional(int) num = xoptional_new(int)(2021);
+    /*if (xoptional_is_present(num)) {
+        myptr(xoptional_get(num));
+    }*/
+    xoptional_if_present(int)(num, myptr);
 )
 
-CESTER_SKIP_TEST(cpp_vector, inst, 
-    std::vector<int> array;
-    long long i = 999999999999;
-    
-    while(i-->0) {
-        array.push_back(i);
-    }
-)
 
 /* http://www.cplusplus.com/reference/vector/vector/push_back/ */
 
