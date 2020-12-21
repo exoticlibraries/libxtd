@@ -1,6 +1,7 @@
-/*!gcc -ansi -pedantic-errors {0} -I. -I../../include/ -o out; ./out */
-/*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -o out; ./out */
-/*!g++ -std=c++11 {0} -I. -I../../include/ -o out; ./out */
+/*!gcc -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
+/*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
+/*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
+/*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
 #include <exotic/xoptional.h>
@@ -13,9 +14,9 @@ struct point_s {
 typedef char* str;
 typedef struct point_s* Point;
 
-SETUP_OPTIONAL_FOR(int)
-SETUP_OPTIONAL_FOR(str)
-SETUP_OPTIONAL_FOR(Point)
+SETUP_XOPTIONAL_FOR(int)
+SETUP_XOPTIONAL_FOR(str)
+SETUP_XOPTIONAL_FOR(Point)
 
 
 )
@@ -160,5 +161,5 @@ CESTER_TEST(xoptional_swap_reset, _, {
 })
 
 CESTER_OPTIONS(
-    CESTER_VERBOSE_LEVEL(2);
+    CESTER_DEBUG_LEVEL(3);
 )

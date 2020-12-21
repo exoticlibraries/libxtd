@@ -5,26 +5,30 @@ A library of data types and structures for C.
 
 Types to be implemented
 
-- [ ] array
-- [ ] list
+- [x] vector
+- [x] optional
+- [ ] stack
+- [ ] queue
 - [ ] map
 - [ ] single linkedlist
 - [ ] double linked list
 - [ ] item
 - [ ] ring
 - [ ] set
-- [ ] stack
 - [ ] treemap
-- [ ] vector
 - [ ] tuple
 - [ ] hashtable
 - [ ] hashset
 - [ ] tree
-- [ ] queue
-- [ ] array
 - [ ] heap
 - [ ] string
 - [ ] xstring
+
+## Doc hints
+
+- vector store element in contiguous memory locations
+- xoptional does no memory allocation
+- xiterator works for any struct with Iterator and size field
 
 ## How it works 
 

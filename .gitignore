@@ -71,6 +71,7 @@ dist/
 
 # IDE Folders
 *.vscode/
+*.vs/
 
 # Others
 *.tmp
