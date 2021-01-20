@@ -23,8 +23,8 @@ jobs:
       - name: Setup Exotic Libraries And Run Regression
         uses: exoticlibraries/exotic-action@v1.0
         with:
-          download-exotic-libraries: false
-          run-regression: false
+          download-exotic-libraries: true
+          run-regression: true
           test-folder-recursive: true
           test-folders: |
             test/
