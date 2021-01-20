@@ -11,7 +11,7 @@
 CESTER_BODY(
     typedef char* str;
     typedef char** char_array;
-    SETUP_XVECTOR_FOR(str)
+    SETUP_XDEQUE_FOR(str)
     SETUP_ONLY_XSTACK_FOR(str)
     SETUP_XALGORITHM_SWAP_FOR(xstack_str)
     SETUP_XALGORITHM_SWAP_FOR(char_array)
@@ -236,7 +236,7 @@ CESTER_TEST(xstack_max_size_1, _, {
     
     cester_assert_false(xstack_is_empty(fruits));
     cester_assert_uint_eq(xstack_size(fruits), 3);
-    cester_assert_uint_eq(xstack_capacity(fruits), 3);
+    cester_assert_uint_eq(xstack_capacity(fruits), 4);
     cester_assert_llong_eq(xstack_max_size(fruits), 3);
 
     xstack_destroy(fruits);

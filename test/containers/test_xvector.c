@@ -162,6 +162,39 @@ CESTER_TEST(xvector_get_str, _, {
     xvector_destroy(fruits);
 })
 
+CESTER_TEST(xvector_replace_at, _, {
+    xvector(str) *fruits;
+    enum x_stat status;
+
+    status = xvector_new(str)(&fruits);
+    cester_assert_uint_eq(status, X_OK);
+    status = xvector_add(str)(fruits, "Apple");
+    cester_assert_uint_eq(status, X_OK);
+    status = xvector_add(str)(fruits, "Banana");
+    cester_assert_uint_eq(status, X_OK);
+    status = xvector_add(str)(fruits, "Coconut");
+    cester_assert_uint_eq(status, X_OK);
+    status = xvector_add(str)(fruits, "Mango");
+    cester_assert_uint_eq(status, X_OK);
+
+    cester_assert_str_equal(xget_at(fruits, 0), "Apple");
+    cester_assert_str_equal(xget_at(fruits, 1), "Banana");
+    cester_assert_str_equal(xget_at(fruits, 2), "Coconut");
+    cester_assert_str_equal(xget_at(fruits, 3), "Mango");
+    
+    cester_assert_uint_eq(xvector_replace_at(str)(fruits, 0, "Orange", NULL), X_OK);
+    cester_assert_uint_eq(xvector_replace_at(str)(fruits, 1, "Strawberry", NULL), X_OK);
+    cester_assert_uint_eq(xvector_replace_at(str)(fruits, 2, "Pineapple", NULL), X_OK);
+    cester_assert_uint_eq(xvector_replace_at(str)(fruits, 3, "Avocado", NULL), X_OK);
+
+    cester_assert_str_equal(xget_at(fruits, 0), "Orange");
+    cester_assert_str_equal(xget_at(fruits, 1), "Strawberry");
+    cester_assert_str_equal(xget_at(fruits, 2), "Pineapple");
+    cester_assert_str_equal(xget_at(fruits, 3), "Avocado");
+
+    xvector_destroy(fruits);
+})
+
 CESTER_TEST(xvector_front_back, _, {
     xvector(str) *fruits;
     enum x_stat status;
@@ -413,6 +446,45 @@ CESTER_TEST(xvector_swap_buffer, _, {
     cester_assert_str_equal(value, "Amala");
     cester_assert_uint_eq(xvector_get_back(str)(fruits, &value), X_OK);
     cester_assert_str_equal(value, "Fufu");
+
+    xvector_destroy(fruits);
+})
+
+CESTER_TEST(xvector_remove_front_and_back, _, {
+    xvector(str) *fruits;
+    enum x_stat status;
+    char *value;
+
+    status = xvector_new(str)(&fruits);
+    cester_assert_uint_eq(status, X_OK);
+    status = xvector_add(str)(fruits, "Apple");
+    cester_assert_uint_eq(status, X_OK);
+    status = xvector_add(str)(fruits, "Banana");
+    cester_assert_uint_eq(status, X_OK);
+    status = xvector_add(str)(fruits, "Mango");
+    cester_assert_uint_eq(status, X_OK);
+    
+    cester_assert_uint_eq(xvector_get_at(str)(fruits, 1, &value), X_OK);
+    cester_assert_str_equal(value, "Banana");
+    cester_assert_uint_eq(xvector_size(fruits), 3);
+    
+    cester_assert_uint_eq(xvector_get_front(str)(fruits, &value), X_OK);
+    cester_assert_str_equal(value, "Apple");
+    status = xvector_remove_front(str)(fruits, &value);
+    cester_assert_uint_eq(status, X_OK);
+    cester_assert_str_equal(value, "Apple");
+    cester_assert_uint_eq(xvector_get_front(str)(fruits, &value), X_OK);
+    cester_assert_str_equal(value, "Banana");
+    cester_assert_uint_eq(xvector_size(fruits), 2);
+    
+    cester_assert_uint_eq(xvector_get_back(str)(fruits, &value), X_OK);
+    cester_assert_str_equal(value, "Mango");
+    status = xvector_remove_back(str)(fruits, &value);
+    cester_assert_uint_eq(status, X_OK);
+    cester_assert_str_equal(value, "Mango");
+    cester_assert_uint_eq(xvector_get_back(str)(fruits, &value), X_OK);
+    cester_assert_str_equal(value, "Banana");
+    cester_assert_uint_eq(xvector_size(fruits), 1);
 
     xvector_destroy(fruits);
 })

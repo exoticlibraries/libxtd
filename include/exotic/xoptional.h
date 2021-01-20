@@ -23,23 +23,35 @@ extern "C" {
 #endif
 
 
+
 /**
 
 */
 #define SETUP_XOPTIONAL_FOR(T)  typedef struct xoptional_##T##_s { \
     bool is_present ;\
+    bool (*is_null_cmp) (T);\
     T value;\
 } xoptional_##T;\
 \
-xoptional_##T xoptional_##T##_new(T value) {\
+bool xoptional_##T##_is_null(T value)\
+{\
+    return 0 == value;\
+}\
+\
+xoptional_##T xoptional_##T##_new_with_cmp(T value, bool (*is_null_cmp) (T)) {\
     xoptional_##T _x_gen_optional;\
-    if (value == NULL) {\
+    _x_gen_optional.is_null_cmp = is_null_cmp;\
+    if (_x_gen_optional.is_null_cmp(value) == TRUE) {\
         _x_gen_optional.is_present = FALSE;\
     } else {\
         _x_gen_optional.is_present = TRUE;\
         _x_gen_optional.value = value;\
     }\
     return _x_gen_optional;\
+}\
+\
+xoptional_##T xoptional_##T##_new(T value) {\
+    return xoptional_##T##_new_with_cmp(value, xoptional_##T##_is_null);\
 }\
 \
 xoptional_##T xoptional_##T##_new_empty() {\
@@ -85,17 +97,22 @@ void xoptional_##T##_swap(xoptional_##T *optional1, xoptional_##T *optional2) {\
 /**
 
 */
+#define xoptional_new_with_cmp(T) xoptional_##T##_new_with_cmp
+
+/**
+
+*/
 #define xoptional_new_empty(T) xoptional_##T##_new_empty
 
 /**
 
 */
-#define xoptional_is_present(optional) (optional.is_present == TRUE && optional.value != NULL)
+#define xoptional_is_present(optional) (optional.is_present == TRUE && optional.is_null_cmp(optional.value) == FALSE)
 
 /**
 
 */
-#define xoptional_is_empty(optional) (optional.is_present == FALSE || optional.value == NULL)
+#define xoptional_is_empty(optional) (optional.is_present == FALSE || optional.is_null_cmp(optional.value) == TRUE)
 
 /**
 

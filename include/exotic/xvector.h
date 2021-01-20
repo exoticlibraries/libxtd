@@ -76,8 +76,13 @@ enum x_stat xvector_##T##_new_config(struct xcontainer_config * const config, xv
         return X_ALLOC_ERR;\
     }\
     buffer = (T *) config->memory_alloc(config->capacity * sizeof(T));\
-    iter = (XIterator *) config->memory_alloc(sizeof(XIterator));\
     if (!buffer) {\
+        config->memory_free(container);\
+        return X_ALLOC_ERR;\
+    }\
+    iter = (XIterator *) config->memory_alloc(sizeof(XIterator));\
+    if (!iter) {\
+        config->memory_free(buffer);\
         config->memory_free(container);\
         return X_ALLOC_ERR;\
     }\
@@ -141,7 +146,7 @@ enum x_stat xvector_##T##_add_at(xvector_##T *container, T item, size_t index) \
     return X_OK;\
 }\
 \
-static enum x_stat xvector_##T##_get_at(xvector_##T *container, int index, T *out)\
+enum x_stat xvector_##T##_get_at(xvector_##T *container, int index, T *out)\
 {\
     if (!out) {\
         return X_OUT_PARAM_NULL_ERR;\
@@ -153,7 +158,7 @@ static enum x_stat xvector_##T##_get_at(xvector_##T *container, int index, T *ou
     return X_OK;\
 }\
 \
-static enum x_stat xvector_##T##_get_front(xvector_##T *container, T *out)\
+enum x_stat xvector_##T##_get_front(xvector_##T *container, T *out)\
 {\
     if (!out) {\
         return X_OUT_PARAM_NULL_ERR;\
@@ -165,7 +170,7 @@ static enum x_stat xvector_##T##_get_front(xvector_##T *container, T *out)\
     return X_OK;\
 }\
 \
-static enum x_stat xvector_##T##_get_back(xvector_##T *container, T *out)\
+enum x_stat xvector_##T##_get_back(xvector_##T *container, T *out)\
 {\
     if (!out) {\
         return X_OUT_PARAM_NULL_ERR;\
@@ -177,7 +182,19 @@ static enum x_stat xvector_##T##_get_back(xvector_##T *container, T *out)\
     return X_OK;\
 }\
 \
-static enum x_stat xvector_##T##_remove_at(xvector_##T *container, size_t index, T *out)\
+enum x_stat xvector_##T##_replace_at(xvector_##T *container, size_t index, T element, T *out)\
+{\
+    if (index >= container->size) {\
+        return X_INDEX_OUT_OF_RANGE_ERR;\
+    }\
+    if (out) {\
+        *out = container->buffer[index];\
+    }\
+    container->buffer[index] = element;\
+    return X_OK;\
+}\
+\
+enum x_stat xvector_##T##_remove_at(xvector_##T *container, size_t index, T *out)\
 {\
     size_t mem_size;\
     if (index < 0 || index >= container->size) {\
@@ -194,7 +211,17 @@ static enum x_stat xvector_##T##_remove_at(xvector_##T *container, size_t index,
     return X_OK;\
 }\
 \
-static enum x_stat xvector_##T##_clear(xvector_##T *container)\
+enum x_stat xvector_##T##_remove_front(xvector_##T *container, T *out)\
+{\
+    return xvector_##T##_remove_at(container, 0, out);\
+}\
+\
+enum x_stat xvector_##T##_remove_back(xvector_##T *container, T *out)\
+{\
+    return xvector_##T##_remove_at(container, container->size-1, out);\
+}\
+\
+enum x_stat xvector_##T##_clear(xvector_##T *container)\
 {\
     enum x_stat status;\
     while (container->size > 0) {\
@@ -206,7 +233,7 @@ static enum x_stat xvector_##T##_clear(xvector_##T *container)\
     return X_OK;\
 }\
 \
-enum x_stat xvector_##T##_shrink_to_fit(xvector_##T *container)\
+static enum x_stat xvector_##T##_shrink_to_fit(xvector_##T *container)\
 {\
     T *new_buffer;\
     size_t size;\
@@ -298,7 +325,17 @@ static enum x_stat xvector_##T##_expand_capacity(xvector_##T *container)\
 /**
 
 */
-#define xvector_get_back(T) xvector_##T##_get_back
+#define xvector_replace_at(T) xvector_##T##_replace_at
+
+/**
+
+*/
+#define xvector_remove_front(T) xvector_##T##_remove_front
+
+/**
+
+*/
+#define xvector_remove_back(T) xvector_##T##_remove_back
 
 /**
 

@@ -18,9 +18,36 @@ extern "C" {
 #include <stdlib.h>
 #ifndef XTYPES_DONT_USE_BUILTIN
     #include <string.h>
-    #define xtypes_qsort qsort
+    #define xtd_qsort qsort
 #else
     #include "__xsupplement.h" /* define the builtin functions manually */
+#endif
+
+
+/** 
+    The inline keyword to optimize the function. In 
+    C89 and C90 the inline keyword semantic is 
+    different from current C standard semantic hence 
+    for compilation targeting C89 or C99 the inline 
+    keyword is ommited.
+*/
+#ifdef __STDC_VERSION__
+    #define __X_STDC_VERSION__ __STDC_VERSION__
+#else
+    #ifdef __cplusplus
+        #if __cplusplus > 199711L
+            #define __X_STDC_VERSION__ __cplusplus
+        #endif
+    #endif
+#endif
+#ifndef __X_STDC_VERSION__
+    #define __X_INLINE__ 
+    #define __X_LONG_LONG__ long
+    #define __FUNCTION__ "<unknown>"
+#else 
+    #define __X_INLINE__ inline
+    #define __X_LONG_LONG__ long long
+    #define __FUNCTION__ __func__
 #endif
 
 #ifdef _WIN32
@@ -94,6 +121,12 @@ EXOTIC_API enum x_stat {
 
 };
 
+#ifdef ARCH_64
+    #define X_MAX_POW_TWO (((size_t) 1) << 63)
+#else
+    #define X_MAX_POW_TWO (((size_t) 1) << 31)
+#endif /* ARCH_64 */
+
 #define XDEFAULT_CONTAINER_CAPACITY 4
 #define XDEFAULT_CONTAINER_EXPANSION_RATE 2
 
@@ -162,7 +195,7 @@ void init_xcontainer_config_max_size(struct xcontainer_config *config, size_t ma
 /**
 
 */
-#define xget_internal_impl(container) (container->xinternal_e7884708734_xvector)
+#define xget_internal_impl(container) (container->xinternal_e7884708734_ximpl)
 
 /**
 
@@ -178,6 +211,33 @@ void init_xcontainer_config_max_size(struct xcontainer_config *config, size_t ma
 
 */
 #define xget_back(container) (container->size > 0 ? xget_at(container, container->size-1) : NULL)
+
+/**
+
+*/
+static __X_INLINE__ size_t x_upper_pow_two(size_t n)
+{
+    if (n >= X_MAX_POW_TWO) {
+        return X_MAX_POW_TWO;
+    }
+    if (n == 0) {
+        return 2;
+    }
+    /**
+     * taken from:
+     * http://graphics.stanford.edu/~seander/
+     * bithacks.html#RoundUpPowerOf2Float
+     */
+    n--;
+    n |= n >> 1;
+    n |= n >> 2;
+    n |= n >> 4;
+    n |= n >> 8;
+    n |= n >> 16;
+    n++;
+
+    return n;
+}
 
 #ifdef __cplusplus
 }

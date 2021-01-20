@@ -15,7 +15,7 @@ extern "C" {
 
 #include "xcommon.h"
 #include "xiterator.h"
-#include "xvector.h"
+#include "xdeque.h"
 
 #ifdef __cplusplus
 #if !defined(ALLOW_X_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
@@ -39,7 +39,7 @@ extern "C" {
     void *(*memory_calloc) (size_t blocks, size_t size);\
     void  (*memory_free)   (void *block);\
     \
-    xvector_##T *xinternal_e7884708734_xvector;\
+    xdeque_##T *xinternal_e7884708734_ximpl;\
 } xstack_##T;\
 \
 enum x_stat xstack_##T##_new_config(struct xcontainer_config * const config, xstack_##T **out);\
@@ -61,13 +61,13 @@ enum x_stat xstack_##T##_new_max_size(xstack_##T **out, size_t max_size) \
 enum x_stat xstack_##T##_new_config(struct xcontainer_config * const config, xstack_##T **out) \
 {\
     enum x_stat xinternal_vector_status;\
-    xvector_##T *xinternal_vector;\
+    xdeque_##T *xinternal_vector;\
     xstack_##T *container;\
     container = (xstack_##T *) config->memory_calloc(1, sizeof(xstack_##T));\
     if (!container) {\
         return X_ALLOC_ERR;\
     }\
-    xinternal_vector_status = xvector_##T##_new_config(config, &xinternal_vector);\
+    xinternal_vector_status = xdeque_##T##_new_config(config, &xinternal_vector);\
     if (xinternal_vector_status != X_OK) {\
         config->memory_free(container);\
         return xinternal_vector_status;\
@@ -75,7 +75,7 @@ enum x_stat xstack_##T##_new_config(struct xcontainer_config * const config, xst
     container->capacity         = config->capacity;\
     container->max_size         = config->max_size;\
     container->size             = 0;\
-    container->xinternal_e7884708734_xvector = xinternal_vector;\
+    container->xinternal_e7884708734_ximpl = xinternal_vector;\
     container->buffer           = xinternal_vector->buffer;\
     container->iter             = xinternal_vector->iter;\
     container->memory_alloc     = config->memory_alloc;\
@@ -91,17 +91,17 @@ enum x_stat xstack_##T##_push(xstack_##T *container, T element)\
     if (container->size >= container->max_size) {\
         return X_STACK_OVERFLOW_ERR;\
     }\
-    status = xvector_##T##_add(container->xinternal_e7884708734_xvector, element);\
+    status = xdeque_##T##_add_back(container->xinternal_e7884708734_ximpl, element);\
     if (status == X_OK) {\
-        container->capacity = container->xinternal_e7884708734_xvector->capacity;\
-        container->size = container->xinternal_e7884708734_xvector->size;\
+        container->capacity = container->xinternal_e7884708734_ximpl->capacity;\
+        container->size = container->xinternal_e7884708734_ximpl->size;\
     }\
     return status;\
 }\
 \
 enum x_stat xstack_##T##_peek(xstack_##T *container, T *element)\
 {\
-    return xvector_##T##_get_back(container->xinternal_e7884708734_xvector, element);\
+    return xdeque_##T##_get_back(container->xinternal_e7884708734_ximpl, element);\
 }\
 \
 enum x_stat xstack_##T##_pop(xstack_##T *container, T *element)\
@@ -110,10 +110,10 @@ enum x_stat xstack_##T##_pop(xstack_##T *container, T *element)\
     if (container->size == 0) {\
         return X_STACK_UNDERFLOW_ERR;\
     }\
-    status = xvector_##T##_remove_at(container->xinternal_e7884708734_xvector, container->xinternal_e7884708734_xvector->size-1, element);\
+    status = xdeque_##T##_remove_back(container->xinternal_e7884708734_ximpl, element);\
     if (status == X_OK) {\
-        container->capacity = container->xinternal_e7884708734_xvector->capacity;\
-        container->size = container->xinternal_e7884708734_xvector->size;\
+        container->capacity = container->xinternal_e7884708734_ximpl->capacity;\
+        container->size = container->xinternal_e7884708734_ximpl->size;\
     }\
     return status;\
 }\
@@ -122,7 +122,7 @@ enum x_stat xstack_##T##_pop(xstack_##T *container, T *element)\
 /**
 
 */
-#define SETUP_XSTACK_FOR(T) SETUP_XVECTOR_FOR(T) SETUP_ONLY_XSTACK_FOR(T)
+#define SETUP_XSTACK_FOR(T) SETUP_XDEQUE_FOR(T) SETUP_ONLY_XSTACK_FOR(T)
 
 /**
 
@@ -163,9 +163,9 @@ enum x_stat xstack_##T##_pop(xstack_##T *container, T *element)\
 
 */
 #define xstack_destroy(container) { \
-        container->memory_free(container->xinternal_e7884708734_xvector->buffer); \
-        container->memory_free(container->xinternal_e7884708734_xvector->iter); \
-        container->memory_free(container->xinternal_e7884708734_xvector); \
+        container->memory_free(container->xinternal_e7884708734_ximpl->buffer); \
+        container->memory_free(container->xinternal_e7884708734_ximpl->iter); \
+        container->memory_free(container->xinternal_e7884708734_ximpl); \
         container->memory_free(container); \
     }
 

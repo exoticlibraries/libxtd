@@ -19,6 +19,11 @@ SETUP_XOPTIONAL_FOR(str)
 SETUP_XOPTIONAL_FOR(Point)
 
 
+bool int_is_less_than_zero(int value)
+{
+    return value == -1;
+}
+
 )
 
 CESTER_TEST(xoptional_initialization_str, _, {
@@ -33,7 +38,7 @@ CESTER_TEST(xoptional_initialization_str, _, {
 
 CESTER_TEST(xoptional_initialization_int, _, {
     xoptional(int) emptyOpt = xoptional_new_empty(int)();
-    xoptional(int) fillOpt = xoptional_new(int)(2020);
+    xoptional(int) fillOpt = xoptional_new_with_cmp(int)(2020, int_is_less_than_zero);
     
     cester_assert_false(xoptional_is_present(emptyOpt));
     cester_assert_true(xoptional_is_present(fillOpt));
