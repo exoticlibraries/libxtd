@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-20.04, ubuntu-18.04, ubuntu-20.04, ubuntu-latest, windows-latest]
+        os: [macos-latest, ubuntu-latest, windows-latest]
         platform: [x86, x64]
         compiler: [gnu, clang]
 
@@ -30,5 +30,9 @@ jobs:
             test/
           test-exclude-file-pattern: |
             crash_test.c
+          compiler-options-for-tests: |
+            -I. -I../include -I../../include -I../../../include -I./include
+          regression-cli-options: |
+            --cester-printversion
             
         
