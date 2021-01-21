@@ -71,10 +71,12 @@ dist/
 
 # IDE Folders
 *.vscode/
+*.vs/
 
 # Others
 *.tmp
 */expand.*
+*expand.*
 *result.txt
 *.swb
 *.swp
