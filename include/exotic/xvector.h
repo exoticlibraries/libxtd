@@ -261,7 +261,7 @@ static enum x_stat xvector_##T##_expand_capacity(xvector_##T *container)\
     }\
     tmp_capacity = container->capacity * container->expansion_rate;\
     if (tmp_capacity <= container->capacity) {\
-        container->capacity = X_CONTAINER_MAX_CAPACITY;\
+        container->capacity = container->max_size;\
     } else {\
         container->capacity = tmp_capacity;\
     }\

@@ -198,8 +198,6 @@ CESTER_TEST(xstack_capacity, _, {
 
     status = xstack_new(str)(&fruits);
     cester_assert_uint_eq(status, X_OK);
-    status = xstack_new(str)(&fruits);
-    cester_assert_uint_eq(status, X_OK);
     status = xstack_push(str)(fruits, "Apple");
     cester_assert_uint_eq(status, X_OK);
     status = xstack_push(str)(fruits, "Banana");

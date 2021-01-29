@@ -24,7 +24,7 @@ jobs:
         uses: exoticlibraries/exotic-action@v1.0
         with:
           download-exotic-libraries: true
-          run-regression: true
+          run-regression: false
           test-folder-recursive: true
           test-folders: |
             test/

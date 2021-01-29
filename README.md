@@ -6,15 +6,18 @@ A library of data types and structures for C.
 Types to be implemented
 
 - [x] vector
+- [x] dequeue
 - [x] optional
-- [ ] stack
+- [x] stack
 - [ ] queue
-- [ ] map
-- [ ] single linkedlist
+- [ ] priority_queue
+- [ ] single linked list
 - [ ] double linked list
+- [ ] set
+- [ ] unordered_set
+- [ ] map
 - [ ] item
 - [ ] ring
-- [ ] set
 - [ ] treemap
 - [ ] tuple
 - [ ] hashtable

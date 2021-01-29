@@ -2,12 +2,12 @@
 /**
     \copyright MIT License Copyright (c) 2020, Adewale Azeez 
     \author Adewale Azeez <azeezadewale98@gmail.com>
-    \date 21 December 2020
-    \file xstack.h
+    \date 23 January 2021
+    \file xqueue.h
 */
 
-#ifndef EXOTIC_XSTACK_H
-#define EXOTIC_XSTACK_H
+#ifndef EXOTIC_XQUEUE_H
+#define EXOTIC_XQUEUE_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,17 +19,17 @@ extern "C" {
 
 #ifdef __cplusplus
 #if !defined(ALLOW_X_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
-    #warning Do not use this type in C++ 03 and above, use the std::stack class instead
+    #warning Do not use this type in C++ 03 and above, use the std::queue class instead
 #endif
 #define NULL 0
 #endif
 
 /**
-    NEVER EVER SWAP BUFFER OF XSTACK to prevent dangling pointers, 
+    NEVER EVER SWAP BUFFER OF XQUEUE to prevent dangling pointers, 
     except your swap function will take care of the internal 
     impl container
 */
-#define SETUP_ONLY_XSTACK_FOR(T)  typedef struct xstack_##T##_s { \
+#define SETUP_ONLY_XQUEUE_FOR(T)  typedef struct xqueue_##T##_s { \
     size_t capacity;\
     size_t size;\
     size_t max_size;\
@@ -39,31 +39,31 @@ extern "C" {
     void *(*memory_calloc) (size_t blocks, size_t size);\
     void  (*memory_free)   (void *block);\
     \
-    xdeque_##T *xinternal_e7884708734_ximpl;\
-} xstack_##T;\
+    xdeque(T) *xinternal_e7884708734_ximpl;\
+} xqueue_##T;\
 \
-enum x_stat xstack_##T##_new_config(struct xcontainer_config * const config, xstack_##T **out);\
+enum x_stat xqueue_##T##_new_config(struct xcontainer_config * const config, xqueue_##T **out);\
 \
-enum x_stat xstack_##T##_new(xstack_##T **out) \
+enum x_stat xqueue_##T##_new(xqueue_##T **out) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config(&config);\
-    return xstack_##T##_new_config(&config, out);\
+    return xqueue_##T##_new_config(&config, out);\
 }\
 \
-enum x_stat xstack_##T##_new_max_size(xstack_##T **out, size_t max_size) \
+enum x_stat xqueue_##T##_new_max_size(xqueue_##T **out, size_t max_size) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config_max_size(&config, max_size);\
-    return xstack_##T##_new_config(&config, out);\
+    return xqueue_##T##_new_config(&config, out);\
 }\
 \
-enum x_stat xstack_##T##_new_config(struct xcontainer_config * const config, xstack_##T **out) \
+enum x_stat xqueue_##T##_new_config(struct xcontainer_config * const config, xqueue_##T **out) \
 {\
     enum x_stat xinternal_vector_status;\
     xdeque_##T *xinternal_vector;\
-    xstack_##T *container;\
-    container = (xstack_##T *) config->memory_calloc(1, sizeof(xstack_##T));\
+    xqueue_##T *container;\
+    container = (xqueue_##T *) config->memory_calloc(1, sizeof(xqueue_##T));\
     if (!container) {\
         return X_ALLOC_ERR;\
     }\
@@ -85,11 +85,11 @@ enum x_stat xstack_##T##_new_config(struct xcontainer_config * const config, xst
     return X_OK;\
 }\
 \
-enum x_stat xstack_##T##_push(xstack_##T *container, T element)\
+enum x_stat xqueue_##T##_push(xqueue_##T *container, T element)\
 {\
     enum x_stat status;\
     if (container->size >= container->max_size) {\
-        return X_STACK_OVERFLOW_ERR;\
+        return X_MAX_SIZE_ERR;\
     }\
     status = xdeque_##T##_add_back(container->xinternal_e7884708734_ximpl, element);\
     if (status == X_OK) {\
@@ -100,18 +100,18 @@ enum x_stat xstack_##T##_push(xstack_##T *container, T element)\
     return status;\
 }\
 \
-enum x_stat xstack_##T##_peek(xstack_##T *container, T *element)\
+enum x_stat xqueue_##T##_peek(xqueue_##T *container, T *element)\
 {\
-    return xdeque_##T##_get_back(container->xinternal_e7884708734_ximpl, element);\
+    return xdeque_##T##_get_front(container->xinternal_e7884708734_ximpl, element);\
 }\
 \
-enum x_stat xstack_##T##_pop(xstack_##T *container, T *element)\
+enum x_stat xqueue_##T##_pop(xqueue_##T *container, T *element)\
 {\
     enum x_stat status;\
     if (container->size == 0) {\
-        return X_STACK_UNDERFLOW_ERR;\
+        return X_EMPTY_CONTAINER_ERR;\
     }\
-    status = xdeque_##T##_remove_back(container->xinternal_e7884708734_ximpl, element);\
+    status = xdeque_##T##_remove_front(container->xinternal_e7884708734_ximpl, element);\
     if (status == X_OK) {\
         container->buffer = container->xinternal_e7884708734_ximpl->buffer;\
         container->capacity = container->xinternal_e7884708734_ximpl->capacity;\
@@ -124,47 +124,57 @@ enum x_stat xstack_##T##_pop(xstack_##T *container, T *element)\
 /**
 
 */
-#define SETUP_XSTACK_FOR(T) SETUP_XDEQUE_FOR(T) SETUP_ONLY_XSTACK_FOR(T)
+#define SETUP_XQUEUE_FOR(T) SETUP_XDEQUE_FOR(T) SETUP_ONLY_XQUEUE_FOR(T)
 
 /**
 
 */
-#define xstack(T) xstack_##T
+#define xqueue(T) xqueue_##T
 
 /**
 
 */
-#define xstack_new(T) xstack_##T##_new
+#define xqueue_new(T) xqueue_##T##_new
 
 /**
 
 */
-#define xstack_new_max_size(T) xstack_##T##_new_max_size
+#define xqueue_new_max_size(T) xqueue_##T##_new_max_size
 
 /**
 
 */
-#define xstack_new_config(T) xstack_##T##_new_config
+#define xqueue_new_config(T) xqueue_##T##_new_config
 
 /**
 
 */
-#define xstack_push(T) xstack_##T##_push
+#define xqueue_push(T) xqueue_##T##_push
 
 /**
 
 */
-#define xstack_peek(T) xstack_##T##_peek
+#define xqueue_enqueue xqueue_push
 
 /**
 
 */
-#define xstack_pop(T) xstack_##T##_pop
+#define xqueue_peek(T) xqueue_##T##_peek
 
 /**
 
 */
-#define xstack_destroy(container) { \
+#define xqueue_pop(T) xqueue_##T##_pop
+
+/**
+
+*/
+#define xqueue_dequeue xqueue_pop
+
+/**
+
+*/
+#define xqueue_destroy(container) { \
         container->memory_free(container->xinternal_e7884708734_ximpl->buffer); \
         container->memory_free(container->xinternal_e7884708734_ximpl->iter); \
         container->memory_free(container->xinternal_e7884708734_ximpl); \
@@ -174,22 +184,22 @@ enum x_stat xstack_##T##_pop(xstack_##T *container, T *element)\
 /*
 
 */
-#define xstack_capacity xcapacity
+#define xqueue_capacity xcapacity
 
 /*
 
 */
-#define xstack_size xsize
+#define xqueue_size xsize
 
 /*
 
 */
-#define xstack_max_size xmax_size
+#define xqueue_max_size xmax_size
 
 /*
 
 */
-#define xstack_is_empty xis_empty
+#define xqueue_is_empty xis_empty
     
 
 

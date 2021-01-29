@@ -107,6 +107,7 @@ EXOTIC_API enum x_stat {
     X_INDEX_LESS_THAN_ZERO_ERR,
     X_EMPTY_CONTAINER_ERR,
     X_MAX_SIZE_ERR,
+    X_OUT_OF_RANGE_ERR,
     X_OUT_PARAM_NULL_ERR,
     X_STACK_OVERFLOW_ERR,
     X_STACK_UNDERFLOW_ERR,
@@ -117,6 +118,7 @@ EXOTIC_API enum x_stat {
     X_CRITICAL_ERR,                 /**< An error impossible to recover from occur. The program should terminate immediately if encountered */
     X_NO_OP,                        /**< No operation caried out */
     X_ITER_END,                     /**< The loop has reached the end of the iteration */
+    X_INVALID_PARAMETER,
     X_ERR                           /**< An operation fails */
 
 };
