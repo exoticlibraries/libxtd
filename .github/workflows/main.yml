@@ -21,10 +21,10 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Setup Exotic Libraries And Run Regression
-        uses: exoticlibraries/exotic-action@v1.0
+        uses: exoticlibraries/exotic-action@v1.1
         with:
           download-exotic-libraries: true
-          run-regression: false
+          run-regression: true
           test-folder-recursive: true
           test-folders: |
             test/
@@ -45,6 +45,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        
+      - name: Setup Exotic Libraries
+        uses: exoticlibraries/exotic-action@v1.1
+        with:
+          download-exotic-libraries: true
+          run-regression: false
         
       - name: Download Dependencies
         run: |

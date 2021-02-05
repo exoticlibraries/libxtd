@@ -4,8 +4,8 @@
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
-#include <exotic/xnode.h>
-#include <exotic/xiterator.h>
+#include <exotic/xtd/xnode.h>
+#include <exotic/xtd/xiterator.h>
 
 CESTER_BODY(
     SETUP_XSINGLE_NODE_WITH_ITER_FOR(int)
