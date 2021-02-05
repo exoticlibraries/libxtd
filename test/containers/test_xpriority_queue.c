@@ -34,7 +34,7 @@ CESTER_TEST(xpriority_queue_init, _, {
     enum x_stat status;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     xpriority_queue_destroy(fruits);
 })
@@ -50,7 +50,7 @@ CESTER_TEST(xpriority_queue_conf_init, _, {
     config.expansion_rate = 5;
     config.capacity       = 20;
     status = xpriority_queue_new_config(str)(&config, &fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     xpriority_queue_destroy(fruits);
 })
@@ -60,18 +60,18 @@ CESTER_TEST(xpriority_queue_enqueue, _, {
     enum x_stat status;
     
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_true(xpriority_queue_is_empty(fruits));
     cester_assert_uint_eq(xpriority_queue_size(fruits), 0);
 
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status =xpriority_queue_enqueue(str)(fruits, "Coconut");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     cester_assert_false(xpriority_queue_is_empty(fruits));
     cester_assert_uint_eq(xpriority_queue_size(fruits), 4);
@@ -85,33 +85,33 @@ CESTER_TEST(xpriority_queue_peek, _, {
     char *value;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_peek(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_str_equal(value, "Apple");
     cester_assert_uint_eq(xpriority_queue_size(fruits), 1);
 
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_peek(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_str_equal(value, "Apple");
     cester_assert_uint_eq(xpriority_queue_size(fruits), 2);
 
     status =xpriority_queue_enqueue(str)(fruits, "Coconut");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_peek(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_str_equal(value, "Apple");
     cester_assert_uint_eq(xpriority_queue_size(fruits), 3);
 
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_peek(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_str_equal(value, "Apple");
     cester_assert_uint_eq(xpriority_queue_size(fruits), 4);
 
@@ -124,34 +124,34 @@ CESTER_TEST(xpriority_queue_dequeue, _, {
     char *value;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status =xpriority_queue_enqueue(str)(fruits, "Coconut");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     status = xpriority_queue_dequeue(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_str_equal(value, "Apple");
     cester_assert_uint_eq(xpriority_queue_size(fruits), 3);
 
     status = xpriority_queue_dequeue(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_str_equal(value, "Mango");
     cester_assert_uint_eq(xpriority_queue_size(fruits), 2);
 
     status = xpriority_queue_dequeue(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_str_equal(value, "Coconut");
     cester_assert_uint_eq(xpriority_queue_size(fruits), 1);
 
     status = xpriority_queue_dequeue(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_str_equal(value, "Banana");
     cester_assert_uint_eq(xpriority_queue_size(fruits), 0);
 
@@ -164,42 +164,42 @@ CESTER_TEST(xpriority_queue_dequeue_underflow, _, {
     char *value;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status =xpriority_queue_enqueue(str)(fruits, "Coconut");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     status = xpriority_queue_dequeue(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_str_equal(value, "Apple");
     cester_assert_uint_eq(xpriority_queue_size(fruits), 3);
 
     status = xpriority_queue_dequeue(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_str_equal(value, "Mango");
     cester_assert_uint_eq(xpriority_queue_size(fruits), 2);
 
     status = xpriority_queue_dequeue(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_str_equal(value, "Coconut");
     cester_assert_uint_eq(xpriority_queue_size(fruits), 1);
 
     status = xpriority_queue_dequeue(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_str_equal(value, "Banana");
     cester_assert_uint_eq(xpriority_queue_size(fruits), 0);
 
     status = xpriority_queue_dequeue(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_EMPTY_CONTAINER_ERR);
+    cester_assert_uint_eq(status, XTD_EMPTY_CONTAINER_ERR);
 
     status = xpriority_queue_dequeue(str)(fruits, &value);
-    cester_assert_uint_eq(status, X_EMPTY_CONTAINER_ERR);
+    cester_assert_uint_eq(status, XTD_EMPTY_CONTAINER_ERR);
 
     xpriority_queue_destroy(fruits);
 })
@@ -210,41 +210,41 @@ CESTER_TEST(xpriority_queue_priority_greater_than, _, {
     int value;
 
     status = xpriority_queue_new(int)(&numbers, cmp_int_gt);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     status = xpriority_queue_enqueue(int)(numbers, 3);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(int)(numbers, 4);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status =xpriority_queue_enqueue(int)(numbers, 9);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(int)(numbers, 5);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(int)(numbers, 2);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     status = xpriority_queue_dequeue(int)(numbers, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_uint_eq(value, 9);
     cester_assert_uint_eq(xpriority_queue_size(numbers), 4);
 
     status = xpriority_queue_dequeue(int)(numbers, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_uint_eq(value, 2);
     cester_assert_uint_eq(xpriority_queue_size(numbers), 3);
 
     status = xpriority_queue_dequeue(int)(numbers, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_uint_eq(value, 3);
     cester_assert_uint_eq(xpriority_queue_size(numbers), 2);
 
     status = xpriority_queue_dequeue(int)(numbers, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_uint_eq(value, 4);
     cester_assert_uint_eq(xpriority_queue_size(numbers), 1);
 
     status = xpriority_queue_dequeue(int)(numbers, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_uint_eq(value, 5);
     cester_assert_uint_eq(xpriority_queue_size(numbers), 0);
 
@@ -257,41 +257,41 @@ CESTER_TEST(xpriority_queue_priority_lesser_than, _, {
     int value;
 
     status = xpriority_queue_new(int)(&numbers, cmp_int_lt);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     status = xpriority_queue_enqueue(int)(numbers, 3);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(int)(numbers, 4);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status =xpriority_queue_enqueue(int)(numbers, 9);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(int)(numbers, 5);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(int)(numbers, 2);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     status = xpriority_queue_dequeue(int)(numbers, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_uint_eq(value, 2);
     cester_assert_uint_eq(xpriority_queue_size(numbers), 4);
 
     status = xpriority_queue_dequeue(int)(numbers, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_uint_eq(value, 4);
     cester_assert_uint_eq(xpriority_queue_size(numbers), 3);
 
     status = xpriority_queue_dequeue(int)(numbers, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_uint_eq(value, 5);
     cester_assert_uint_eq(xpriority_queue_size(numbers), 2);
 
     status = xpriority_queue_dequeue(int)(numbers, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_uint_eq(value, 9);
     cester_assert_uint_eq(xpriority_queue_size(numbers), 1);
 
     status = xpriority_queue_dequeue(int)(numbers, &value);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     cester_assert_uint_eq(value, 3);
     cester_assert_uint_eq(xpriority_queue_size(numbers), 0);
 
@@ -303,20 +303,20 @@ CESTER_TEST(xpriority_queue_capacity, _, {
     enum x_stat status;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Coconut");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     
     cester_assert_false(xpriority_queue_is_empty(fruits));
     cester_assert_uint_eq(xpriority_queue_size(fruits), 4);
     cester_assert_uint_eq(xpriority_queue_capacity(fruits), XDEFAULT_CONTAINER_CAPACITY);
-    cester_assert_equal(xpriority_queue_max_size(fruits), X_CONTAINER_MAX_CAPACITY);
+    cester_assert_equal(xpriority_queue_max_size(fruits), XTD_CONTAINER_MAXTD_CAPACITY);
 
     xpriority_queue_destroy(fruits);
 })
@@ -326,17 +326,17 @@ CESTER_TEST(xpriority_queue_max_size_1, _, {
     enum x_stat status;
 
     status = xpriority_queue_new_max_size(str)(&fruits, 3, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Coconut");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_MAX_SIZE_ERR);
+    cester_assert_uint_eq(status, XTD_MAXTD_SIZE_ERR);
     status = xpriority_queue_enqueue(str)(fruits, "Watermelon");
-    cester_assert_uint_eq(status, X_MAX_SIZE_ERR);
+    cester_assert_uint_eq(status, XTD_MAXTD_SIZE_ERR);
     
     cester_assert_false(xpriority_queue_is_empty(fruits));
     cester_assert_uint_eq(xpriority_queue_size(fruits), 3);
@@ -352,23 +352,23 @@ CESTER_TEST(xpriority_queue_max_size_2, _, {
     int max_size = 6;
 
     status = xpriority_queue_new_max_size(str)(&fruits, max_size, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Carrot");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Coconut");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Watermelon");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, X_MAX_SIZE_ERR);
+    cester_assert_uint_eq(status, XTD_MAXTD_SIZE_ERR);
     status = xpriority_queue_enqueue(str)(fruits, "Avocado");
-    cester_assert_uint_eq(status, X_MAX_SIZE_ERR);
+    cester_assert_uint_eq(status, XTD_MAXTD_SIZE_ERR);
     
     cester_assert_false(xpriority_queue_is_empty(fruits));
     cester_assert_uint_eq(xpriority_queue_size(fruits), max_size);
@@ -385,33 +385,33 @@ CESTER_TEST(xpriority_queue_swap, _, {
     char *value;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     status = xpriority_queue_new(str)(&foods, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(foods, "Amala");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(foods, "Iyan");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(foods, "Fufu");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
-    cester_assert_uint_eq(xpriority_queue_peek(str)(fruits, &value), X_OK);
+    cester_assert_uint_eq(xpriority_queue_peek(str)(fruits, &value), XTD_OK);
     cester_assert_str_equal(value, "Apple");
-    cester_assert_uint_eq(xpriority_queue_peek(str)(foods, &value), X_OK);
+    cester_assert_uint_eq(xpriority_queue_peek(str)(foods, &value), XTD_OK);
     cester_assert_str_equal(value, "Amala");
 
     xswap(xpriority_queue_str)(foods, fruits);
 
-    cester_assert_uint_eq(xpriority_queue_peek(str)(fruits, &value), X_OK);
+    cester_assert_uint_eq(xpriority_queue_peek(str)(fruits, &value), XTD_OK);
     cester_assert_str_equal(value, "Amala");
-    cester_assert_uint_eq(xpriority_queue_peek(str)(foods, &value), X_OK);
+    cester_assert_uint_eq(xpriority_queue_peek(str)(foods, &value), XTD_OK);
     cester_assert_str_equal(value, "Apple");
 
     xpriority_queue_destroy(fruits);
@@ -424,33 +424,33 @@ CESTER_TEST(xpriority_queue_swap_buffer, _, {
     char *value;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
     status = xpriority_queue_new(str)(&foods, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(foods, "Amala");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(foods, "Iyan");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(foods, "Fufu");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
 
-    cester_assert_uint_eq(xpriority_queue_peek(str)(fruits, &value), X_OK);
+    cester_assert_uint_eq(xpriority_queue_peek(str)(fruits, &value), XTD_OK);
     cester_assert_str_equal(value, "Apple");
-    cester_assert_uint_eq(xpriority_queue_peek(str)(foods, &value), X_OK);
+    cester_assert_uint_eq(xpriority_queue_peek(str)(foods, &value), XTD_OK);
     cester_assert_str_equal(value, "Amala");
 
     xswap(char_array)(&xget_buffer(foods), &xget_buffer(fruits));
 
-    cester_assert_uint_eq(xpriority_queue_peek(str)(fruits, &value), X_OK);
+    cester_assert_uint_eq(xpriority_queue_peek(str)(fruits, &value), XTD_OK);
     cester_assert_str_equal(value, "Amala");
-    cester_assert_uint_eq(xpriority_queue_peek(str)(foods, &value), X_OK);
+    cester_assert_uint_eq(xpriority_queue_peek(str)(foods, &value), XTD_OK);
     cester_assert_str_equal(value, "Apple");
 
     xpriority_queue_destroy(fruits);
@@ -461,15 +461,15 @@ CESTER_TEST(xpriority_queue_iterator, _, {
     enum x_stat status;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     
     
     while (XITERATOR_HAS_NEXT(fruits)) {
@@ -493,15 +493,15 @@ CESTER_TEST(xpriority_queue_iterator_reverse, _, {
     enum x_stat status;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     
     
     while (XITERATOR_HAS_PREV(fruits)) {
@@ -525,15 +525,15 @@ CESTER_TEST(xpriority_queue_foreach, _, {
     enum x_stat status;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     
     XFOREACH(const char *fruit, fruits, {
         cester_assert_str_not_equal(fruit, NULL);
@@ -547,15 +547,15 @@ CESTER_TEST(xpriority_queue_foreach_reverse, _, {
     enum x_stat status;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     
     XFOREACH_REVERSE(const char *fruit, fruits, {
         cester_assert_str_not_equal(fruit, NULL);
@@ -569,15 +569,15 @@ CESTER_TEST(xpriority_queue_foreach_with_index, _, {
     enum x_stat status;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     
     XFOREACH_INDEX(size_t index, const char *fruit, fruits, {
         if (index == 0) {
@@ -599,15 +599,15 @@ CESTER_TEST(xpriority_queue_foreach_reverse_with_index, _, {
     enum x_stat status;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     
     XFOREACH_REVERSE_INDEX(size_t index, const char *fruit, fruits, {
         if (index == 3) {
@@ -629,20 +629,20 @@ CESTER_TEST(xpriority_queue_modify_in_loop, _, {
     enum x_stat status;
 
     status = xpriority_queue_new(str)(&fruits, cmp_str);
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     status = xpriority_queue_enqueue(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, X_OK);
+    cester_assert_uint_eq(status, XTD_OK);
     
     XFOREACH_INDEX(size_t index, const char *fruit, fruits, {
         if (xpriority_queue_size(fruits) > 2) {
             status = xpriority_queue_dequeue(str)(fruits, NULL);
-            cester_assert_uint_eq(status, X_OK);
+            cester_assert_uint_eq(status, XTD_OK);
         }
         cester_assert_str_not_equal(fruit, "Mango");
         cester_assert_str_not_equal(fruit, "Pineapple");

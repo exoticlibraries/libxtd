@@ -33,4 +33,8 @@ extern "C" {
 */
 #define array_get_or(ptr_array, index, default)
 
+#ifdef __cplusplus
+}
+#endif
+
 #endif

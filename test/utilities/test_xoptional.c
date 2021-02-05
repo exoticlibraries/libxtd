@@ -97,7 +97,7 @@ CESTER_TEST(xoptional_value, _, {
 })
 
 CESTER_TEST(xoptional_value_or, _, {
-    xoptional(int) fillOptInt;
+    xoptional(int) fillOptInt = xoptional_new(int)(2000);
     xoptional(str) fillOptStr = xoptional_new(str)(NULL);
     xoptional(str) fillOptStr2 = xoptional_new(str)("libxtypes");
     xoptional(Point) fillOptPoint = xoptional_new(Point)(NULL);

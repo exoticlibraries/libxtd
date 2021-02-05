@@ -32,21 +32,21 @@ extern "C" {
     keyword is ommited.
 */
 #ifdef __STDC_VERSION__
-    #define __X_STDC_VERSION__ __STDC_VERSION__
+    #define __XTD_STDC_VERSION__ __STDC_VERSION__
 #else
     #ifdef __cplusplus
         #if __cplusplus > 199711L
-            #define __X_STDC_VERSION__ __cplusplus
+            #define __XTD_STDC_VERSION__ __cplusplus
         #endif
     #endif
 #endif
-#ifndef __X_STDC_VERSION__
-    #define __X_INLINE__ 
-    #define __X_LONG_LONG__ long
+#ifndef __XTD_STDC_VERSION__
+    #define __XTD_INLINE__ 
+    #define __XTD_LONG_LONG__ long
     #define __FUNCTION__ "<unknown>"
 #else 
-    #define __X_INLINE__ inline
-    #define __X_LONG_LONG__ long long
+    #define __XTD_INLINE__ inline
+    #define __XTD_LONG_LONG__ long long
     #define __FUNCTION__ __func__
 #endif
 
@@ -99,46 +99,46 @@ extern "C" {
     The status codes for operation in the x-types 
     library.
 */
-EXOTIC_API enum x_stat {
-    X_OK = 0,                       /**< the operation successful */
-    X_ALLOC_ERR,                    /**< unable to allocate memory for a pointer */
-    X_INVALID_CAPACITY_ERR,         /**< the capacity is more than available for the data type */
-    X_INDEX_OUT_OF_RANGE_ERR,       /**< the index is equal or more than the size of the container elements */
-    X_INDEX_LESS_THAN_ZERO_ERR,
-    X_EMPTY_CONTAINER_ERR,
-    X_MAX_SIZE_ERR,
-    X_OUT_OF_RANGE_ERR,
-    X_OUT_PARAM_NULL_ERR,
-    X_STACK_OVERFLOW_ERR,
-    X_STACK_UNDERFLOW_ERR,
-    X_MAX_CAPACITY_ERR,             /**< the data type is full */
-    X_VALUE_NOT_FOUND_ERR,          /**< the data type is full */  
-    X_FAILED_TO_CLEANUP_ERR,        /**< the data type is full */    
-    X_INDEXES_OVERLAP_ERR,          /**< Two index value overlap each other */
-    X_CRITICAL_ERR,                 /**< An error impossible to recover from occur. The program should terminate immediately if encountered */
-    X_NO_OP,                        /**< No operation caried out */
-    X_ITER_END,                     /**< The loop has reached the end of the iteration */
-    X_INVALID_PARAMETER,
-    X_ERR                           /**< An operation fails */
+enum x_stat {
+    XTD_OK = 0,                       /**< the operation successful */
+    XTD_ALLOC_ERR,                    /**< unable to allocate memory for a pointer */
+    XTD_INVALID_CAPACITY_ERR,         /**< the capacity is more than available for the data type */
+    XTD_INDEXTD_OUT_OF_RANGE_ERR,       /**< the index is equal or more than the size of the container elements */
+    XTD_INDEXTD_LESS_THAN_ZERO_ERR,
+    XTD_EMPTY_CONTAINER_ERR,
+    XTD_MAXTD_SIZE_ERR,
+    XTD_OUT_OF_RANGE_ERR,
+    XTD_OUT_PARAM_NULL_ERR,
+    XTD_STACK_OVERFLOW_ERR,
+    XTD_STACK_UNDERFLOW_ERR,
+    XTD_MAXTD_CAPACITY_ERR,             /**< the data type is full */
+    XTD_VALUE_NOT_FOUND_ERR,          /**< the data type is full */  
+    XTD_FAILED_TO_CLEANUP_ERR,        /**< the data type is full */    
+    XTD_INDEXES_OVERLAP_ERR,          /**< Two index value overlap each other */
+    XTD_CRITICAL_ERR,                 /**< An error impossible to recover from occur. The program should terminate immediately if encountered */
+    XTD_NO_OP,                        /**< No operation caried out */
+    XTD_ITER_END,                     /**< The loop has reached the end of the iteration */
+    XTD_INVALID_PARAMETER,
+    XTD_ERR                           /**< An operation fails */
 
 };
 
 #ifdef ARCH_64
-    #define X_MAX_POW_TWO (((size_t) 1) << 63)
+    #define XTD_MAXTD_POW_TWO (((size_t) 1) << 63)
 #else
-    #define X_MAX_POW_TWO (((size_t) 1) << 31)
+    #define XTD_MAXTD_POW_TWO (((size_t) 1) << 31)
 #endif /* ARCH_64 */
 
 #define XDEFAULT_CONTAINER_CAPACITY 4
 #define XDEFAULT_CONTAINER_EXPANSION_RATE 2
 
-#define X_CONTAINER_MAX_CAPACITY ((size_t) - 1)
+#define XTD_CONTAINER_MAXTD_CAPACITY ((size_t) - 1)
 
 /**
     The container configuration structure to initialize a new container with 
     specific fields and memory allocation funtions. 
 */
-EXOTIC_API struct xcontainer_config {
+struct xcontainer_config {
     size_t capacity;                                        /**<  the default capacity of the array */
     size_t expansion_rate;                                  /**<  the rate at which the array buffer expands (capacity * expand_rate) */
     size_t max_size;                                        /**<  the max size of the container */
@@ -152,7 +152,7 @@ typedef struct xcontainer_config XConfig;
 void init_xcontainer_config(struct xcontainer_config *config) {
     config->expansion_rate = XDEFAULT_CONTAINER_EXPANSION_RATE;
     config->capacity       = XDEFAULT_CONTAINER_CAPACITY;
-    config->max_size       = X_CONTAINER_MAX_CAPACITY;
+    config->max_size       = XTD_CONTAINER_MAXTD_CAPACITY;
     config->memory_alloc   = malloc;
     config->memory_calloc  = calloc;
     config->memory_free    = free;
@@ -217,10 +217,10 @@ void init_xcontainer_config_max_size(struct xcontainer_config *config, size_t ma
 /**
 
 */
-static __X_INLINE__ size_t x_upper_pow_two(size_t n)
+static __XTD_INLINE__ size_t x_upper_pow_two(size_t n)
 {
-    if (n >= X_MAX_POW_TWO) {
-        return X_MAX_POW_TWO;
+    if (n >= XTD_MAXTD_POW_TWO) {
+        return XTD_MAXTD_POW_TWO;
     }
     if (n == 0) {
         return 2;

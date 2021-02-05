@@ -19,7 +19,7 @@ extern "C" {
 #include "xiterator.h"
 
 #ifdef __cplusplus
-#if !defined(ALLOW_X_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
+#if !defined(ALLOW_XTD_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
     #warning Do not use this type in C++ 11 and above, use the std::priority_queue class instead
 #endif
 #define NULL 0
@@ -71,7 +71,7 @@ enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * const co
     T *buffer;\
     XIterator *iter;\
     if (!cmp) {\
-        return X_INVALID_PARAMETER;\
+        return XTD_INVALID_PARAMETER;\
     }\
     if (config->expansion_rate <= 1) {\
         expansion_rate = XDEFAULT_CONTAINER_EXPANSION_RATE;\
@@ -79,22 +79,22 @@ enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * const co
         expansion_rate = config->expansion_rate;\
     }\
     if ((!config->capacity || expansion_rate >= (config->max_size / config->capacity)) && (config->max_size < config->capacity)) {\
-        return X_INVALID_CAPACITY_ERR;\
+        return XTD_INVALID_CAPACITY_ERR;\
     }\
     container = (xpriority_queue_##T *) config->memory_calloc(1, sizeof(xpriority_queue_##T));\
     if (!container) {\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     buffer = (T *) config->memory_alloc(config->capacity * sizeof(T));\
     if (!buffer) {\
         config->memory_free(container);\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     iter = (XIterator *) config->memory_alloc(sizeof(XIterator));\
     if (!iter) {\
         config->memory_free(buffer);\
         config->memory_free(container);\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     container->capacity             = config->capacity;\
     container->expansion_rate       = config->expansion_rate;\
@@ -109,7 +109,7 @@ enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * const co
     container->iter->index          = 0;\
     container->iter->backward_index = 0;\
     *out = container;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xpriority_queue_##T##_push(xpriority_queue_##T *container, T element)\
@@ -120,18 +120,18 @@ enum x_stat xpriority_queue_##T##_push(xpriority_queue_##T *container, T element
     T parent;\
     container_size = container->size;\
     if (container->size >= container->max_size) {\
-        return X_MAX_SIZE_ERR;\
+        return XTD_MAXTD_SIZE_ERR;\
     }\
     if (container_size >= container->capacity) {\
         status = xpriority_queue_##T##_expand_capacity(container);\
-        if (status != X_OK) {\
+        if (status != XTD_OK) {\
             return status;\
         }\
     }\
     container->buffer[container_size] = element;\
     container->size++;\
     if (container_size == 0) {\
-        return X_OK;\
+        return XTD_OK;\
     }\
     child  = container->buffer[container_size];\
     parent = container->buffer[XPRIORITY_QUEUE_PARENT(container_size)];\
@@ -143,23 +143,23 @@ enum x_stat xpriority_queue_##T##_push(xpriority_queue_##T *container, T element
         child  = container->buffer[container_size];\
         parent = container->buffer[XPRIORITY_QUEUE_PARENT(container_size)];\
     }\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xpriority_queue_##T##_peek(xpriority_queue_##T *container, T *out)\
 {\
     if (container->size == 0) {\
-        return X_OUT_OF_RANGE_ERR;\
+        return XTD_OUT_OF_RANGE_ERR;\
     }\
     *out = container->buffer[0];\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xpriority_queue_##T##_pop(xpriority_queue_##T *container, T *out)\
 {\
     T temp;\
     if (container->size == 0) {\
-        return X_EMPTY_CONTAINER_ERR;\
+        return XTD_EMPTY_CONTAINER_ERR;\
     }\
     temp = container->buffer[0];\
     container->buffer[0] = container->buffer[container->size - 1];\
@@ -170,7 +170,7 @@ enum x_stat xpriority_queue_##T##_pop(xpriority_queue_##T *container, T *out)\
     if (out) {\
         *out = temp;\
     }\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 static enum x_stat xpriority_queue_##T##_shrink_to_fit(xpriority_queue_##T *container)\
@@ -178,18 +178,18 @@ static enum x_stat xpriority_queue_##T##_shrink_to_fit(xpriority_queue_##T *cont
     T *new_buffer;\
     size_t size;\
     if (container->size == container->capacity) {\
-        return X_OK;\
+        return XTD_OK;\
     }\
-    new_buffer = container->memory_calloc(container->size, sizeof(T));\
+    new_buffer = (T *) container->memory_calloc(container->size, sizeof(T));\
     if (!new_buffer) {\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     size = container->size < 1 ? 1 : container->size;\
     memcpy(new_buffer, container->buffer, size * sizeof(T));\
     container->memory_free(container->buffer);\
     container->buffer   = new_buffer;\
     container->capacity = container->size;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 static enum x_stat xpriority_queue_##T##_expand_capacity(xpriority_queue_##T *container)\
@@ -197,7 +197,7 @@ static enum x_stat xpriority_queue_##T##_expand_capacity(xpriority_queue_##T *co
     size_t temp_capacity;\
     T *new_buffer;\
     if (container->capacity >= container->max_size) {\
-        return X_MAX_CAPACITY_ERR;\
+        return XTD_MAXTD_CAPACITY_ERR;\
     }\
     temp_capacity = container->capacity * container->expansion_rate;\
     if (temp_capacity <= container->capacity) {\
@@ -207,12 +207,12 @@ static enum x_stat xpriority_queue_##T##_expand_capacity(xpriority_queue_##T *co
     }\
     new_buffer = (T *) container->memory_alloc(temp_capacity * sizeof(T));\
     if (!new_buffer) {\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     memcpy(new_buffer, container->buffer, container->size * sizeof(T));\
     container->memory_free(container->buffer);\
     container->buffer = new_buffer;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 static void xpriority_queue_##T##_heapify(xpriority_queue_##T *container, size_t index)\

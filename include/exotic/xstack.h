@@ -18,7 +18,7 @@ extern "C" {
 #include "xdeque.h"
 
 #ifdef __cplusplus
-#if !defined(ALLOW_X_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
+#if !defined(ALLOW_XTD_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
     #warning Do not use this type in C++ 03 and above, use the std::stack class instead
 #endif
 #define NULL 0
@@ -65,10 +65,10 @@ enum x_stat xstack_##T##_new_config(struct xcontainer_config * const config, xst
     xstack_##T *container;\
     container = (xstack_##T *) config->memory_calloc(1, sizeof(xstack_##T));\
     if (!container) {\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     xinternal_vector_status = xdeque_##T##_new_config(config, &xinternal_vector);\
-    if (xinternal_vector_status != X_OK) {\
+    if (xinternal_vector_status != XTD_OK) {\
         config->memory_free(container);\
         return xinternal_vector_status;\
     }\
@@ -82,17 +82,17 @@ enum x_stat xstack_##T##_new_config(struct xcontainer_config * const config, xst
     container->memory_calloc    = config->memory_calloc;\
     container->memory_free      = config->memory_free;\
     *out = container;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xstack_##T##_push(xstack_##T *container, T element)\
 {\
     enum x_stat status;\
     if (container->size >= container->max_size) {\
-        return X_STACK_OVERFLOW_ERR;\
+        return XTD_STACK_OVERFLOW_ERR;\
     }\
     status = xdeque_##T##_add_back(container->xinternal_e7884708734_ximpl, element);\
-    if (status == X_OK) {\
+    if (status == XTD_OK) {\
         container->buffer = container->xinternal_e7884708734_ximpl->buffer;\
         container->capacity = container->xinternal_e7884708734_ximpl->capacity;\
         container->size = container->xinternal_e7884708734_ximpl->size;\
@@ -109,10 +109,10 @@ enum x_stat xstack_##T##_pop(xstack_##T *container, T *element)\
 {\
     enum x_stat status;\
     if (container->size == 0) {\
-        return X_STACK_UNDERFLOW_ERR;\
+        return XTD_STACK_UNDERFLOW_ERR;\
     }\
     status = xdeque_##T##_remove_back(container->xinternal_e7884708734_ximpl, element);\
-    if (status == X_OK) {\
+    if (status == XTD_OK) {\
         container->buffer = container->xinternal_e7884708734_ximpl->buffer;\
         container->capacity = container->xinternal_e7884708734_ximpl->capacity;\
         container->size = container->xinternal_e7884708734_ximpl->size;\

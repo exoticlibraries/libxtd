@@ -13,6 +13,8 @@
 extern "C" {
 #endif
 
+#include "xcommon.h"
+
 /*
     
 */
@@ -35,7 +37,7 @@ void xiterator_reset_xsingle_node_##T(T##_XSingle_Node *node)\
 {\
     node->iter = node;\
 }\
-\ 
+\
 unsigned int xiterator_has_next_xsingle_node_##T(T##_XSingle_Node *node)\
 {\
     if (node->iter == NULL) {\
@@ -77,7 +79,7 @@ void xiterator_reset_xnode_##T(T##_XNode *node)\
 {\
     node->iter = node;\
 }\
-\ 
+\
 unsigned int xiterator_has_next_xnode_##T(T##_XNode *node)\
 {\
     if (node->iter == NULL) {\
@@ -186,3 +188,4 @@ int xiterator_prev_xnode_##T(T##_XNode *node)\
 #endif
 
 #endif
+

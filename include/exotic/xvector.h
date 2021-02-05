@@ -17,7 +17,7 @@ extern "C" {
 #include "xiterator.h"
 
 #ifdef __cplusplus
-#if !defined(ALLOW_X_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
+#if !defined(ALLOW_XTD_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
     #warning Do not use this type in C++ 11 and above, use the std::vector class instead
 #endif
 #define NULL 0
@@ -69,22 +69,22 @@ enum x_stat xvector_##T##_new_config(struct xcontainer_config * const config, xv
         expansion_rate = config->expansion_rate;\
     }\
     if ((!config->capacity || expansion_rate >= (config->max_size / config->capacity)) && (config->max_size < config->capacity)) {\
-        return X_INVALID_CAPACITY_ERR;\
+        return XTD_INVALID_CAPACITY_ERR;\
     }\
     container = (xvector_##T *) config->memory_calloc(1, sizeof(xvector_##T));\
     if (!container) {\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     buffer = (T *) config->memory_alloc(config->capacity * sizeof(T));\
     if (!buffer) {\
         config->memory_free(container);\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     iter = (XIterator *) config->memory_alloc(sizeof(XIterator));\
     if (!iter) {\
         config->memory_free(buffer);\
         config->memory_free(container);\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     container->capacity             = config->capacity;\
     container->expansion_rate       = config->expansion_rate;\
@@ -98,24 +98,24 @@ enum x_stat xvector_##T##_new_config(struct xcontainer_config * const config, xv
     container->iter->index          = 0;\
     container->iter->backward_index = 0;\
     *out = container;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xvector_##T##_add(xvector_##T *container, T element)\
 {\
     enum x_stat status;\
     if (container->size >= container->max_size) {\
-        return X_MAX_SIZE_ERR;\
+        return XTD_MAXTD_SIZE_ERR;\
     }\
     if (container->size >= container->capacity) {\
         status = xvector_##T##_expand_capacity(container);\
-        if (status != X_OK) {\
+        if (status != XTD_OK) {\
             return status;\
         }\
     }\
     container->buffer[container->size] = element;\
     ++container->size;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xvector_##T##_add_at(xvector_##T *container, T item, size_t index) \
@@ -126,14 +126,14 @@ enum x_stat xvector_##T##_add_at(xvector_##T *container, T item, size_t index) \
         return xvector_##T##_add(container, item);\
     }\
     if ((container->size == 0 && index != 0) || index > (container->size - 1)) {\
-        return X_INDEX_OUT_OF_RANGE_ERR;\
+        return XTD_INDEXTD_OUT_OF_RANGE_ERR;\
     }\
     if (container->size >= container->max_size) {\
-        return X_MAX_SIZE_ERR;\
+        return XTD_MAXTD_SIZE_ERR;\
     }\
     if (container->size >= container->capacity) {\
         status = xvector_##T##_expand_capacity(container);\
-        if (status != X_OK) {\
+        if (status != XTD_OK) {\
             return status;\
         }\
     }\
@@ -143,62 +143,62 @@ enum x_stat xvector_##T##_add_at(xvector_##T *container, T item, size_t index) \
             num);\
     container->buffer[index] = item;\
     ++container->size;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xvector_##T##_get_at(xvector_##T *container, int index, T *out)\
 {\
     if (!out) {\
-        return X_OUT_PARAM_NULL_ERR;\
+        return XTD_OUT_PARAM_NULL_ERR;\
     }\
     if (index >= container->size) {\
-        return X_INDEX_OUT_OF_RANGE_ERR;\
+        return XTD_INDEXTD_OUT_OF_RANGE_ERR;\
     }\
     *out = container->buffer[index];\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xvector_##T##_get_front(xvector_##T *container, T *out)\
 {\
     if (!out) {\
-        return X_OUT_PARAM_NULL_ERR;\
+        return XTD_OUT_PARAM_NULL_ERR;\
     }\
     if (container->size == 0) {\
-        return X_EMPTY_CONTAINER_ERR;\
+        return XTD_EMPTY_CONTAINER_ERR;\
     }\
     *out = container->buffer[0];\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xvector_##T##_get_back(xvector_##T *container, T *out)\
 {\
     if (!out) {\
-        return X_OUT_PARAM_NULL_ERR;\
+        return XTD_OUT_PARAM_NULL_ERR;\
     }\
     if (container->size == 0) {\
-        return X_EMPTY_CONTAINER_ERR;\
+        return XTD_EMPTY_CONTAINER_ERR;\
     }\
     *out = container->buffer[container->size-1];\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xvector_##T##_replace_at(xvector_##T *container, size_t index, T element, T *out)\
 {\
     if (index >= container->size) {\
-        return X_INDEX_OUT_OF_RANGE_ERR;\
+        return XTD_INDEXTD_OUT_OF_RANGE_ERR;\
     }\
     if (out) {\
         *out = container->buffer[index];\
     }\
     container->buffer[index] = element;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xvector_##T##_remove_at(xvector_##T *container, size_t index, T *out)\
 {\
     size_t mem_size;\
     if (index < 0 || index >= container->size) {\
-        return X_INDEX_OUT_OF_RANGE_ERR;\
+        return XTD_INDEXTD_OUT_OF_RANGE_ERR;\
     }\
     if (out) {\
         *out = container->buffer[index];\
@@ -208,7 +208,7 @@ enum x_stat xvector_##T##_remove_at(xvector_##T *container, size_t index, T *out
         memmove(&(container->buffer[index]), &(container->buffer[index + 1]), mem_size);\
     }\
     --container->size;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xvector_##T##_remove_front(xvector_##T *container, T *out)\
@@ -226,11 +226,11 @@ enum x_stat xvector_##T##_clear(xvector_##T *container)\
     enum x_stat status;\
     while (container->size > 0) {\
         status = xvector_##T##_remove_at(container, (container->size)-1, NULL);\
-        if (status != X_OK) {\
+        if (status != XTD_OK) {\
             return status;\
         }\
     }\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 static enum x_stat xvector_##T##_shrink_to_fit(xvector_##T *container)\
@@ -238,26 +238,26 @@ static enum x_stat xvector_##T##_shrink_to_fit(xvector_##T *container)\
     T *new_buffer;\
     size_t size;\
     if (container->size == container->capacity) {\
-        return X_OK;\
+        return XTD_OK;\
     }\
-    new_buffer = container->memory_calloc(container->size, sizeof(T));\
+    new_buffer = (T *) container->memory_calloc(container->size, sizeof(T));\
     if (!new_buffer) {\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     size = container->size < 1 ? 1 : container->size;\
     memcpy(new_buffer, container->buffer, size * sizeof(T));\
     container->memory_free(container->buffer);\
     container->buffer   = new_buffer;\
     container->capacity = container->size;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 static enum x_stat xvector_##T##_expand_capacity(xvector_##T *container)\
 {\
     size_t tmp_capacity;\
     T *new_buffer;\
-    if (container->capacity >= X_CONTAINER_MAX_CAPACITY) {\
-        return X_MAX_CAPACITY_ERR;\
+    if (container->capacity >= XTD_CONTAINER_MAXTD_CAPACITY) {\
+        return XTD_MAXTD_CAPACITY_ERR;\
     }\
     tmp_capacity = container->capacity * container->expansion_rate;\
     if (tmp_capacity <= container->capacity) {\
@@ -267,12 +267,12 @@ static enum x_stat xvector_##T##_expand_capacity(xvector_##T *container)\
     }\
     new_buffer = (T *) container->memory_alloc(tmp_capacity * sizeof(T));\
     if (!new_buffer) {\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     memcpy(new_buffer, container->buffer, container->size * sizeof(T));\
     container->memory_free(container->buffer);\
     container->buffer = new_buffer;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 \

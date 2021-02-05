@@ -8,7 +8,7 @@
 #include <exotic/xiterator.h>
 
 CESTER_TEST(manage_raw_ptr_array_add, _, {
-    char **fruits = malloc(10 * sizeof(char *));
+    char **fruits = (char **) malloc(10 * sizeof(char *));
     
     array_add_at(fruits, 0, "Apple");
     array_add_at(fruits, 1, "Banana");

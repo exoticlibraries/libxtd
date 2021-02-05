@@ -16,7 +16,7 @@ extern "C" {
 #include "xcommon.h"
 
 #ifdef __cplusplus
-#if !defined(ALLOW_X_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
+#if !defined(ALLOW_XTD_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
     #warning Do not use this type in C++ 11 and above, use the std::optional class instead
 #endif
 #define NULL 0

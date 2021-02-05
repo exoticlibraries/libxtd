@@ -6,6 +6,7 @@
 #include <exotic/cester.h>
 #include <exotic/xalgorithm.h>
 
+#ifdef __STDC_VERSION__
 CESTER_BODY(
     typedef long long llong;
     SETUP_XALGORITHM_FOR(int);
@@ -81,3 +82,4 @@ CESTER_TEST(xbinary_search_999999999, _, {
 CESTER_OPTIONS(
     CESTER_VERBOSE_LEVEL(0);
 )
+#endif
