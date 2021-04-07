@@ -40,7 +40,7 @@ void xiterator_reset_xsingle_node_##T(T##_XSingle_Node *node)\
 \
 unsigned int xiterator_has_next_xsingle_node_##T(T##_XSingle_Node *node)\
 {\
-    if (node->iter == NULL) {\
+    if (node->iter == XTD_NULL) {\
         node->iter = node;\
     }\
     return xnode_has_next(node->iter);\
@@ -82,7 +82,7 @@ void xiterator_reset_xnode_##T(T##_XNode *node)\
 \
 unsigned int xiterator_has_next_xnode_##T(T##_XNode *node)\
 {\
-    if (node->iter == NULL) {\
+    if (node->iter == XTD_NULL) {\
         node->iter = node;\
     }\
     return xnode_has_next(node->iter);\
@@ -97,7 +97,7 @@ int xiterator_next_xnode_##T(T##_XNode *node)\
 \
 unsigned int xiterator_has_prev_xnode_##T(T##_XNode *node)\
 {\
-    if (node->iter == NULL) {\
+    if (node->iter == XTD_NULL) {\
         node->iter = node;\
     }\
     return xnode_has_prev(node->iter);\
@@ -135,7 +135,7 @@ int xiterator_prev_xnode_##T(T##_XNode *node)\
 /**
 
 */
-#define xnode_has_prev(node) (node->prev != NULL)
+#define xnode_has_prev(node) (node->prev != XTD_NULL)
 
 /**
 
@@ -155,12 +155,12 @@ int xiterator_prev_xnode_##T(T##_XNode *node)\
 /**
 
 */
-#define xnode_set_prev_data(node, value) {if (node->prev != NULL) { node->prev->data = value; }}
+#define xnode_set_prev_data(node, value) {if (node->prev != XTD_NULL) { node->prev->data = value; }}
 
 /**
 
 */
-#define xnode_has_next(node) (node->next != NULL)
+#define xnode_has_next(node) (node->next != XTD_NULL)
 
 /**
 
@@ -180,7 +180,7 @@ int xiterator_prev_xnode_##T(T##_XNode *node)\
 /**
 
 */
-#define xnode_set_next_data(node, value) {if (node->next != NULL) { node->next->data = value; }}
+#define xnode_set_next_data(node, value) {if (node->next != XTD_NULL) { node->next->data = value; }}
 
 
 #ifdef __cplusplus

@@ -1,5 +1,5 @@
-/*!gcc  -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
+/*!gcc  -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 
@@ -32,11 +32,7 @@ CESTER_TEST(xdeque_conf_init, _, {
     xdeque(str) *fruits;
     enum x_stat status;
 
-    config.memory_alloc   = malloc;
-    config.memory_calloc  = calloc;
-    config.memory_free    = free;
-    config.expansion_rate = 5;
-    config.capacity       = 20;
+    init_xcontainer_config(&config);
     status = xdeque_new_config(str)(&config, &fruits);
     cester_assert_uint_eq(status, XTD_OK);
 

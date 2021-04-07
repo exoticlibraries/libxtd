@@ -22,7 +22,6 @@ extern "C" {
 #if !defined(ALLOW_XTD_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
     #warning Do not use this type in C++ 11 and above, use the std::priority_queue class instead
 #endif
-#define NULL 0
 #endif
 
 #define XPRIORITY_QUEUE_PARENT(x)  ((x - 1) / 2)

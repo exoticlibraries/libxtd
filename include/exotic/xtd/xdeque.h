@@ -20,7 +20,6 @@ extern "C" {
 #if !defined(ALLOW_XTD_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
     #warning Do not use this type in C++ 03 and above, use the std::deque class instead
 #endif
-#define NULL 0
 #endif
 
 #define SETUP_XDEQUE_FOR(T) typedef struct xdeque_##T##_s { \
@@ -369,7 +368,7 @@ enum x_stat xdeque_##T##_clear(xdeque_##T *container)\
 {\
     enum x_stat status;\
     while (container->size > 0) {\
-        status = xdeque_##T##_remove_at(container, (container->size)-1, NULL);\
+        status = xdeque_##T##_remove_at(container, (container->size)-1, XTD_NULL);\
         if (status != XTD_OK) {\
             return status;\
         }\
@@ -379,7 +378,7 @@ enum x_stat xdeque_##T##_clear(xdeque_##T *container)\
 \
 static void xdeque_##T##_copy_buffer(xdeque_##T const * const container, T *buffer, T (*callback) (T))\
 {\
-    if (callback == NULL) {\
+    if (callback == XTD_NULL) {\
         if (container->last > container->first) {\
             memcpy(buffer,\
                    &(container->buffer[container->first]),\
@@ -418,7 +417,7 @@ static enum x_stat xdeque_##T##_shrink_to_fit(xdeque_##T *container)\
     if (!new_buffer) {\
         return XTD_ALLOC_ERR;\
     }\
-    xdeque_##T##_copy_buffer(container, new_buffer, NULL);\
+    xdeque_##T##_copy_buffer(container, new_buffer, XTD_NULL);\
     container->memory_free(container->buffer);\
     container->buffer   = new_buffer;\
     container->first    = 0;\
@@ -439,7 +438,7 @@ static enum x_stat xdeque_##T##_expand_capacity(xdeque_##T *container)\
     if (!new_buffer) {\
         return XTD_ALLOC_ERR;\
     }\
-    xdeque_##T##_copy_buffer(container, new_buffer, NULL);\
+    xdeque_##T##_copy_buffer(container, new_buffer, XTD_NULL);\
     container->memory_free(container->buffer);\
     container->first      = 0;\
     container->last       = container->size;\

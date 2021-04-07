@@ -21,7 +21,6 @@ extern "C" {
 #if !defined(ALLOW_XTD_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
     #warning Do not use this type in C++ 03 and above, use the std::stack class instead
 #endif
-#define NULL 0
 #endif
 
 /**

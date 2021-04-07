@@ -43,11 +43,17 @@ extern "C" {
 #ifndef __XTD_STDC_VERSION__
     #define __XTD_INLINE__ 
     #define __XTD_LONG_LONG__ long
-    #define __FUNCTION__ "<unknown>"
+    #ifdef __FUNCTION__ 
+        #define __XTD_FUNCTION__ __FUNCTION__
+    #else
+        #define __XTD_FUNCTION__ "<unknown>"
+    #endif
+    #define XTD_NULL 0L
 #else 
     #define __XTD_INLINE__ inline
     #define __XTD_LONG_LONG__ long long
-    #define __FUNCTION__ __func__
+    #define __XTD_FUNCTION__ __func__
+    #define XTD_NULL NULL
 #endif
 
 #ifdef _WIN32
@@ -75,7 +81,7 @@ extern "C" {
     #define EXOTIC_API
 #endif
 
-#define x_free(x) free(x); x = NULL;
+#define x_free(x) free(x); x = XTD_NULL;
 
 /**
     Define bool to be unsigned
@@ -207,12 +213,12 @@ void init_xcontainer_config_max_size(struct xcontainer_config *config, size_t ma
 /**
 
 */
-#define xget_front(container) (container->size > 0 ? xget_at(container, 0) : NULL)
+#define xget_front(container) (container->size > 0 ? xget_at(container, 0) : XTD_NULL)
 
 /**
 
 */
-#define xget_back(container) (container->size > 0 ? xget_at(container, container->size-1) : NULL)
+#define xget_back(container) (container->size > 0 ? xget_at(container, container->size-1) : XTD_NULL)
 
 /**
 

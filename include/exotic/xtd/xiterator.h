@@ -137,7 +137,7 @@ typedef struct xiterator_s XIterator;
                                 XFOREACH_REVERSE_INDEX(unsigned int index, void *value, container, body)
 
 
-#define XITERATOR_RPTR_HAS_NEXT(ptr_array) (*(ptr_array) != NULL)
+#define XITERATOR_RPTR_HAS_NEXT(ptr_array) (*(ptr_array) != XTD_NULL)
 
 #define XITERATOR_RPTR_NEXT(ptr_array) (*(ptr_array)++)
 
