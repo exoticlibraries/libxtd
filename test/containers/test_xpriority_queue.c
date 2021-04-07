@@ -49,6 +49,7 @@ CESTER_TEST(xpriority_queue_conf_init, _, {
     config.memory_free    = free;
     config.expansion_rate = 5;
     config.capacity       = 20;
+    config.max_size       = 5000;
     status = xpriority_queue_new_config(str)(&config, &fruits, cmp_str);
     cester_assert_uint_eq(status, XTD_OK);
 

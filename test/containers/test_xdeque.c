@@ -1,7 +1,10 @@
+/*!clang++ {0} -I. -I../../include/ -I../../../libcester/include -o out.exe; ./out.exe */
+/*!clang -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out.exe; ./out.exe */
+/*!clang {0} -I. -I../../include/ -I../../../libcester/include -o out.exe; ./out.exe */
+/*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
+/*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc  -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
-/*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
-/*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
 #include <exotic/xtd/xdeque.h>
@@ -32,7 +35,12 @@ CESTER_TEST(xdeque_conf_init, _, {
     xdeque(str) *fruits;
     enum x_stat status;
 
-    init_xcontainer_config(&config);
+    config.memory_alloc   = malloc;
+    config.memory_calloc  = calloc;
+    config.memory_free    = free;
+    config.expansion_rate = 5;
+    config.capacity       = 20;
+    config.max_size       = 5000;
     status = xdeque_new_config(str)(&config, &fruits);
     cester_assert_uint_eq(status, XTD_OK);
 

@@ -37,6 +37,7 @@ CESTER_TEST(xvector_conf_init, _, {
     config.memory_free    = free;
     config.expansion_rate = 5;
     config.capacity       = 20;
+    config.max_size       = 5000;
     status = xvector_new_config(str)(&config, &fruits);
     cester_assert_uint_eq(status, XTD_OK);
 
