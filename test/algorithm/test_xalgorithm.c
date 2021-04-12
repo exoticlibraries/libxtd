@@ -26,7 +26,7 @@ CESTER_TEST(xlinear_search_6, _, {
 
 CESTER_TEST(xlinear_search_999999999, _, {
     size_t index = 0;
-    long long size = 999999999;
+    long long size = 999999;
     long long *numbers = calloc(size, sizeof(long long));
 
     for (; index < size; index++) {
@@ -57,9 +57,9 @@ CESTER_TEST(xbinary_search_6, _, {
     cester_assert_int_eq(xbinary_search(int)(numbers, 6, 6), 5);
 })
 
-CESTER_TEST(xbinary_search_999999999, _, {
+CESTER_TEST(xbinary_search_999999, _, {
     size_t index = 0;
-    long long size = 999999999;
+    long long size = 999999;
     long long *numbers = calloc(size, sizeof(long long));
 
     for (; index < size; index++) {

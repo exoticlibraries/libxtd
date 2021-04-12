@@ -9,10 +9,10 @@ Types to be implemented
 - [x] dequeue
 - [x] optional
 - [x] stack
-- [ ] queue
-- [ ] priority_queue
-- [ ] single linked list
-- [ ] double linked list
+- [x] queue
+- [x] priority_queue
+- [x] single linked list
+- [x] double linked list
 - [ ] set
 - [ ] unordered_set
 - [ ] map
