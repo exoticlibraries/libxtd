@@ -119,7 +119,7 @@ enum x_stat xpriority_queue_##T##_push(xpriority_queue_##T *container, T element
     T parent;\
     container_size = container->size;\
     if (container->size >= container->max_size) {\
-        return XTD_MAXTD_SIZE_ERR;\
+        return XTD_MAX_SIZE_ERR;\
     }\
     if (container_size >= container->capacity) {\
         status = xpriority_queue_##T##_expand_capacity(container);\
@@ -196,7 +196,7 @@ static enum x_stat xpriority_queue_##T##_expand_capacity(xpriority_queue_##T *co
     size_t temp_capacity;\
     T *new_buffer;\
     if (container->capacity >= container->max_size) {\
-        return XTD_MAXTD_CAPACITY_ERR;\
+        return XTD_MAX_CAPACITY_ERR;\
     }\
     temp_capacity = container->capacity * container->expansion_rate;\
     if (temp_capacity <= container->capacity) {\

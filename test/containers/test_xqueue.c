@@ -211,7 +211,7 @@ CESTER_TEST(xqueue_capacity, _, {
     cester_assert_false(xqueue_is_empty(fruits));
     cester_assert_uint_eq(xqueue_size(fruits), 4);
     cester_assert_uint_eq(xqueue_capacity(fruits), XDEFAULT_CONTAINER_CAPACITY);
-    cester_assert_equal(xqueue_max_size(fruits), XTD_CONTAINER_MAXTD_CAPACITY);
+    cester_assert_equal(xqueue_max_size(fruits), XTD_CONTAINER_MAX_CAPACITY);
 
     xqueue_destroy(fruits);
 })
@@ -229,9 +229,9 @@ CESTER_TEST(xqueue_max_size_1, _, {
     status = xqueue_enqueue(str)(fruits, "Coconut");
     cester_assert_uint_eq(status, XTD_OK);
     status = xqueue_enqueue(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, XTD_MAXTD_SIZE_ERR);
+    cester_assert_uint_eq(status, XTD_MAX_SIZE_ERR);
     status = xqueue_enqueue(str)(fruits, "Watermelon");
-    cester_assert_uint_eq(status, XTD_MAXTD_SIZE_ERR);
+    cester_assert_uint_eq(status, XTD_MAX_SIZE_ERR);
     
     cester_assert_false(xqueue_is_empty(fruits));
     cester_assert_uint_eq(xqueue_size(fruits), 3);
@@ -261,9 +261,9 @@ CESTER_TEST(xqueue_max_size_2, _, {
     status = xqueue_enqueue(str)(fruits, "Watermelon");
     cester_assert_uint_eq(status, XTD_OK);
     status = xqueue_enqueue(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, XTD_MAXTD_SIZE_ERR);
+    cester_assert_uint_eq(status, XTD_MAX_SIZE_ERR);
     status = xqueue_enqueue(str)(fruits, "Avocado");
-    cester_assert_uint_eq(status, XTD_MAXTD_SIZE_ERR);
+    cester_assert_uint_eq(status, XTD_MAX_SIZE_ERR);
     
     cester_assert_false(xqueue_is_empty(fruits));
     cester_assert_uint_eq(xqueue_size(fruits), max_size);

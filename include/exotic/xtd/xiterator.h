@@ -98,7 +98,7 @@ typedef struct xiterator_s XIterator;
 /**
 
 */
-#define XFOREACH_INDEXTD_UNSAFE(index, value, container, body) \
+#define XFOREACH_INDEX_UNSAFE(index, value, container, body) \
                                 XFOREACH_INDEX(unsigned int index, void *value, container, body)
 
 /**
@@ -133,7 +133,7 @@ typedef struct xiterator_s XIterator;
 /**
 
 */
-#define XFOREACH_REVERSE_INDEXTD_UNSAFE(index, value, container, body) \
+#define XFOREACH_REVERSE_INDEX_UNSAFE(index, value, container, body) \
                                 XFOREACH_REVERSE_INDEX(unsigned int index, void *value, container, body)
 
 
@@ -148,6 +148,16 @@ typedef struct xiterator_s XIterator;
             }\
 
 /* iterator for custom types */
+
+/**
+
+*/
+#define XITERATOR_UD_INIT(T) xiterator_init_##T
+
+/**
+
+*/
+#define XITERATOR_UD_DESTROY(T) xiterator_destroy_##T
 
 /**
 

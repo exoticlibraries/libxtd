@@ -109,15 +109,15 @@ enum x_stat {
     XTD_OK = 0,                       /**< the operation successful */
     XTD_ALLOC_ERR,                    /**< unable to allocate memory for a pointer */
     XTD_INVALID_CAPACITY_ERR,         /**< the capacity is more than available for the data type */
-    XTD_INDEXTD_OUT_OF_RANGE_ERR,       /**< the index is equal or more than the size of the container elements */
-    XTD_INDEXTD_LESS_THAN_ZERO_ERR,
+    XTD_INDEX_OUT_OF_RANGE_ERR,       /**< the index is equal or more than the size of the container elements */
+    XTD_INDEX_LESS_THAN_ZERO_ERR,
     XTD_EMPTY_CONTAINER_ERR,
-    XTD_MAXTD_SIZE_ERR,
+    XTD_MAX_SIZE_ERR,
     XTD_OUT_OF_RANGE_ERR,
     XTD_OUT_PARAM_NULL_ERR,
     XTD_STACK_OVERFLOW_ERR,
     XTD_STACK_UNDERFLOW_ERR,
-    XTD_MAXTD_CAPACITY_ERR,             /**< the data type is full */
+    XTD_MAX_CAPACITY_ERR,             /**< the data type is full */
     XTD_VALUE_NOT_FOUND_ERR,          /**< the data type is full */  
     XTD_FAILED_TO_CLEANUP_ERR,        /**< the data type is full */    
     XTD_INDEXES_OVERLAP_ERR,          /**< Two index value overlap each other */
@@ -130,15 +130,15 @@ enum x_stat {
 };
 
 #ifdef ARCH_64
-    #define XTD_MAXTD_POW_TWO (((size_t) 1) << 63)
+    #define XTD_MAX_POW_TWO (((size_t) 1) << 63)
 #else
-    #define XTD_MAXTD_POW_TWO (((size_t) 1) << 31)
+    #define XTD_MAX_POW_TWO (((size_t) 1) << 31)
 #endif /* ARCH_64 */
 
 #define XDEFAULT_CONTAINER_CAPACITY 4
 #define XDEFAULT_CONTAINER_EXPANSION_RATE 2
 
-#define XTD_CONTAINER_MAXTD_CAPACITY ((size_t) - 1)
+#define XTD_CONTAINER_MAX_CAPACITY ((size_t) - 1)
 
 /**
     The container configuration structure to initialize a new container with 
@@ -158,7 +158,7 @@ typedef struct xcontainer_config XConfig;
 void init_xcontainer_config(struct xcontainer_config *config) {
     config->expansion_rate = XDEFAULT_CONTAINER_EXPANSION_RATE;
     config->capacity       = XDEFAULT_CONTAINER_CAPACITY;
-    config->max_size       = XTD_CONTAINER_MAXTD_CAPACITY;
+    config->max_size       = XTD_CONTAINER_MAX_CAPACITY;
     config->memory_alloc   = malloc;
     config->memory_calloc  = calloc;
     config->memory_free    = free;
@@ -225,8 +225,8 @@ void init_xcontainer_config_max_size(struct xcontainer_config *config, size_t ma
 */
 static __XTD_INLINE__ size_t x_upper_pow_two(size_t n)
 {
-    if (n >= XTD_MAXTD_POW_TWO) {
-        return XTD_MAXTD_POW_TWO;
+    if (n >= XTD_MAX_POW_TWO) {
+        return XTD_MAX_POW_TWO;
     }
     if (n == 0) {
         return 2;

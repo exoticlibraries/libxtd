@@ -113,7 +113,7 @@ CESTER_TEST(xvector_add_at, _, {
     cester_assert_str_equal(xget_at(fruits, 1), "Banana");
 
     status = xvector_add_at(str)(fruits, "Coconut", 4);
-    cester_assert_uint_eq(status, XTD_INDEXTD_OUT_OF_RANGE_ERR);
+    cester_assert_uint_eq(status, XTD_INDEX_OUT_OF_RANGE_ERR);
 
     status = xvector_add_at(str)(fruits, "Coconut", 2);
     cester_assert_uint_eq(status, XTD_OK);
@@ -143,7 +143,7 @@ CESTER_TEST(xvector_get_str, _, {
     status = xvector_add(str)(fruits, "Banana");
     cester_assert_uint_eq(status, XTD_OK);
     status = xvector_add_at(str)(fruits, "Coconut", 4);
-    cester_assert_uint_eq(status, XTD_INDEXTD_OUT_OF_RANGE_ERR);
+    cester_assert_uint_eq(status, XTD_INDEX_OUT_OF_RANGE_ERR);
     status = xvector_add_at(str)(fruits, "Coconut", 2);
     cester_assert_uint_eq(status, XTD_OK);
     status = xvector_add_at(str)(fruits, "Mango", 1);
@@ -157,8 +157,8 @@ CESTER_TEST(xvector_get_str, _, {
     cester_assert_str_equal(value, "Mango");
     cester_assert_uint_eq(xvector_get_at(str)(fruits, 2, &value), XTD_OK);
     cester_assert_str_equal(value, "Banana");
-    cester_assert_uint_eq(xvector_get_at(str)(fruits, 5, &value), XTD_INDEXTD_OUT_OF_RANGE_ERR);
-    cester_assert_uint_eq(xvector_get_at(str)(fruits, -40, &value), XTD_INDEXTD_OUT_OF_RANGE_ERR);
+    cester_assert_uint_eq(xvector_get_at(str)(fruits, 5, &value), XTD_INDEX_OUT_OF_RANGE_ERR);
+    cester_assert_uint_eq(xvector_get_at(str)(fruits, -40, &value), XTD_INDEX_OUT_OF_RANGE_ERR);
 
     xvector_destroy(fruits);
 })
@@ -270,7 +270,7 @@ CESTER_TEST(xvector_capacity, _, {
     cester_assert_false(xvector_is_empty(fruits));
     cester_assert_uint_eq(xvector_size(fruits), 4);
     cester_assert_uint_eq(xvector_capacity(fruits), XDEFAULT_CONTAINER_CAPACITY);
-    cester_assert_equal(xvector_max_size(fruits), XTD_CONTAINER_MAXTD_CAPACITY);
+    cester_assert_equal(xvector_max_size(fruits), XTD_CONTAINER_MAX_CAPACITY);
 
     xvector_destroy(fruits);
 })
@@ -288,9 +288,9 @@ CESTER_TEST(xvector_max_size_1, _, {
     status = xvector_add(str)(fruits, "Coconut");
     cester_assert_uint_eq(status, XTD_OK);
     status = xvector_add(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, XTD_MAXTD_SIZE_ERR);
+    cester_assert_uint_eq(status, XTD_MAX_SIZE_ERR);
     status = xvector_add(str)(fruits, "Watermelon");
-    cester_assert_uint_eq(status, XTD_MAXTD_SIZE_ERR);
+    cester_assert_uint_eq(status, XTD_MAX_SIZE_ERR);
     
     cester_assert_false(xvector_is_empty(fruits));
     cester_assert_uint_eq(xvector_size(fruits), 3);
@@ -320,7 +320,7 @@ CESTER_TEST(xvector_max_size_2, _, {
     status = xvector_add(str)(fruits, "Pineapple");
     cester_assert_uint_eq(status, XTD_OK);
     status = xvector_add(str)(fruits, "Avocado");
-    cester_assert_uint_eq(status, XTD_MAXTD_SIZE_ERR);
+    cester_assert_uint_eq(status, XTD_MAX_SIZE_ERR);
     
     cester_assert_false(xvector_is_empty(fruits));
     cester_assert_uint_eq(xvector_size(fruits), max_size);
@@ -517,7 +517,7 @@ CESTER_TEST(xvector_remove_at, _, {
 
     status = xvector_remove_at(str)(fruits, 0, NULL);
     cester_assert_uint_eq(status, XTD_OK);
-    cester_assert_uint_eq(xvector_get_at(str)(fruits, 1, &value), XTD_INDEXTD_OUT_OF_RANGE_ERR);
+    cester_assert_uint_eq(xvector_get_at(str)(fruits, 1, &value), XTD_INDEX_OUT_OF_RANGE_ERR);
     cester_assert_uint_eq(xvector_size(fruits), 1);
 
 

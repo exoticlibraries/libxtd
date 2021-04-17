@@ -104,7 +104,7 @@ enum x_stat xdeque_##T##_new_config(struct xcontainer_config * const config, xde
 enum x_stat xdeque_##T##_add_front(xdeque_##T *container, T element)\
 {\
     if (container->size >= container->max_size) {\
-        return XTD_MAXTD_SIZE_ERR;\
+        return XTD_MAX_SIZE_ERR;\
     }\
     if (container->size >= container->capacity && xdeque_##T##_expand_capacity(container) != XTD_OK) {\
         return XTD_ALLOC_ERR;\
@@ -118,7 +118,7 @@ enum x_stat xdeque_##T##_add_front(xdeque_##T *container, T element)\
 enum x_stat xdeque_##T##_add_back(xdeque_##T *container, T element)\
 {\
     if (container->size >= container->max_size) {\
-        return XTD_MAXTD_SIZE_ERR;\
+        return XTD_MAX_SIZE_ERR;\
     }\
     if (container->capacity == container->size && xdeque_##T##_expand_capacity(container) != XTD_OK) {\
         return XTD_ALLOC_ERR;\
@@ -141,13 +141,13 @@ enum x_stat xdeque_##T##_add_at(xdeque_##T *container, T element, size_t index)\
     size_t xfirst;\
     size_t xpos;\
     if (index > container->size) {\
-        return XTD_INDEXTD_OUT_OF_RANGE_ERR;\
+        return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
     if (index == container->size) {\
         return xdeque_##T##_add_back(container, element);\
     }\
     if (container->size >= container->max_size) {\
-        return XTD_MAXTD_SIZE_ERR;\
+        return XTD_MAX_SIZE_ERR;\
     }\
     if (container->capacity == container->size && xdeque_##T##_expand_capacity(container) != XTD_OK) {\
         return XTD_ALLOC_ERR;\
@@ -210,14 +210,14 @@ enum x_stat xdeque_##T##_add_at(xdeque_##T *container, T element, size_t index)\
     return XTD_OK;\
 }\
 \
-enum x_stat xdeque_##T##_get_at(xdeque_##T *container, int index, T *out)\
+enum x_stat xdeque_##T##_get_at(xdeque_##T *container, size_t index, T *out)\
 {\
     size_t actual_index;\
     if (!out) {\
         return XTD_OUT_PARAM_NULL_ERR;\
     }\
     if (index >= container->size) {\
-        return XTD_INDEXTD_OUT_OF_RANGE_ERR;\
+        return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
     actual_index = (container->first + index) & (container->capacity - 1);\
     *out = container->buffer[actual_index];\
@@ -254,7 +254,7 @@ enum x_stat xdeque_##T##_replace_at(xdeque_##T *container, size_t index, T eleme
 {\
     size_t actual_index;\
     if (index >= container->size) {\
-        return XTD_INDEXTD_OUT_OF_RANGE_ERR;\
+        return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
     actual_index = (container->first + index) & (container->capacity - 1);\
     if (out) {\
@@ -268,7 +268,7 @@ enum x_stat xdeque_##T##_remove_front(xdeque_##T *container, T *out)\
 {\
     T element;\
     if (container->size == 0) {\
-        return XTD_INDEXTD_OUT_OF_RANGE_ERR;\
+        return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
     element = container->buffer[container->first];\
     container->first = (container->first + 1) & (container->capacity - 1);\
@@ -284,7 +284,7 @@ enum x_stat xdeque_##T##_remove_back(xdeque_##T *container, T *out)\
     size_t last;\
     T element;\
     if (container->size == 0) {\
-        return XTD_INDEXTD_OUT_OF_RANGE_ERR;\
+        return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
     last = (container->last - 1) & (container->capacity - 1);\
     element = container->buffer[last];\
@@ -304,7 +304,7 @@ enum x_stat xdeque_##T##_remove_at(xdeque_##T *container, size_t index, T *out)\
     size_t xpos;\
    T removed;\
     if (index < 0 || index >= container->size) {\
-        return XTD_INDEXTD_OUT_OF_RANGE_ERR;\
+        return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
     xcapacity = container->capacity - 1;\
     xlast = container->last & xcapacity;\
@@ -430,8 +430,8 @@ static enum x_stat xdeque_##T##_expand_capacity(xdeque_##T *container)\
 {\
     size_t new_capacity;\
     T *new_buffer;\
-    if (container->capacity == XTD_MAXTD_POW_TWO) {\
-        return XTD_MAXTD_CAPACITY_ERR;\
+    if (container->capacity == XTD_MAX_POW_TWO) {\
+        return XTD_MAX_CAPACITY_ERR;\
     }\
     new_capacity = container->capacity << 1;\
     new_buffer = (T *) container->memory_calloc(new_capacity, sizeof(T));\

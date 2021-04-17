@@ -11,12 +11,14 @@ Types to be implemented
 - [x] stack
 - [x] queue
 - [x] priority_queue
+- [x] node
+- [x] single node
 - [x] single linked list
 - [x] double linked list
 - [ ] set
 - [ ] unordered_set
 - [ ] map
-- [ ] item
+- [ ] element
 - [ ] ring
 - [ ] treemap
 - [ ] tuple
@@ -26,6 +28,14 @@ Types to be implemented
 - [ ] heap
 - [ ] string
 - [ ] xstring
+
+## Todo
+
+- add_all in containers
+- extend list with other contigiuos related operations
+- add container##T##_remove to remove by element
+- add container##T##_index_of
+- add remove with cb, remove_all with cb
 
 ## Doc hints
 

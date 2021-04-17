@@ -88,7 +88,7 @@ enum x_stat xqueue_##T##_push(xqueue_##T *container, T element)\
 {\
     enum x_stat status;\
     if (container->size >= container->max_size) {\
-        return XTD_MAXTD_SIZE_ERR;\
+        return XTD_MAX_SIZE_ERR;\
     }\
     status = xdeque_##T##_add_back(container->xinternal_e7884708734_ximpl, element);\
     if (status == XTD_OK) {\

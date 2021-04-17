@@ -2,12 +2,12 @@
 /**
     \copyright MIT License Copyright (c) 2020, Adewale Azeez 
     \author Adewale Azeez <azeezadewale98@gmail.com>
-    \date 20 December 2020
-    \file xvector.h
+    \date 1 April 2021
+    \file xnode.h
 */
 
-#ifndef EXOTIC_XVECTOR_H
-#define EXOTIC_XVECTOR_H
+#ifndef EXOTIC_XNODE_H
+#define EXOTIC_XNODE_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,27 +18,27 @@ extern "C" {
 /*
     
 */
-#define SETUP_XSINGLE_NODE_FOR(T) typedef struct T##_xsingle_node_s { \
+#define SETUP_XSINGLE_NODE_FOR(T) typedef struct xsingle_node_##T##_s { \
     T data;\
-    struct T##_xsingle_node_s *next;\
-} T##_XSingle_Node;\
+    struct xsingle_node_##T##_s *next;\
+} xsingle_node_##T;\
 \
 
 /*
     
 */
-#define SETUP_XSINGLE_NODE_WITH_ITER_FOR(T) typedef struct T##_xsingle_node_s { \
+#define SETUP_XSINGLE_NODE_WITH_ITER_FOR(T) typedef struct xsingle_node_##T##_s { \
     T data;\
-    struct T##_xsingle_node_s *next;\
-    struct T##_xsingle_node_s *iter;\
-} T##_XSingle_Node;\
+    struct xsingle_node_##T##_s *next;\
+    struct xsingle_node_##T##_s *iter;\
+} xsingle_node_##T;\
 \
-void xiterator_reset_xsingle_node_##T(T##_XSingle_Node *node)\
+void xiterator_reset_xsingle_node_##T(xsingle_node_##T *node)\
 {\
     node->iter = node;\
 }\
 \
-unsigned int xiterator_has_next_xsingle_node_##T(T##_XSingle_Node *node)\
+unsigned int xiterator_has_next_xsingle_node_##T(xsingle_node_##T *node)\
 {\
     if (node->iter == XTD_NULL) {\
         node->iter = node;\
@@ -46,7 +46,7 @@ unsigned int xiterator_has_next_xsingle_node_##T(T##_XSingle_Node *node)\
     return xnode_has_next(node->iter);\
 }\
 \
-int xiterator_next_xsingle_node_##T(T##_XSingle_Node *node)\
+int xiterator_next_xsingle_node_##T(xsingle_node_##T *node)\
 {\
     T value = xnode_get_next_data(node->iter);\
     node->iter = xnode_get_next(node->iter);\
@@ -58,29 +58,29 @@ int xiterator_next_xsingle_node_##T(T##_XSingle_Node *node)\
 /*
     
 */
-#define SETUP_XNODE_FOR(T) typedef struct T##_xnode_s { \
+#define SETUP_XNODE_FOR(T) typedef struct xnode_##T##_s { \
     T data;\
-    struct T##_xnode_s *next;\
-    struct T##_xnode_s *prev;\
-} T##_XNode;\
+    struct xnode_##T##_s *next;\
+    struct xnode_##T##_s *prev;\
+} xnode_##T;\
 \
 
 /**
 
 */
-#define SETUP_XNODE_WITH_ITER_FOR(T) typedef struct T##_xnode_s { \
+#define SETUP_XNODE_WITH_ITER_FOR(T) typedef struct xnode_##T##_s { \
     T data;\
-    struct T##_xnode_s *next;\
-    struct T##_xnode_s *prev;\
-    struct T##_xnode_s *iter;\
-} T##_XNode;\
+    struct xnode_##T##_s *next;\
+    struct xnode_##T##_s *prev;\
+    struct xnode_##T##_s *iter;\
+} xnode_##T;\
 \
-void xiterator_reset_xnode_##T(T##_XNode *node)\
+void xiterator_reset_xnode_##T(xnode_##T *node)\
 {\
     node->iter = node;\
 }\
 \
-unsigned int xiterator_has_next_xnode_##T(T##_XNode *node)\
+unsigned int xiterator_has_next_xnode_##T(xnode_##T *node)\
 {\
     if (node->iter == XTD_NULL) {\
         node->iter = node;\
@@ -88,14 +88,14 @@ unsigned int xiterator_has_next_xnode_##T(T##_XNode *node)\
     return xnode_has_next(node->iter);\
 }\
 \
-int xiterator_next_xnode_##T(T##_XNode *node)\
+T xiterator_next_xnode_##T(xnode_##T *node)\
 {\
     T value = xnode_get_next_data(node->iter);\
     node->iter = xnode_get_next(node->iter);\
     return value;\
 }\
 \
-unsigned int xiterator_has_prev_xnode_##T(T##_XNode *node)\
+unsigned int xiterator_has_prev_xnode_##T(xnode_##T *node)\
 {\
     if (node->iter == XTD_NULL) {\
         node->iter = node;\
@@ -103,7 +103,7 @@ unsigned int xiterator_has_prev_xnode_##T(T##_XNode *node)\
     return xnode_has_prev(node->iter);\
 }\
 \
-int xiterator_prev_xnode_##T(T##_XNode *node)\
+T xiterator_prev_xnode_##T(xnode_##T *node)\
 {\
     T value = xnode_get_prev_data(node->iter);\
     node->iter = xnode_get_prev(node->iter);\
@@ -115,12 +115,17 @@ int xiterator_prev_xnode_##T(T##_XNode *node)\
 /**
 
 */
-#define xsingle_node(T) T##_XSingle_Node
+#define xsingle_node(T) xsingle_node_##T
 
 /**
 
 */
-#define xnode(T) T##_XNode
+#define xnode(T) xnode_##T
+
+/**
+
+*/
+#define xnode_has_data(node) (node->data != XTD_NULL)
 
 /**
 
@@ -181,6 +186,50 @@ int xiterator_prev_xnode_##T(T##_XNode *node)\
 
 */
 #define xnode_set_next_data(node, value) {if (node->next != XTD_NULL) { node->next->data = value; }}
+
+/**
+
+*/
+#define xnode_link_at_back(base_node, child_node) {\
+        if (child_node->next != XTD_NULL) {\
+            child_node->next->prev = child_node->prev;\
+        }\
+        if (child_node->prev != XTD_NULL) {\
+            child_node->prev->next = child_node->next;\
+        }\
+        if (base_node->prev == XTD_NULL) {\
+            child_node->prev = XTD_NULL;\
+            child_node->next = base_node;\
+            base_node->prev  = child_node;\
+        } else {\
+            child_node->prev = base_node->prev;\
+            child_node->prev->next = child_node;\
+            child_node->next  = base_node;\
+            base_node->prev  = child_node;\
+        }\
+    }
+
+/**
+
+*/
+#define xnode_link_at_front(base_node, child_node) {\
+        if (child_node->next != XTD_NULL) {\
+            child_node->next->prev = child_node->prev;\
+        }\
+        if (child_node->prev != XTD_NULL) {\
+            child_node->prev->next = child_node->next;\
+        }\
+        if (base_node->prev == XTD_NULL) {\
+            child_node->prev = base_node;\
+            base_node->next = child_node;\
+            child_node->next  = XTD_NULL;\
+        } else {\
+            child_node->next = base_node->next;\
+            child_node->next->prev = child_node;\
+            child_node->prev  = base_node;\
+            base_node->next  = child_node;\
+        }\
+    }
 
 
 #ifdef __cplusplus

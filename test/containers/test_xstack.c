@@ -211,7 +211,7 @@ CESTER_TEST(xstack_capacity, _, {
     cester_assert_false(xstack_is_empty(fruits));
     cester_assert_uint_eq(xstack_size(fruits), 4);
     cester_assert_uint_eq(xstack_capacity(fruits), XDEFAULT_CONTAINER_CAPACITY);
-    cester_assert_equal(xstack_max_size(fruits), XTD_CONTAINER_MAXTD_CAPACITY);
+    cester_assert_equal(xstack_max_size(fruits), XTD_CONTAINER_MAX_CAPACITY);
 
     xstack_destroy(fruits);
 })
