@@ -3,7 +3,7 @@
     \copyright MIT License Copyright (c) 2020, Adewale Azeez 
     \author Adewale Azeez <azeezadewale98@gmail.com>
     \date 16 April 2021
-    \file xnode.h
+    \file xlist.h
 */
 
 #ifndef EXOTIC_XLIST_H
@@ -536,7 +536,6 @@ T xiterator_prev_xlist_##T(xlist_iterator_##T *iterator)\
 
 */
 #define xlist_iterator(T) xlist_iterator_##T
-
 
 /*
 

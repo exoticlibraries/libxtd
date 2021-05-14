@@ -25,13 +25,12 @@ extern "C" {
 /*
     
 */
-#define SETUP_XVECTOR_FOR(T) typedef struct xvector_##T##_s { \
+#define SETUP_XVECTOR_ONLY_FOR(T) typedef struct xvector_##T##_s { \
     size_t capacity;\
     size_t expansion_rate;\
     size_t size;\
     size_t max_size;\
     T *buffer;\
-    XIterator *iter;\
     void *(*memory_alloc)  (size_t size);\
     void *(*memory_calloc) (size_t blocks, size_t size);\
     void  (*memory_free)   (void *block);\
@@ -61,7 +60,6 @@ enum x_stat xvector_##T##_new_config(struct xcontainer_config * const config, xv
     size_t expansion_rate;\
     xvector_##T *container;\
     T *buffer;\
-    XIterator *iter;\
     if (config->expansion_rate <= 1) {\
         expansion_rate = XDEFAULT_CONTAINER_EXPANSION_RATE;\
     } else {\
@@ -79,12 +77,6 @@ enum x_stat xvector_##T##_new_config(struct xcontainer_config * const config, xv
         config->memory_free(container);\
         return XTD_ALLOC_ERR;\
     }\
-    iter = (XIterator *) config->memory_alloc(sizeof(XIterator));\
-    if (!iter) {\
-        config->memory_free(buffer);\
-        config->memory_free(container);\
-        return XTD_ALLOC_ERR;\
-    }\
     container->capacity             = config->capacity;\
     container->expansion_rate       = config->expansion_rate;\
     container->max_size             = config->max_size;\
@@ -93,9 +85,6 @@ enum x_stat xvector_##T##_new_config(struct xcontainer_config * const config, xv
     container->memory_calloc        = config->memory_calloc;\
     container->memory_free          = config->memory_free;\
     container->buffer               = buffer;\
-    container->iter                 = iter;\
-    container->iter->index          = 0;\
-    container->iter->backward_index = 0;\
     *out = container;\
     return XTD_OK;\
 }\
@@ -224,7 +213,7 @@ enum x_stat xvector_##T##_clear(xvector_##T *container)\
 {\
     enum x_stat status;\
     while (container->size > 0) {\
-        status = xvector_##T##_remove_at(container, (container->size)-1, NULL);\
+        status = xvector_##T##_remove_at(container, (container->size)-1, XTD_NULL);\
         if (status != XTD_OK) {\
             return status;\
         }\
@@ -273,6 +262,99 @@ static enum x_stat xvector_##T##_expand_capacity(xvector_##T *container)\
     container->buffer = new_buffer;\
     return XTD_OK;\
 }\
+\
+\
+\
+
+/*
+    
+*/
+#define SETUP_ITERATOR_FOR_XVECTOR(T) \
+\
+void xvector_##T##_reset(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index = 0;\
+    iterator->backward_index = ((xvector_##T *) iterator->container)->size-1;\
+}\
+\
+void xvector_##T##_destroy(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xvector_##T *container;\
+    if (iterator == XTD_NULL) {\
+        return;\
+    }\
+    if (iterator->container != XTD_NULL) {\
+        ((xvector_##T *) container)->memory_free(iterator);\
+        return;\
+    }\
+    x_free(iterator);\
+}\
+\
+bool xvector_##T##_has_next(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xvector_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return FALSE;\
+    }\
+    container = (xvector_##T *) iterator->container;\
+    return (iterator->forward_index < container->size);\
+}\
+\
+void *xvector_##T##_next(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xvector_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    container = (xvector_##T *) iterator->container;\
+    return (void **) &(container->buffer[iterator->forward_index++]);\
+}\
+\
+bool xvector_##T##_has_prev(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xvector_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return FALSE;\
+    }\
+    container = (xvector_##T *) iterator->container;\
+    return (iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
+}\
+\
+void *xvector_##T##_prev(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xvector_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    container = (xvector_##T *) iterator->container;\
+    return (void **) &(container->buffer[iterator->backward_index--]);\
+}\
+\
+static XIterator *xiterator_init_xvector_##T(xvector_##T *container) \
+{\
+    XIterator *iterator;\
+    if (container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    iterator = (XIterator *) container->memory_alloc(sizeof(XIterator));\
+    if (iterator == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    iterator->forward_index = 0;\
+    iterator->backward_index = container->size-1;\
+    iterator->has_next = xvector_##T##_has_next;\
+    iterator->next = xvector_##T##_next;\
+    iterator->has_prev = xvector_##T##_has_prev;\
+    iterator->prev = xvector_##T##_prev;\
+    iterator->reset = xvector_##T##_reset;\
+    iterator->destroy = xvector_##T##_destroy;\
+    iterator->container = container;\
+    return iterator;\
+}\
+\
 \
 \
 
@@ -356,9 +438,13 @@ static enum x_stat xvector_##T##_expand_capacity(xvector_##T *container)\
 */
 #define xvector_destroy(container) { \
         container->memory_free(container->buffer); \
-        container->memory_free(container->iter); \
         container->memory_free(container); \
     }
+
+/**
+
+*/
+#define xiterator_init_xvector(T) xiterator_init_xvector_##T
 
 /*
 
@@ -379,6 +465,11 @@ static enum x_stat xvector_##T##_expand_capacity(xvector_##T *container)\
 
 */
 #define xvector_is_empty xis_empty
+
+/*
+
+*/
+#define SETUP_XVECTOR_FOR(T) SETUP_XVECTOR_ONLY_FOR(T) SETUP_ITERATOR_FOR_XVECTOR(T)
 
 
 #ifdef __cplusplus
