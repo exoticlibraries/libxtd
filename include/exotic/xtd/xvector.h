@@ -271,7 +271,23 @@ static enum x_stat xvector_##T##_expand_capacity(xvector_##T *container)\
 */
 #define SETUP_ITERATOR_FOR_XVECTOR(T) \
 \
-void xvector_##T##_reset(void *iterator_) {\
+void xvector_iterator_##T##_reset_forward(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index = 0;\
+}\
+\
+void xvector_iterator_##T##_reset_backward(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->backward_index = ((xvector_##T *) iterator->container)->size-1;\
+}\
+\
+void xvector_iterator_##T##_reset(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -280,57 +296,80 @@ void xvector_##T##_reset(void *iterator_) {\
     iterator->backward_index = ((xvector_##T *) iterator->container)->size-1;\
 }\
 \
-void xvector_##T##_destroy(void *iterator_) {\
+void xvector_iterator_##T##_destroy(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
-    xvector_##T *container;\
     if (iterator == XTD_NULL) {\
         return;\
     }\
     if (iterator->container != XTD_NULL) {\
-        ((xvector_##T *) container)->memory_free(iterator);\
+        ((xvector_##T *) iterator->container)->memory_free(iterator);\
         return;\
     }\
     x_free(iterator);\
 }\
 \
-bool xvector_##T##_has_next(void *iterator_) {\
+void xvector_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index += distance;\
+}\
+\
+void xvector_iterator_##T##_decrement(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index--;\
+}\
+\
+void xvector_iterator_##T##_increment(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index++;\
+}\
+\
+bool xvector_iterator_##T##_has_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xvector_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return FALSE;\
     }\
     container = (xvector_##T *) iterator->container;\
-    return (iterator->forward_index < container->size);\
+    return (container != XTD_NULL && iterator->forward_index < container->size);\
 }\
 \
-void *xvector_##T##_next(void *iterator_) {\
+void *xvector_iterator_##T##_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xvector_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return XTD_NULL;\
     }\
     container = (xvector_##T *) iterator->container;\
-    return (void **) &(container->buffer[iterator->forward_index++]);\
+    return (void *) container->buffer[iterator->forward_index++];\
 }\
 \
-bool xvector_##T##_has_prev(void *iterator_) {\
+bool xvector_iterator_##T##_has_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xvector_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return FALSE;\
     }\
     container = (xvector_##T *) iterator->container;\
-    return (iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
+    return (container != XTD_NULL && iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
 }\
 \
-void *xvector_##T##_prev(void *iterator_) {\
+void *xvector_iterator_##T##_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xvector_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return XTD_NULL;\
     }\
     container = (xvector_##T *) iterator->container;\
-    return (void **) &(container->buffer[iterator->backward_index--]);\
+    return (void *) container->buffer[iterator->backward_index--];\
 }\
 \
 static XIterator *xiterator_init_xvector_##T(xvector_##T *container) \
@@ -345,12 +384,17 @@ static XIterator *xiterator_init_xvector_##T(xvector_##T *container) \
     }\
     iterator->forward_index = 0;\
     iterator->backward_index = container->size-1;\
-    iterator->has_next = xvector_##T##_has_next;\
-    iterator->next = xvector_##T##_next;\
-    iterator->has_prev = xvector_##T##_has_prev;\
-    iterator->prev = xvector_##T##_prev;\
-    iterator->reset = xvector_##T##_reset;\
-    iterator->destroy = xvector_##T##_destroy;\
+    iterator->has_next = xvector_iterator_##T##_has_next;\
+    iterator->next = xvector_iterator_##T##_next;\
+    iterator->has_prev = xvector_iterator_##T##_has_prev;\
+    iterator->prev = xvector_iterator_##T##_prev;\
+    iterator->reset_forward = xvector_iterator_##T##_reset_forward;\
+    iterator->reset_backward = xvector_iterator_##T##_reset_backward;\
+    iterator->reset = xvector_iterator_##T##_reset;\
+    iterator->destroy = xvector_iterator_##T##_destroy;\
+    iterator->advance_by = xvector_iterator_##T##_advance_by;\
+    iterator->increment = xvector_iterator_##T##_increment;\
+    iterator->decrement = xvector_iterator_##T##_decrement;\
     iterator->container = container;\
     return iterator;\
 }\

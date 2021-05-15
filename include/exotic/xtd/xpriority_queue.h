@@ -31,13 +31,12 @@ extern "C" {
 /*
     
 */
-#define SETUP_XPRIORITY_QUEUE_FOR(T) typedef struct xpriority_queue_##T##_s { \
+#define SETUP_XPRIORITY_QUEUE_ONLY_FOR(T) typedef struct xpriority_queue_##T##_s { \
     size_t capacity;\
     size_t expansion_rate;\
     size_t size;\
     size_t max_size;\
     T *buffer;\
-    XIterator *iter;\
     void *(*memory_alloc)  (size_t size);\
     void *(*memory_calloc) (size_t blocks, size_t size);\
     void  (*memory_free)   (void *block);\
@@ -68,7 +67,6 @@ enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * const co
     size_t expansion_rate;\
     xpriority_queue_##T *container;\
     T *buffer;\
-    XIterator *iter;\
     if (!cmp) {\
         return XTD_INVALID_PARAMETER;\
     }\
@@ -89,12 +87,6 @@ enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * const co
         config->memory_free(container);\
         return XTD_ALLOC_ERR;\
     }\
-    iter = (XIterator *) config->memory_alloc(sizeof(XIterator));\
-    if (!iter) {\
-        config->memory_free(buffer);\
-        config->memory_free(container);\
-        return XTD_ALLOC_ERR;\
-    }\
     container->capacity             = config->capacity;\
     container->expansion_rate       = config->expansion_rate;\
     container->max_size             = config->max_size;\
@@ -104,9 +96,6 @@ enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * const co
     container->memory_free          = config->memory_free;\
     container->cmp                  = cmp;\
     container->buffer               = buffer;\
-    container->iter                 = iter;\
-    container->iter->index          = 0;\
-    container->iter->backward_index = 0;\
     *out = container;\
     return XTD_OK;\
 }\
@@ -249,6 +238,144 @@ static void xpriority_queue_##T##_heapify(xpriority_queue_##T *container, size_t
 }\
 \
 \
+\
+
+/*
+    
+*/
+#define SETUP_ITERATOR_FOR_XPRIORITY_QUEUE(T) \
+\
+void xpriority_queue_iterator_##T##_reset_forward(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index = 0;\
+}\
+\
+void xpriority_queue_iterator_##T##_reset_backward(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->backward_index = ((xpriority_queue_##T *) iterator->container)->size-1;\
+}\
+\
+void xpriority_queue_iterator_##T##_reset(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index = 0;\
+    iterator->backward_index = ((xpriority_queue_##T *) iterator->container)->size-1;\
+}\
+\
+void xpriority_queue_iterator_##T##_destroy(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xpriority_queue_##T *container;\
+    if (iterator == XTD_NULL) {\
+        return;\
+    }\
+    if (iterator->container != XTD_NULL) {\
+        ((xpriority_queue_##T *) iterator->container)->memory_free(iterator);\
+        return;\
+    }\
+    x_free(iterator);\
+}\
+\
+void xpriority_queue_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index += distance;\
+}\
+\
+void xpriority_queue_iterator_##T##_decrement(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index--;\
+}\
+\
+void xpriority_queue_iterator_##T##_increment(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index++;\
+}\
+\
+bool xpriority_queue_iterator_##T##_has_next(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xpriority_queue_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return FALSE;\
+    }\
+    container = (xpriority_queue_##T *) iterator->container;\
+    return (iterator->forward_index < container->size);\
+}\
+\
+void *xpriority_queue_iterator_##T##_next(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xpriority_queue_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    container = (xpriority_queue_##T *) iterator->container;\
+    return (void *) container->buffer[iterator->forward_index++];\
+}\
+\
+bool xpriority_queue_iterator_##T##_has_prev(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xpriority_queue_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return FALSE;\
+    }\
+    container = (xpriority_queue_##T *) iterator->container;\
+    return (iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
+}\
+\
+void *xpriority_queue_iterator_##T##_prev(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xpriority_queue_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    container = (xpriority_queue_##T *) iterator->container;\
+    return (void *) container->buffer[iterator->backward_index--];\
+}\
+\
+static XIterator *xiterator_init_xpriority_queue_##T(xpriority_queue_##T *container) \
+{\
+    XIterator *iterator;\
+    if (container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    iterator = (XIterator *) container->memory_alloc(sizeof(XIterator));\
+    if (iterator == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    iterator->forward_index = 0;\
+    iterator->backward_index = container->size-1;\
+    iterator->has_next = xpriority_queue_iterator_##T##_has_next;\
+    iterator->next = xpriority_queue_iterator_##T##_next;\
+    iterator->has_prev = xpriority_queue_iterator_##T##_has_prev;\
+    iterator->prev = xpriority_queue_iterator_##T##_prev;\
+    iterator->reset_forward = xpriority_queue_iterator_##T##_reset_forward;\
+    iterator->reset_backward = xpriority_queue_iterator_##T##_reset_backward;\
+    iterator->reset = xpriority_queue_iterator_##T##_reset;\
+    iterator->destroy = xpriority_queue_iterator_##T##_destroy;\
+    iterator->advance_by = xpriority_queue_iterator_##T##_advance_by;\
+    iterator->increment = xpriority_queue_iterator_##T##_increment;\
+    iterator->decrement = xpriority_queue_iterator_##T##_decrement;\
+    iterator->container = container;\
+    return iterator;\
+}\
+\
+\
+\
 
 /**
 
@@ -305,7 +432,6 @@ static void xpriority_queue_##T##_heapify(xpriority_queue_##T *container, size_t
 */
 #define xpriority_queue_destroy(container) { \
         container->memory_free(container->buffer); \
-        container->memory_free(container->iter); \
         container->memory_free(container); \
     }
 
@@ -328,6 +454,11 @@ static void xpriority_queue_##T##_heapify(xpriority_queue_##T *container, size_t
 
 */
 #define xpriority_queue_is_empty xis_empty
+
+/*
+    
+*/
+#define SETUP_XPRIORITY_QUEUE_FOR(T) SETUP_XPRIORITY_QUEUE_ONLY_FOR(T) SETUP_ITERATOR_FOR_XPRIORITY_QUEUE(T)
 
 
 #ifdef __cplusplus

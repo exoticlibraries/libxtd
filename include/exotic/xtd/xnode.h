@@ -125,7 +125,7 @@ T xiterator_prev_xnode_##T(xnode_##T *node)\
 /**
 
 */
-#define xnode_has_data(node) (node->data != XTD_NULL)
+#define xnode_has_data(node) (node != XTD_NULL && node->data != XTD_NULL)
 
 /**
 
@@ -140,7 +140,7 @@ T xiterator_prev_xnode_##T(xnode_##T *node)\
 /**
 
 */
-#define xnode_has_prev(node) (node->prev != XTD_NULL)
+#define xnode_has_prev(node) (node != XTD_NULL && node->prev != XTD_NULL)
 
 /**
 
@@ -165,7 +165,7 @@ T xiterator_prev_xnode_##T(xnode_##T *node)\
 /**
 
 */
-#define xnode_has_next(node) (node->next != XTD_NULL)
+#define xnode_has_next(node) (node != XTD_NULL && node->next != XTD_NULL)
 
 /**
 

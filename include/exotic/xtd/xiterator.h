@@ -57,7 +57,7 @@ typedef void* (*xiterator_prev)(void*);
 /**
 
 */
-typedef void (*xiterator_advance_by)(void*, size_t distance);
+typedef void (*xiterator_advance_by)(void*, size_t);
 
 /**
 
@@ -77,8 +77,8 @@ struct xiterator_s {
     size_t backward_index;                    /**< the current element index in the parent containerect */
     xiterator_has_next has_next;              /**< ... */
     xiterator_next next;                      /**< ... */
-    xiterator_has_next has_prev;              /**< ... */
-    xiterator_next prev;                      /**< ... */
+    xiterator_has_prev has_prev;              /**< ... */
+    xiterator_prev prev;                      /**< ... */
     xiterator_reset reset;                    /**< ... */
     xiterator_destroy destroy;                /**< ... */
     xiterator_advance_by advance_by;          /**< ... */
@@ -117,7 +117,7 @@ typedef struct xiterator_s XIterator;
 /**
 
 */
-#define XITERATOR_RESET(iterator) iterator->reset(iterator)
+#define XITERATOR_DESTROY(iterator) iterator->destroy(iterator)
 
 /**
 
@@ -143,26 +143,23 @@ typedef struct xiterator_s XIterator;
 
 */
 #define XITERATOR_ADVANCE_BY(iterator, distance) iterator->advance_by(iterator, distance)
-#define XITERATOR_ADVANCE_BY_TMP(container, distance) {container->iter->index += distance;}
 
 /**
 
 */
 #define XITERATOR_INCREMENT(iterator) iterator->increment(iterator)
-#define XITERATOR_INCREMENT_TMP(container) {container->iter->index++;}
 
 /**
 
 */
 #define XITERATOR_DECREMENT(iterator) iterator->decrement(iterator)
-#define XITERATOR_DECREMENT_TMP(container) {container->iter->inde--;}
 
 /**
 
 */
 #define x_internal_foreach(value, iterator, body) XITERATOR_RESET_FORWARD(iterator); \
                                   while (XITERATOR_HAS_NEXT(iterator)) { \
-                                        value = XITERATOR_NEXT(container);\
+                                        value = XITERATOR_NEXT(iterator);\
                                         body\
                                   }
 
@@ -171,7 +168,7 @@ typedef struct xiterator_s XIterator;
 */
 #define x_internal_foreach_typed(type, name, iterator, body) XITERATOR_RESET_FORWARD(iterator); \
                                   while (XITERATOR_HAS_NEXT(iterator)) { \
-                                        type name = (type) XITERATOR_NEXT(container);\
+                                        type name = (type) XITERATOR_NEXT(iterator);\
                                         body\
                                   }
 
@@ -188,7 +185,7 @@ typedef struct xiterator_s XIterator;
 /**
 
 */
-#define XFOREACH_INDEX(index_, value, container, body) XITERATOR_RESET_FORWARD(iterator);\
+#define XFOREACH_INDEX(index_, value, iterator, body) XITERATOR_RESET_FORWARD(iterator);\
                                   while (XITERATOR_HAS_NEXT(iterator)) {\
                                         index_ = iterator->forward_index;\
                                         value = XITERATOR_NEXT(iterator);\
@@ -198,7 +195,7 @@ typedef struct xiterator_s XIterator;
 /**
 
 */
-#define XFOREACH_INDEX_TYPED(index_, type, name, container, body) XITERATOR_RESET_FORWARD(iterator);\
+#define XFOREACH_INDEX_TYPED(index_, type, name, iterator, body) XITERATOR_RESET_FORWARD(iterator);\
                                   while (XITERATOR_HAS_NEXT(iterator)) {\
                                         index_ = iterator->forward_index;\
                                         type name = (type) XITERATOR_NEXT(iterator);\
@@ -246,93 +243,31 @@ typedef struct xiterator_s XIterator;
 /**
 
 */
-#define XFOREACH_REVERSE_INDEX_TYPED(index_, type, name, container, body) XITERATOR_RESET_BACKWARD(iterator);\
+#define XFOREACH_REVERSE_INDEX_TYPED(index_, type, name, iterator, body) XITERATOR_RESET_BACKWARD(iterator);\
                                   while (XITERATOR_HAS_PREV(iterator)) {\
                                         index_ = iterator->backward_index;\
                                         type name = (type) = XITERATOR_PREV(iterator);\
                                         body\
                                   }
 
+/**
 
+*/
 #define XITERATOR_RPTR_HAS_NEXT(ptr_array) (*(ptr_array) != NULL)
 
+/**
+
+*/
 #define XITERATOR_RPTR_NEXT(ptr_array) (*(ptr_array)++)
 
+/**
+
+*/
 #define XFOREACH_RPTR(value, ptr_array, body) \
             while (XITERATOR_RPTR_HAS_NEXT(ptr_array)) {\
                   value = XITERATOR_RPTR_NEXT(ptr_array);\
                   body\
             }
-
-/* iterator for custom types */
-
-/**
-
-*/
-#define XITERATOR_UD_INIT(T) xiterator_init_##T
-
-/**
-
-*/
-#define XITERATOR_UD_DESTROY(T) xiterator_destroy_##T
-
-/**
-
-*/
-#define XITERATOR_UD_RESET(T) xiterator_reset_##T
-
-/**
-
-*/
-#define XITERATOR_UD_HAS_NEXT(T) xiterator_has_next_##T
-
-/**
-
-*/
-#define XITERATOR_UD_NEXT(T) xiterator_next_##T
-
-/**
-
-*/
-#define XITERATOR_UD_HAS_PREV(T) xiterator_has_prev_##T
-
-/**
-
-*/
-#define XITERATOR_UD_PREV(T) xiterator_prev_##T
-
-/**
-
-*/
-#define XITERATOR_UD_ADVANCE_BY(T) xiterator_advance_by_##T
-
-/**
-
-*/
-#define XITERATOR_UD_INCREMENT(T) xiterator_increment_##T
-
-/**
-
-*/
-#define XITERATOR_UD_DECREMENT(T) xiterator_decrement_##T
-
-/**
-
-*/
-#define XFOREACH_UD(T, value, object, body) xiterator_reset_##T(object); \
-                                  while (xiterator_has_next_##T(object)) { \
-                                        value = xiterator_next_##T(object);\
-                                        body\
-                                  }\
-
-/**
-
-*/
-#define XFOREACH_UD_REVERSE(T, value, object, body) xiterator_reset_##T(object); \
-                                  while (xiterator_has_prev_##T(object)) { \
-                                        value = xiterator_prev_##T(object);\
-                                        body\
-                                  }\
 
 
 #ifdef __cplusplus

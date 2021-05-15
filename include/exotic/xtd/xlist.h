@@ -366,59 +366,207 @@ static xnode_##T *xlist_##T##_get_node(xlist_##T *container, T element)\
     xlist_##T *container;\
 } xlist_iterator_##T;\
 \
-static xlist_iterator_##T *xiterator_init_xlist_##T(xlist_##T *container) \
-{\
-    xlist_iterator_##T *iterator = (xlist_iterator_##T *) container->memory_alloc(sizeof(xlist_iterator_##T));\
-    if (iterator != XTD_NULL && container != XTD_NULL) {\
-        iterator->container = container;\
-        iterator->forward_iter = container->head;\
-        iterator->backward_iter = container->tail;\
+void xlist_iterator_##T##_reset_forward(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xlist_iterator_##T *xlist_iterator;\
+    xlist_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
     }\
+    xlist_iterator = ((xlist_iterator_##T *) iterator->container);\
+    container = xlist_iterator->container;\
+    xlist_iterator->forward_iter = container->head;\
+    iterator->forward_index = 0;\
+}\
+\
+void xlist_iterator_##T##_reset_backward(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xlist_iterator_##T *xlist_iterator;\
+    xlist_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    xlist_iterator = ((xlist_iterator_##T *) iterator->container);\
+    container = xlist_iterator->container;\
+    xlist_iterator->backward_iter = container->tail;\
+    iterator->backward_index = container->size-1;\
+}\
+\
+void xlist_iterator_##T##_reset(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xlist_iterator_##T *xlist_iterator;\
+    xlist_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    xlist_iterator = ((xlist_iterator_##T *) iterator->container);\
+    container = xlist_iterator->container;\
+    xlist_iterator->forward_iter = container->head;\
+    xlist_iterator->backward_iter = container->tail;\
+    iterator->forward_index = 0;\
+    iterator->backward_index = container->size-1;\
+}\
+\
+void xlist_iterator_##T##_destroy(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xlist_iterator_##T *xlist_iterator;\
+    xlist_##T *container;\
+    if (iterator == XTD_NULL) {\
+        return;\
+    }\
+    if (iterator->container == XTD_NULL) {\
+        x_free(iterator);\
+        return;\
+    }\
+    xlist_iterator = ((xlist_iterator_##T *) iterator->container);\
+    container = xlist_iterator->container;\
+    container->memory_free(xlist_iterator);\
+    container->memory_free(iterator);\
+}\
+\
+void xlist_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xlist_iterator_##T *xlist_iterator;\
+    xlist_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    xlist_iterator = ((xlist_iterator_##T *) iterator->container);\
+    container = xlist_iterator->container;\
+    while (distance-- > 0 && xlist_iterator->forward_iter != XTD_NULL) {\
+        xlist_iterator->forward_iter = xnode_get_next(xlist_iterator->forward_iter);\
+        iterator->forward_index++;\
+    }\
+}\
+\
+void xlist_iterator_##T##_decrement(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xlist_iterator_##T *xlist_iterator;\
+    xlist_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    xlist_iterator = ((xlist_iterator_##T *) iterator->container);\
+    container = xlist_iterator->container;\
+    if (xlist_iterator->forward_iter != XTD_NULL) {\
+        xlist_iterator->forward_iter = xnode_get_prev(xlist_iterator->forward_iter);\
+        iterator->forward_index--;\
+    }\
+    if (xlist_iterator->forward_iter == XTD_NULL) {\
+        xlist_iterator->forward_iter = container->tail;\
+    }\
+}\
+\
+void xlist_iterator_##T##_increment(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xlist_iterator_##T *xlist_iterator;\
+    xlist_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    xlist_iterator = ((xlist_iterator_##T *) iterator->container);\
+    container = xlist_iterator->container;\
+    if (xlist_iterator->forward_iter != XTD_NULL) {\
+        xlist_iterator->forward_iter = xnode_get_next(xlist_iterator->forward_iter);\
+        iterator->forward_index++;\
+    }\
+    if (xlist_iterator->forward_iter == XTD_NULL) {\
+        xlist_iterator->forward_iter = container->head;\
+    }\
+}\
+\
+bool xlist_iterator_##T##_has_next(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xlist_iterator_##T *xlist_iterator;\
+    xlist_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return FALSE;\
+    }\
+    xlist_iterator = ((xlist_iterator_##T *) iterator->container);\
+    container = xlist_iterator->container;\
+    return (container != XTD_NULL && xlist_iterator->forward_iter != XTD_NULL && xnode_has_data(xlist_iterator->forward_iter));\
+}\
+\
+void *xlist_iterator_##T##_next(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xlist_iterator_##T *xlist_iterator;\
+    xlist_##T *container;\
+    T value;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    xlist_iterator = ((xlist_iterator_##T *) iterator->container);\
+    container = xlist_iterator->container;\
+    value = xnode_get_data(xlist_iterator->forward_iter);\
+    xlist_iterator->forward_iter = xnode_get_next(xlist_iterator->forward_iter);\
+    iterator->forward_index++;\
+    return (void *) value;\
+}\
+\
+bool xlist_iterator_##T##_has_prev(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xlist_iterator_##T *xlist_iterator;\
+    xlist_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return FALSE;\
+    }\
+    xlist_iterator = ((xlist_iterator_##T *) iterator->container);\
+    container = xlist_iterator->container;\
+    return (container != XTD_NULL && xlist_iterator->backward_iter != XTD_NULL && xnode_has_data(xlist_iterator->backward_iter));\
+}\
+\
+void *xlist_iterator_##T##_prev(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xlist_iterator_##T *xlist_iterator;\
+    xlist_##T *container;\
+    T value;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    xlist_iterator = ((xlist_iterator_##T *) iterator->container);\
+    container = xlist_iterator->container;\
+    value = xnode_get_data(xlist_iterator->backward_iter);\
+    xlist_iterator->backward_iter = xnode_get_prev(xlist_iterator->backward_iter);\
+    iterator->backward_index++;\
+    return (void *) value;\
+}\
+\
+static XIterator *xiterator_init_xlist_##T(xlist_##T *container) \
+{\
+    XIterator *iterator;\
+    xlist_iterator_##T *xlist_iterator;\
+    if (container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    iterator = (XIterator *) container->memory_alloc(sizeof(XIterator));\
+    if (iterator == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    xlist_iterator = (xlist_iterator_##T *) container->memory_alloc(sizeof(xlist_iterator_##T));\
+    if (xlist_iterator == XTD_NULL) {\
+        container->memory_free(iterator);\
+        return XTD_NULL;\
+    }\
+    xlist_iterator->container = container;\
+    xlist_iterator->forward_iter = container->head;\
+    xlist_iterator->backward_iter = container->tail;\
+    iterator->forward_index = 0;\
+    iterator->backward_index = container->size-1;\
+    iterator->has_next = xlist_iterator_##T##_has_next;\
+    iterator->next = xlist_iterator_##T##_next;\
+    iterator->has_prev = xlist_iterator_##T##_has_prev;\
+    iterator->prev = xlist_iterator_##T##_prev;\
+    iterator->reset_forward = xlist_iterator_##T##_reset_forward;\
+    iterator->reset_backward = xlist_iterator_##T##_reset_backward;\
+    iterator->reset = xlist_iterator_##T##_reset;\
+    iterator->destroy = xlist_iterator_##T##_destroy;\
+    iterator->advance_by = xlist_iterator_##T##_advance_by;\
+    iterator->increment = xlist_iterator_##T##_increment;\
+    iterator->decrement = xlist_iterator_##T##_decrement;\
+    iterator->container = xlist_iterator;\
     return iterator;\
 }\
 \
-static void xiterator_destroy_xlist_##T(xlist_iterator_##T *iterator)\
-{\
-    if (iterator != XTD_NULL) {\
-        iterator->container->memory_free(iterator);\
-    }\
-}\
-\
-static void xiterator_reset_xlist_##T(xlist_iterator_##T *iterator)\
-{\
-    iterator->forward_iter = iterator->container->head;\
-    iterator->backward_iter = iterator->container->tail;\
-}\
-\
-bool xiterator_has_next_xlist_##T(xlist_iterator_##T *iterator)\
-{\
-    if (iterator->forward_iter == XTD_NULL) {\
-        return FALSE;\
-    }\
-    return xnode_has_data(iterator->forward_iter);\
-}\
-\
-T xiterator_next_xlist_##T(xlist_iterator_##T *iterator)\
-{\
-    T value = xnode_get_data(iterator->forward_iter);\
-    iterator->forward_iter = xnode_get_next(iterator->forward_iter);\
-    return value;\
-}\
-\
-bool xiterator_has_prev_xlist_##T(xlist_iterator_##T *iterator)\
-{\
-    if (iterator->backward_iter == XTD_NULL) {\
-        return FALSE;\
-    }\
-    return xnode_has_data(iterator->backward_iter);\
-}\
-\
-T xiterator_prev_xlist_##T(xlist_iterator_##T *iterator)\
-{\
-    T value = xnode_get_data(iterator->backward_iter);\
-    iterator->backward_iter = xnode_get_prev(iterator->backward_iter);\
-    return value;\
-}\
 \
 \
 

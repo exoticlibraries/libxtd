@@ -1,8 +1,8 @@
+/*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!clang++ {0} -I. -I../../include/ -I../../../libcester/include -o out.exe; ./out.exe */
 /*!clang -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out.exe; ./out.exe */
 /*!clang {0} -I. -I../../include/ -I../../../libcester/include -o out.exe; ./out.exe */
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
-/*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc  -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 
@@ -14,7 +14,7 @@
 CESTER_BODY(
     typedef char* str;
     typedef char** char_array;
-    SETUP_XDEQUE_FOR(int)
+    SETUP_XDEQUE_ONLY_FOR(int)
     SETUP_XDEQUE_FOR(str)
     SETUP_XALGORITHM_SWAP_FOR(xdeque_str)
     SETUP_XALGORITHM_SWAP_FOR(char_array)
@@ -544,205 +544,6 @@ CESTER_TEST(xdeque_clear, _, {
     cester_assert_uint_eq(xdeque_clear(str)(fruits), XTD_OK);
     cester_assert_uint_eq(xdeque_size(fruits), 0);
 
-
-    xdeque_destroy(fruits);
-})
-
-CESTER_TEST(xdeque_iterator, _, {
-    xdeque(str) *fruits;
-    enum x_stat status;
-
-    status = xdeque_new(str)(&fruits);
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, XTD_OK);
-    
-    
-    while (XITERATOR_HAS_NEXT(fruits)) {
-        cester_assert_str_not_equal(XITERATOR_NEXT(fruits), NULL);
-    }
-    XITERATOR_RESET(fruits);
-    cester_assert_uint_eq(XITERATOR_HAS_NEXT(fruits), TRUE);
-    cester_assert_str_equal(XITERATOR_NEXT(fruits), "Apple");
-    cester_assert_uint_eq(XITERATOR_HAS_NEXT(fruits), TRUE);
-    cester_assert_str_equal(XITERATOR_NEXT(fruits), "Banana");
-    cester_assert_uint_eq(XITERATOR_HAS_NEXT(fruits), TRUE);
-    cester_assert_str_equal(XITERATOR_NEXT(fruits), "Mango");
-    cester_assert_uint_eq(XITERATOR_HAS_NEXT(fruits), TRUE);
-    cester_assert_str_equal(XITERATOR_NEXT(fruits), "Pineapple");
-
-    xdeque_destroy(fruits);
-})
-
-CESTER_TEST(xdeque_iterator_reverse, _, {
-    xdeque(str) *fruits;
-    enum x_stat status;
-
-    status = xdeque_new(str)(&fruits);
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, XTD_OK);
-    
-    
-    while (XITERATOR_HAS_PREV(fruits)) {
-        cester_assert_str_not_equal(XITERATOR_PREV(fruits), NULL);
-    }
-    XITERATOR_RESET(fruits);
-    cester_assert_uint_eq(XITERATOR_HAS_PREV(fruits), TRUE);
-    cester_assert_str_equal(XITERATOR_PREV(fruits), "Pineapple");
-    cester_assert_uint_eq(XITERATOR_HAS_PREV(fruits), TRUE);
-    cester_assert_str_equal(XITERATOR_PREV(fruits), "Mango");
-    cester_assert_uint_eq(XITERATOR_HAS_PREV(fruits), TRUE);
-    cester_assert_str_equal(XITERATOR_PREV(fruits), "Banana");
-    cester_assert_uint_eq(XITERATOR_HAS_PREV(fruits), TRUE);
-    cester_assert_str_equal(XITERATOR_PREV(fruits), "Apple");
-
-    xdeque_destroy(fruits);
-})
-
-CESTER_TEST(xdeque_foreach, _, {
-    xdeque(str) *fruits;
-    enum x_stat status;
-
-    status = xdeque_new(str)(&fruits);
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, XTD_OK);
-    
-    XFOREACH(const char *fruit, fruits, {
-        cester_assert_str_not_equal(fruit, NULL);
-    });
-
-    xdeque_destroy(fruits);
-})
-
-CESTER_TEST(xdeque_foreach_reverse, _, {
-    xdeque(str) *fruits;
-    enum x_stat status;
-
-    status = xdeque_new(str)(&fruits);
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, XTD_OK);
-    
-    XFOREACH_REVERSE(const char *fruit, fruits, {
-        cester_assert_str_not_equal(fruit, NULL);
-    });
-
-    xdeque_destroy(fruits);
-})
-
-CESTER_TEST(xdeque_foreach_with_index, _, {
-    xdeque(str) *fruits;
-    enum x_stat status;
-
-    status = xdeque_new(str)(&fruits);
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, XTD_OK);
-    
-    XFOREACH_INDEX(size_t index, const char *fruit, fruits, {
-        if (index == 0) {
-            cester_assert_str_equal(fruit, "Apple");
-        } else if (index == 1) {
-            cester_assert_str_equal(fruit, "Banana");
-        } else if (index == 2) {
-            cester_assert_str_equal(fruit, "Mango");
-        } else if (index == 3) {
-            cester_assert_str_equal(fruit, "Pineapple");
-        }
-    });
-
-    xdeque_destroy(fruits);
-})
-
-CESTER_TEST(xdeque_foreach_reverse_with_index, _, {
-    xdeque(str) *fruits;
-    enum x_stat status;
-
-    status = xdeque_new(str)(&fruits);
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, XTD_OK);
-    
-    XFOREACH_REVERSE_INDEX(size_t index, const char *fruit, fruits, {
-        if (index == 3) {
-            cester_assert_str_equal(fruit, "Pineapple");
-        } else if (index == 2) {
-            cester_assert_str_equal(fruit, "Mango");
-        } else if (index == 1) {
-            cester_assert_str_equal(fruit, "Banana");
-        } else if (index == 0) {
-            cester_assert_str_equal(fruit, "Apple");
-        }
-    });
-
-    xdeque_destroy(fruits);
-})
-
-CESTER_TEST(xdeque_modify_in_loop, _, {
-    xdeque(str) *fruits;
-    enum x_stat status;
-
-    status = xdeque_new(str)(&fruits);
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Apple");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Banana");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Mango");
-    cester_assert_uint_eq(status, XTD_OK);
-    status = xdeque_add(str)(fruits, "Pineapple");
-    cester_assert_uint_eq(status, XTD_OK);
-    
-    XFOREACH_INDEX(size_t index, const char *fruit, fruits, {
-        if (xdeque_size(fruits) > 3) {
-            status = xdeque_remove_at(str)(fruits, 3, NULL);
-            cester_assert_uint_eq(status, XTD_OK);
-        }
-        if (xdeque_size(fruits) > 2) {
-            status = xdeque_remove_at(str)(fruits, 1, NULL);
-            cester_assert_uint_eq(status, XTD_OK);
-        }
-        cester_assert_str_not_equal(fruit, "Banana");
-        cester_assert_str_not_equal(fruit, "Pineapple");
-    });
 
     xdeque_destroy(fruits);
 })

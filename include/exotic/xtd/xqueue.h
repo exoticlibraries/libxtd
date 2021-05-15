@@ -33,7 +33,6 @@ extern "C" {
     size_t size;\
     size_t max_size;\
     T *buffer;\
-    XIterator *iter;\
     void *(*memory_alloc)  (size_t size);\
     void *(*memory_calloc) (size_t blocks, size_t size);\
     void  (*memory_free)   (void *block);\
@@ -76,7 +75,6 @@ enum x_stat xqueue_##T##_new_config(struct xcontainer_config * const config, xqu
     container->size             = 0;\
     container->xinternal_e7884708734_ximpl = xinternal_vector;\
     container->buffer           = xinternal_vector->buffer;\
-    container->iter             = xinternal_vector->iter;\
     container->memory_alloc     = config->memory_alloc;\
     container->memory_calloc    = config->memory_calloc;\
     container->memory_free      = config->memory_free;\
@@ -119,11 +117,21 @@ enum x_stat xqueue_##T##_pop(xqueue_##T *container, T *element)\
     return status;\
 }\
 \
+\
+\
 
-/**
-
+/*
+    
 */
-#define SETUP_XQUEUE_FOR(T) SETUP_XDEQUE_FOR(T) SETUP_ONLY_XQUEUE_FOR(T)
+#define SETUP_ITERATOR_FOR_XQUEUE(T) SETUP_ITERATOR_FOR_XDEQUE(T) \
+\
+static XIterator *xiterator_init_xqueue_##T(xqueue_##T *container) \
+{\
+    return xiterator_init_xdeque_##T(container->xinternal_e7884708734_ximpl);\
+}\
+\
+\
+\
 
 /**
 
@@ -175,7 +183,6 @@ enum x_stat xqueue_##T##_pop(xqueue_##T *container, T *element)\
 */
 #define xqueue_destroy(container) { \
         container->memory_free(container->xinternal_e7884708734_ximpl->buffer); \
-        container->memory_free(container->xinternal_e7884708734_ximpl->iter); \
         container->memory_free(container->xinternal_e7884708734_ximpl); \
         container->memory_free(container); \
     }
@@ -199,6 +206,11 @@ enum x_stat xqueue_##T##_pop(xqueue_##T *container, T *element)\
 
 */
 #define xqueue_is_empty xis_empty
+
+/**
+
+*/
+#define SETUP_XQUEUE_FOR(T) SETUP_XDEQUE_ONLY_FOR(T) SETUP_ONLY_XQUEUE_FOR(T) SETUP_ITERATOR_FOR_XQUEUE(T)
     
 
 

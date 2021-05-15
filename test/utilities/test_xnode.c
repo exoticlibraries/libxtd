@@ -200,7 +200,7 @@ CESTER_TEST(xnode_prev_next, _, {
     free(next);
 })
 
-CESTER_TEST(xnode_iterator_prev_manual, test_inst, {
+CESTER_TODO_TEST(xnode_iterator_prev_manual, test_inst, {
     xnode(int) *iter;
     xnode(int) *numbers = (xnode(int) *) test_inst->arg;
 
@@ -222,7 +222,7 @@ CESTER_TEST(xnode_iterator_prev_manual, test_inst, {
     
 })
 
-CESTER_TEST(xnode_iterator_next_manual, test_inst, {
+CESTER_TODO_TEST(xnode_iterator_next_manual, test_inst, {
     xnode(int) *iter;
     xnode(int) *numbers = (xnode(int) *) test_inst->arg;
 
@@ -244,7 +244,7 @@ CESTER_TEST(xnode_iterator_next_manual, test_inst, {
     
 })
 
-CESTER_TEST(xnode_custom_iterator_prev, test_inst, {
+CESTER_TODO_TEST(xnode_custom_iterator_prev, test_inst, {
     xnode(int) *numbers = (xnode(int) *) test_inst->arg;
     
     while (XITERATOR_UD_HAS_PREV(xnode_int)(numbers)) {
@@ -263,7 +263,7 @@ CESTER_TEST(xnode_custom_iterator_prev, test_inst, {
     cester_assert_uint_ne(XITERATOR_UD_HAS_PREV(xnode_int)(numbers), TRUE);
 })
 
-CESTER_TEST(xnode_custom_iterator_next, test_inst, {
+CESTER_TODO_TEST(xnode_custom_iterator_next, test_inst, {
     xnode(int) *numbers = (xnode(int) *) test_inst->arg;
     
     while (XITERATOR_UD_HAS_NEXT(xnode_int)(numbers)) {
@@ -282,7 +282,7 @@ CESTER_TEST(xnode_custom_iterator_next, test_inst, {
     cester_assert_uint_ne(XITERATOR_UD_HAS_NEXT(xnode_int)(numbers), TRUE);
 })
 
-CESTER_TEST(xnode_custom_foreach, test_inst, {
+CESTER_TODO_TEST(xnode_custom_foreach, test_inst, {
     xnode(int) *numbers = (xnode(int) *) test_inst->arg;
     
     XFOREACH_UD(xnode_int, int number, numbers, {
@@ -290,7 +290,7 @@ CESTER_TEST(xnode_custom_foreach, test_inst, {
     });
 })
 
-CESTER_TEST(xnode_custom_foreach_reverse, test_inst, {
+CESTER_TODO_TEST(xnode_custom_foreach_reverse, test_inst, {
     xnode(int) *numbers = (xnode(int) *) test_inst->arg;
     
     XFOREACH_UD_REVERSE(xnode_int, int number, numbers, {
