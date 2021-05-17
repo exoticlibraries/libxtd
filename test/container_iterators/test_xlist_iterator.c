@@ -1,6 +1,6 @@
+/*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc  -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
-/*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
@@ -196,7 +196,7 @@ CESTER_TEST(xlist_foreach_reverse_with_index, _, {
     xlist_destroy(str)(fruits);
 })
 
-CESTER_TEST(xlist_modify_in_loop, _, {
+CESTER_SKIP_TEST(xlist_modify_in_loop, _, {
     xlist(str) *fruits;
     enum x_stat status;
     XIterator *iterator;
@@ -341,6 +341,7 @@ CESTER_TEST(xlist_iterator_forward_and_backward, _, {
     status = xlist_add(str)(fruits, "Pineapple");
     cester_assert_uint_eq(status, XTD_OK);
     
+    index = 0;
     forward_iterator = XITERATOR_INIT(xlist, str, fruits);
     backward_iterator = XITERATOR_INIT(xlist, str, fruits);
     while (XITERATOR_HAS_NEXT(forward_iterator) && XITERATOR_HAS_PREV(backward_iterator)) {
@@ -373,7 +374,6 @@ CESTER_TEST(xlist_iterator_forward_and_backward, _, {
 })
 
 CESTER_OPTIONS(
-    CESTER_TEST_SHOULD_FAIL(xlist_modify_in_loop);
     CESTER_TEST_SHOULD_FAIL(xlist_iterator_segfault);
     CESTER_VERBOSE_LEVEL(2);
 )

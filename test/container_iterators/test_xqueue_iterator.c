@@ -337,6 +337,7 @@ CESTER_TEST(xqueue_iterator_forward_and_backward, _, {
     status = xqueue_enqueue(str)(fruits, "Pineapple");
     cester_assert_uint_eq(status, XTD_OK);
     
+    index = 0;
     forward_iterator = XITERATOR_INIT(xqueue, str, fruits);
     backward_iterator = XITERATOR_INIT(xqueue, str, fruits);
     while (XITERATOR_HAS_NEXT(forward_iterator) && XITERATOR_HAS_PREV(backward_iterator)) {

@@ -1,4 +1,4 @@
-/*!gcc  -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
+/*!clang -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
@@ -341,6 +341,7 @@ CESTER_TEST(xdeque_iterator_forward_and_backward, _, {
     status = xdeque_add(str)(fruits, "Pineapple");
     cester_assert_uint_eq(status, XTD_OK);
     
+    index = 0;
     forward_iterator = XITERATOR_INIT(xdeque, str, fruits);
     backward_iterator = XITERATOR_INIT(xdeque, str, fruits);
     while (XITERATOR_HAS_NEXT(forward_iterator) && XITERATOR_HAS_PREV(backward_iterator)) {
