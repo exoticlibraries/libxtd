@@ -17,13 +17,12 @@ extern "C" {
 #include "xiterator.h"
 
 #ifdef __cplusplus
-#if !defined(ALLOW_X_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
-    #warning Do not use this type in C++ 03 and above, use the std::container class instead
+#if !defined(ALLOW_XTD_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
+    #warning Do not use this type in C++ 03 and above, use the std::deque class instead
 #endif
-#define NULL 0
 #endif
 
-#define SETUP_XDEQUE_FOR(T) typedef struct xdeque_##T##_s { \
+#define SETUP_XDEQUE_ONLY_FOR(T) typedef struct xdeque_##T##_s { \
     size_t capacity;\
     size_t expansion_rate;\
     size_t size;\
@@ -31,7 +30,6 @@ extern "C" {
     size_t first;\
     size_t last;\
     T *buffer;\
-    XIterator *iter;\
     void *(*memory_alloc)  (size_t size);\
     void *(*memory_calloc) (size_t blocks, size_t size);\
     void  (*memory_free)   (void *block);\
@@ -61,29 +59,22 @@ enum x_stat xdeque_##T##_new_config(struct xcontainer_config * const config, xde
     size_t expansion_rate;\
     xdeque_##T *container;\
     T *buffer;\
-    XIterator *iter;\
     if (config->expansion_rate <= 1) {\
         expansion_rate = XDEFAULT_CONTAINER_EXPANSION_RATE;\
     } else {\
         expansion_rate = config->expansion_rate;\
     }\
     if ((!config->capacity || expansion_rate >= (config->max_size / config->capacity)) && (config->max_size < config->capacity)) {\
-        return X_INVALID_CAPACITY_ERR;\
+        return XTD_INVALID_CAPACITY_ERR;\
     }\
     container = (xdeque_##T *) config->memory_calloc(1, sizeof(xdeque_##T));\
     if (!container) {\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     buffer = (T *) config->memory_alloc(config->capacity * sizeof(T));\
     if (!buffer) {\
         config->memory_free(container);\
-        return X_ALLOC_ERR;\
-    }\
-    iter = (XIterator *) config->memory_alloc(sizeof(XIterator));\
-    if (!iter) {\
-        config->memory_free(buffer);\
-        config->memory_free(container);\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
     container->capacity             = x_upper_pow_two(config->capacity);\
     container->expansion_rate       = config->expansion_rate;\
@@ -95,39 +86,36 @@ enum x_stat xdeque_##T##_new_config(struct xcontainer_config * const config, xde
     container->memory_calloc        = config->memory_calloc;\
     container->memory_free          = config->memory_free;\
     container->buffer               = buffer;\
-    container->iter                 = iter;\
-    container->iter->index          = 0;\
-    container->iter->backward_index = 0;\
     *out = container;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xdeque_##T##_add_front(xdeque_##T *container, T element)\
 {\
     if (container->size >= container->max_size) {\
-        return X_MAX_SIZE_ERR;\
+        return XTD_MAX_SIZE_ERR;\
     }\
-    if (container->size >= container->capacity && xdeque_##T##_expand_capacity(container) != X_OK) {\
-        return X_ALLOC_ERR;\
+    if (container->size >= container->capacity && xdeque_##T##_expand_capacity(container) != XTD_OK) {\
+        return XTD_ALLOC_ERR;\
     }\
     container->first = (container->first - 1) & (container->capacity - 1);\
     container->buffer[container->first] = element;\
     container->size++;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xdeque_##T##_add_back(xdeque_##T *container, T element)\
 {\
     if (container->size >= container->max_size) {\
-        return X_MAX_SIZE_ERR;\
+        return XTD_MAX_SIZE_ERR;\
     }\
-    if (container->capacity == container->size && xdeque_##T##_expand_capacity(container) != X_OK) {\
-        return X_ALLOC_ERR;\
+    if (container->capacity == container->size && xdeque_##T##_expand_capacity(container) != XTD_OK) {\
+        return XTD_ALLOC_ERR;\
     }\
     container->buffer[container->last] = element;\
     container->last = (container->last + 1) & (container->capacity - 1);\
     container->size++;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xdeque_##T##_add(xdeque_##T *container, T element)\
@@ -142,16 +130,16 @@ enum x_stat xdeque_##T##_add_at(xdeque_##T *container, T element, size_t index)\
     size_t xfirst;\
     size_t xpos;\
     if (index > container->size) {\
-        return X_INDEX_OUT_OF_RANGE_ERR;\
+        return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
     if (index == container->size) {\
         return xdeque_##T##_add_back(container, element);\
     }\
     if (container->size >= container->max_size) {\
-        return X_MAX_SIZE_ERR;\
+        return XTD_MAX_SIZE_ERR;\
     }\
-    if (container->capacity == container->size && xdeque_##T##_expand_capacity(container) != X_OK) {\
-        return X_ALLOC_ERR;\
+    if (container->capacity == container->size && xdeque_##T##_expand_capacity(container) != XTD_OK) {\
+        return XTD_ALLOC_ERR;\
     }\
     xcapacity = container->capacity - 1;\
     xlast = container->last & xcapacity;\
@@ -208,68 +196,68 @@ enum x_stat xdeque_##T##_add_at(xdeque_##T *container, T element, size_t index)\
     }\
     container->buffer[xpos] = element;\
     container->size++;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
-enum x_stat xdeque_##T##_get_at(xdeque_##T *container, int index, T *out)\
+enum x_stat xdeque_##T##_get_at(xdeque_##T *container, size_t index, T *out)\
 {\
     size_t actual_index;\
     if (!out) {\
-        return X_OUT_PARAM_NULL_ERR;\
+        return XTD_OUT_PARAM_NULL_ERR;\
     }\
     if (index >= container->size) {\
-        return X_INDEX_OUT_OF_RANGE_ERR;\
+        return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
     actual_index = (container->first + index) & (container->capacity - 1);\
     *out = container->buffer[actual_index];\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xdeque_##T##_get_front(xdeque_##T *container, T *out)\
 {\
     if (!out) {\
-        return X_OUT_PARAM_NULL_ERR;\
+        return XTD_OUT_PARAM_NULL_ERR;\
     }\
     if (container->size == 0) {\
-        return X_EMPTY_CONTAINER_ERR;\
+        return XTD_EMPTY_CONTAINER_ERR;\
     }\
     *out = container->buffer[container->first];\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xdeque_##T##_get_back(xdeque_##T *container, T *out)\
 {\
     size_t last;\
     if (!out) {\
-        return X_OUT_PARAM_NULL_ERR;\
+        return XTD_OUT_PARAM_NULL_ERR;\
     }\
     if (container->size == 0) {\
-        return X_EMPTY_CONTAINER_ERR;\
+        return XTD_EMPTY_CONTAINER_ERR;\
     }\
     last = (container->last - 1) & (container->capacity - 1);\
     *out = container->buffer[last];\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xdeque_##T##_replace_at(xdeque_##T *container, size_t index, T element, T *out)\
 {\
     size_t actual_index;\
     if (index >= container->size) {\
-        return X_INDEX_OUT_OF_RANGE_ERR;\
+        return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
     actual_index = (container->first + index) & (container->capacity - 1);\
     if (out) {\
         *out = container->buffer[actual_index];\
     }\
     container->buffer[actual_index] = element;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xdeque_##T##_remove_front(xdeque_##T *container, T *out)\
 {\
     T element;\
     if (container->size == 0) {\
-        return X_INDEX_OUT_OF_RANGE_ERR;\
+        return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
     element = container->buffer[container->first];\
     container->first = (container->first + 1) & (container->capacity - 1);\
@@ -277,7 +265,7 @@ enum x_stat xdeque_##T##_remove_front(xdeque_##T *container, T *out)\
     if (out) {\
         *out = element;\
     }\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xdeque_##T##_remove_back(xdeque_##T *container, T *out)\
@@ -285,7 +273,7 @@ enum x_stat xdeque_##T##_remove_back(xdeque_##T *container, T *out)\
     size_t last;\
     T element;\
     if (container->size == 0) {\
-        return X_INDEX_OUT_OF_RANGE_ERR;\
+        return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
     last = (container->last - 1) & (container->capacity - 1);\
     element = container->buffer[last];\
@@ -294,7 +282,7 @@ enum x_stat xdeque_##T##_remove_back(xdeque_##T *container, T *out)\
     if (out) {\
         *out = element;\
     }\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xdeque_##T##_remove_at(xdeque_##T *container, size_t index, T *out)\
@@ -305,7 +293,7 @@ enum x_stat xdeque_##T##_remove_at(xdeque_##T *container, size_t index, T *out)\
     size_t xpos;\
    T removed;\
     if (index < 0 || index >= container->size) {\
-        return X_INDEX_OUT_OF_RANGE_ERR;\
+        return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
     xcapacity = container->capacity - 1;\
     xlast = container->last & xcapacity;\
@@ -362,24 +350,24 @@ enum x_stat xdeque_##T##_remove_at(xdeque_##T *container, size_t index, T *out)\
     container->size--;\
     if (out)\
         *out = removed;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 enum x_stat xdeque_##T##_clear(xdeque_##T *container)\
 {\
     enum x_stat status;\
     while (container->size > 0) {\
-        status = xdeque_##T##_remove_at(container, (container->size)-1, NULL);\
-        if (status != X_OK) {\
+        status = xdeque_##T##_remove_at(container, (container->size)-1, XTD_NULL);\
+        if (status != XTD_OK) {\
             return status;\
         }\
     }\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 static void xdeque_##T##_copy_buffer(xdeque_##T const * const container, T *buffer, T (*callback) (T))\
 {\
-    if (callback == NULL) {\
+    if (callback == XTD_NULL) {\
         if (container->last > container->first) {\
             memcpy(buffer,\
                    &(container->buffer[container->first]),\
@@ -408,45 +396,182 @@ static enum x_stat xdeque_##T##_shrink_to_fit(xdeque_##T *container)\
     size_t new_size;\
     T *new_buffer;\
     if (container->capacity == container->size) {\
-        return X_OK;\
+        return XTD_OK;\
     }\
     new_size = x_upper_pow_two(container->size);\
     if (new_size == container->capacity) {\
-        return X_OK;\
+        return XTD_OK;\
     }\
-    new_buffer = container->memory_alloc(sizeof(T) * new_size);\
+    new_buffer = (T *) container->memory_alloc(sizeof(T) * new_size);\
     if (!new_buffer) {\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
-    xdeque_##T##_copy_buffer(container, new_buffer, NULL);\
+    xdeque_##T##_copy_buffer(container, new_buffer, XTD_NULL);\
     container->memory_free(container->buffer);\
     container->buffer   = new_buffer;\
     container->first    = 0;\
     container->last     = container->size;\
     container->capacity = new_size;\
-    return X_OK;\
+    return XTD_OK;\
 }\
 \
 static enum x_stat xdeque_##T##_expand_capacity(xdeque_##T *container)\
 {\
     size_t new_capacity;\
     T *new_buffer;\
-    if (container->capacity == X_MAX_POW_TWO) {\
-        return X_MAX_CAPACITY_ERR;\
+    if (container->capacity == XTD_MAX_POW_TWO) {\
+        return XTD_MAX_CAPACITY_ERR;\
     }\
     new_capacity = container->capacity << 1;\
-    new_buffer = container->memory_calloc(new_capacity, sizeof(T));\
+    new_buffer = (T *) container->memory_calloc(new_capacity, sizeof(T));\
     if (!new_buffer) {\
-        return X_ALLOC_ERR;\
+        return XTD_ALLOC_ERR;\
     }\
-    xdeque_##T##_copy_buffer(container, new_buffer, NULL);\
+    xdeque_##T##_copy_buffer(container, new_buffer, XTD_NULL);\
     container->memory_free(container->buffer);\
     container->first      = 0;\
     container->last       = container->size;\
     container->capacity   = new_capacity;\
     container->buffer     = new_buffer;\
-    return X_OK;\
+    return XTD_OK;\
 }\
+\
+\
+\
+
+/*
+    
+*/
+#define SETUP_ITERATOR_FOR_XDEQUE(T) \
+\
+void xdeque_iterator_##T##_reset_forward(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index = 0;\
+}\
+\
+void xdeque_iterator_##T##_reset_backward(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->backward_index = ((xdeque_##T *) iterator->container)->size-1;\
+}\
+\
+void xdeque_iterator_##T##_reset(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index = 0;\
+    iterator->backward_index = ((xdeque_##T *) iterator->container)->size-1;\
+}\
+\
+void xdeque_iterator_##T##_destroy(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL) {\
+        return;\
+    }\
+    if (iterator->container != XTD_NULL) {\
+        ((xdeque_##T *) iterator->container)->memory_free(iterator);\
+        return;\
+    }\
+    x_free(iterator);\
+}\
+\
+void xdeque_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index += distance;\
+}\
+\
+void xdeque_iterator_##T##_decrement(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index--;\
+}\
+\
+void xdeque_iterator_##T##_increment(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index++;\
+}\
+\
+bool xdeque_iterator_##T##_has_next(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xdeque_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return FALSE;\
+    }\
+    container = (xdeque_##T *) iterator->container;\
+    return (container != XTD_NULL && iterator->forward_index < container->size);\
+}\
+\
+void *xdeque_iterator_##T##_next(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xdeque_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    container = (xdeque_##T *) iterator->container;\
+    return (void *) container->buffer[iterator->forward_index++];\
+}\
+\
+bool xdeque_iterator_##T##_has_prev(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xdeque_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return FALSE;\
+    }\
+    container = (xdeque_##T *) iterator->container;\
+    return (container != XTD_NULL && iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
+}\
+\
+void *xdeque_iterator_##T##_prev(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xdeque_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    container = (xdeque_##T *) iterator->container;\
+    return (void *) container->buffer[iterator->backward_index--];\
+}\
+\
+static XIterator *xiterator_init_xdeque_##T(xdeque_##T *container) \
+{\
+    XIterator *iterator;\
+    if (container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    iterator = (XIterator *) container->memory_alloc(sizeof(XIterator));\
+    if (iterator == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    iterator->forward_index = 0;\
+    iterator->backward_index = container->size-1;\
+    iterator->has_next = xdeque_iterator_##T##_has_next;\
+    iterator->next = xdeque_iterator_##T##_next;\
+    iterator->has_prev = xdeque_iterator_##T##_has_prev;\
+    iterator->prev = xdeque_iterator_##T##_prev;\
+    iterator->reset_forward = xdeque_iterator_##T##_reset_forward;\
+    iterator->reset_backward = xdeque_iterator_##T##_reset_backward;\
+    iterator->reset = xdeque_iterator_##T##_reset;\
+    iterator->destroy = xdeque_iterator_##T##_destroy;\
+    iterator->advance_by = xdeque_iterator_##T##_advance_by;\
+    iterator->increment = xdeque_iterator_##T##_increment;\
+    iterator->decrement = xdeque_iterator_##T##_decrement;\
+    iterator->container = container;\
+    return iterator;\
+}\
+\
 \
 \
 
@@ -540,7 +665,6 @@ static enum x_stat xdeque_##T##_expand_capacity(xdeque_##T *container)\
 */
 #define xdeque_destroy(container) { \
         container->memory_free(container->buffer); \
-        container->memory_free(container->iter); \
         container->memory_free(container); \
     }
 
@@ -563,6 +687,11 @@ static enum x_stat xdeque_##T##_expand_capacity(xdeque_##T *container)\
 
 */
 #define xdeque_is_empty xis_empty
+
+/*
+
+*/
+#define SETUP_XDEQUE_FOR(T) SETUP_XDEQUE_ONLY_FOR(T) SETUP_ITERATOR_FOR_XDEQUE(T)
 
 
 #ifdef __cplusplus

@@ -6,15 +6,20 @@ A library of data types and structures for C.
 Types to be implemented
 
 - [x] vector
+- [x] dequeue
 - [x] optional
-- [ ] stack
-- [ ] queue
-- [ ] map
-- [ ] single linkedlist
-- [ ] double linked list
-- [ ] item
-- [ ] ring
+- [x] stack
+- [x] queue
+- [x] priority_queue
+- [x] node
+- [x] single node
+- [x] single linked list
+- [x] double linked list
 - [ ] set
+- [ ] unordered_set
+- [ ] map
+- [ ] element
+- [ ] ring
 - [ ] treemap
 - [ ] tuple
 - [ ] hashtable
@@ -23,6 +28,14 @@ Types to be implemented
 - [ ] heap
 - [ ] string
 - [ ] xstring
+
+## Todo
+
+- add_all in containers
+- extend list with other contigiuos related operations
+- add container##T##_remove to remove by element
+- add container##T##_index_of
+- add remove with cb, remove_all with cb
 
 ## Doc hints
 
