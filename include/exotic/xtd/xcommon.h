@@ -13,9 +13,6 @@
 extern "C" {
 #endif
 
-#include <stdio.h>
-#include <stddef.h>
-#include <stdlib.h>
 #ifndef XTYPES_DONT_USE_BUILTIN
     #include <string.h>
     #define xtd_qsort qsort
@@ -159,18 +156,22 @@ void init_xcontainer_config(struct xcontainer_config *config) {
     config->expansion_rate = XDEFAULT_CONTAINER_EXPANSION_RATE;
     config->capacity       = XDEFAULT_CONTAINER_CAPACITY;
     config->max_size       = XTD_CONTAINER_MAX_CAPACITY;
+#if defined(_STDIO_H_) || defined(_INC_STDLIB) || defined(_STDLIB_H) || defined(_TR1_STDLIB_H)
     config->memory_alloc   = malloc;
     config->memory_calloc  = calloc;
     config->memory_free    = free;
+#endif
 }
 
 void init_xcontainer_config_max_size(struct xcontainer_config *config, size_t max_size) {
     config->expansion_rate = XDEFAULT_CONTAINER_CAPACITY > max_size ? 0 : XDEFAULT_CONTAINER_EXPANSION_RATE;
     config->capacity       = XDEFAULT_CONTAINER_CAPACITY > max_size ? max_size : XDEFAULT_CONTAINER_CAPACITY;
     config->max_size       = max_size;
+#if defined(_STDIO_H_) || defined(_INC_STDLIB) || defined(_STDLIB_H) || defined(_TR1_STDLIB_H)
     config->memory_alloc   = malloc;
     config->memory_calloc  = calloc;
     config->memory_free    = free;
+#endif
 }
 
 /* General container functions */
