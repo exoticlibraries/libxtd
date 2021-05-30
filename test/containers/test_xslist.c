@@ -459,6 +459,46 @@ CESTER_TEST(xslist_clear, _, {
     xslist_destroy(str)(fruits);
 })
 
+CESTER_TEST(xslist_previous_node, _, {
+    xslist(str) *fruits;
+    xsingle_node(str) *node;
+    xsingle_node(str) *prev;
+    enum x_stat status;
+
+    status = xslist_new(str)(&fruits);
+    cester_assert_uint_eq(status, XTD_OK);
+    status = xslist_add(str)(fruits, "Apple");
+    cester_assert_uint_eq(status, XTD_OK);
+    status = xslist_add(str)(fruits, "Banana");
+    cester_assert_uint_eq(status, XTD_OK);
+    status = xslist_add(str)(fruits, "Mango");
+    cester_assert_uint_eq(status, XTD_OK);
+    
+    cester_assert_uint_eq(xslist_size(fruits), 3);
+    status = xslist_str_get_node_at(fruits, 0, &node, &prev);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_ptr_equal(xnode_get_data(prev), XTD_NULL);
+    status = xslist_str_get_node_at(fruits, 1, &node, &prev);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_str_equal(xnode_get_data(prev), "Apple");
+    status = xslist_str_get_node_at(fruits, 2, &node, &prev);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_str_equal(xnode_get_data(prev), "Banana");
+
+    
+    status = xslist_str_get_node_at(fruits, 0, &node, &prev);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_ptr_equal(xslist_previous_node(str)(fruits, node), XTD_NULL);
+    status = xslist_str_get_node_at(fruits, 1, &node, &prev);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_str_equal(xnode_get_data(xslist_previous_node(str)(fruits, node)), "Apple");
+    status = xslist_str_get_node_at(fruits, 2, &node, &prev);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_str_equal(xnode_get_data(xslist_previous_node(str)(fruits, node)), "Banana");
+    
+    xslist_destroy(str)(fruits);
+})
+
 CESTER_OPTIONS(
     CESTER_VERBOSE_LEVEL(2);
 )

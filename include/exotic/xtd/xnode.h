@@ -130,7 +130,7 @@ T xiterator_prev_xnode_##T(xnode_##T *node)\
 /**
 
 */
-#define xnode_get_data(node) (node->data)
+#define xnode_get_data(node) (node ? node->data : XTD_NULL)
 
 /**
 

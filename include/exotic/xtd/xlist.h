@@ -660,6 +660,16 @@ static XIterator *xiterator_init_xlist_##T(xlist_##T *container) \
 */
 #define xlist_clear(T) xlist_##T##_clear
 
+/**
+
+*/
+#define xlist_get_node_at(T) xlist_##T##_get_node_at
+
+/**
+
+*/
+#define xlist_get_node(T) xlist_##T##_get_node
+
 /*
 
 */

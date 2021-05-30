@@ -40,7 +40,6 @@ static T xslist_##T##_unlink(xslist_##T *container, xsingle_node_##T *node, xsin
 static bool xslist_##T##_unlink_all(xslist_##T *container, void (*cb) (T));\
 static enum x_stat xslist_##T##_get_node_at(xslist_##T *container, size_t index, xsingle_node_##T **out, xsingle_node_##T **prev);\
 static enum x_stat xslist_##T##_get_node(xslist_##T *container, T element, xsingle_node_##T **node, xsingle_node_##T **prev);\
-static xsingle_node_##T *xslist_##T##_find_previous_node(xslist_##T *container, xsingle_node_##T *node);\
 \
 enum x_stat xslist_##T##_new(xslist_##T **out) \
 {\
@@ -302,6 +301,19 @@ enum x_stat xslist_##T##_clear(xslist_##T *container)\
     return XTD_EMPTY_CONTAINER_ERR;\
 }\
 \
+xsingle_node_##T *xslist_##T##_find_previous_node(xslist_##T *container, xsingle_node_##T *node)\
+{\
+    xsingle_node_##T *current_node = container->head;\
+    while (current_node->next != XTD_NULL) {\
+        if (current_node->next == node) {\
+            return current_node;\
+        } else {\
+            current_node = current_node->next;\
+        }\
+    }\
+    return XTD_NULL;\
+}\
+\
 static T xslist_##T##_unlink(xslist_##T *container, xsingle_node_##T *node, xsingle_node_##T *prev)\
 {\
     T data = node->data;\
@@ -344,6 +356,9 @@ static enum x_stat xslist_##T##_get_node_at(xslist_##T *container, size_t index,
     if (!out) {\
         return XTD_OUT_PARAM_NULL_ERR;\
     }\
+    if (!prev) {\
+        return XTD_OUT_PARAM_NULL_ERR;\
+    }\
     if (container == XTD_NULL || index >= container->size) {\
         return XTD_INDEX_OUT_OF_RANGE_ERR;\
     }\
@@ -358,6 +373,12 @@ static enum x_stat xslist_##T##_get_node_at(xslist_##T *container, size_t index,
 \
 static enum x_stat xslist_##T##_get_node(xslist_##T *container, T element, xsingle_node_##T **node, xsingle_node_##T **prev)\
 {\
+    if (!node) {\
+        return XTD_OUT_PARAM_NULL_ERR;\
+    }\
+    if (!prev) {\
+        return XTD_OUT_PARAM_NULL_ERR;\
+    }\
     *node = container->head;\
     *prev = XTD_NULL;\
     while (*node) {\
@@ -367,19 +388,6 @@ static enum x_stat xslist_##T##_get_node(xslist_##T *container, T element, xsing
         *node = (*node)->next;\
     }\
     return XTD_VALUE_NOT_FOUND_ERR;\
-}\
-\
-static xsingle_node_##T *xslist_##T##_find_previous_node(xslist_##T *container, xsingle_node_##T *node)\
-{\
-    xsingle_node_##T *current_node = container->head;\
-    while (current_node->next != XTD_NULL) {\
-        if (current_node->next == node) {\
-            return current_node;\
-        } else {\
-            current_node = current_node->next;\
-        }\
-    }\
-    return XTD_NULL;\
 }\
 \
 \
@@ -687,6 +695,21 @@ static XIterator *xiterator_init_xslist_##T(xslist_##T *container) \
 
 */
 #define xslist_clear(T) xslist_##T##_clear
+
+/**
+
+*/
+#define xslist_previous_node(T) xslist_##T##_find_previous_node
+
+/**
+
+*/
+#define xslist_get_node_at(T) xslist_##T##_get_node_at
+
+/**
+
+*/
+#define xslist_get_node(T) xslist_##T##_get_node
 
 /*
 
