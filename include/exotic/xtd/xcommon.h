@@ -98,6 +98,7 @@ extern "C" {
 #ifndef true
     #define true !false
 #endif
+
 /**
     The status codes for operation in the x-types 
     library.
@@ -111,6 +112,7 @@ enum x_stat {
     XTD_EMPTY_CONTAINER_ERR,
     XTD_MAX_SIZE_ERR,
     XTD_OUT_OF_RANGE_ERR,
+    XTD_PARAM_NULL_ERR,
     XTD_OUT_PARAM_NULL_ERR,
     XTD_STACK_OVERFLOW_ERR,
     XTD_STACK_UNDERFLOW_ERR,
