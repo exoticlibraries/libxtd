@@ -430,6 +430,34 @@ static enum x_stat xstring_str_sub_string_1(char *char_array, size_t begin_index
 #define xstring_str_sub_string xstring_str_sub_string_1
 
 /*
+    
+*/
+#define xstring_str_char_at(char_array, index) char_array[index]
+
+/* TODO */
+#define xstring_str_char_value
+#define xstring_str_int_value
+#define xstring_str_long_value
+#define xstring_str_double_value
+#define xstring_str_float_value
+#define xstring_str_pointer_value
+#define xstring_str_concat_str
+#define xstring_str_concat_char
+#define xstring_str_concat_int
+#define xstring_str_concat_long
+#define xstring_str_concat_double
+#define xstring_str_concat_float
+#define xstring_str_concat_pointer
+#define xstring_str_format
+#define xstring_str_hashcode
+#define xstring_str_replace
+#define xstring_str_replace_first
+#define xstring_str_replace_last
+#define xstring_str_to_lower_case
+#define xstring_str_to_upper_case
+#define xstring_str_trim
+
+/*
 
 */
 typedef char xchar_internal__;

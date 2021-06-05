@@ -458,6 +458,100 @@ CESTER_TEST(xstring_str_sub_string, _, {
     free(substr_value5);
 })
 
+CESTER_TEST(xstring_str_char_at, _, {
+    char *text1 = "libxtd xstring length";
+    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+
+    cester_assert_char_eq(xstring_str_char_at(text1, 0), 'l');
+    cester_assert_char_eq(xstring_str_char_at(text1, 20), 'h');
+    cester_assert_char_eq(xstring_str_char_at(text2, 0), 'H');
+    cester_assert_char_eq(xstring_str_char_at(text2, 7), 'o');
+})
+
+CESTER_TODO_TEST(xstring_str_char_value, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_int_value, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_long_value, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_double_value, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_float_value, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_pointer_value, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_concat_str, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_concat_char, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_concat_int, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_concat_long, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_concat_double, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_concat_float, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_concat_pointer, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_format, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_hashcode, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_replace, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_replace_first, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_replace_last, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_to_lower_case, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_to_upper_case, _, {
+    
+})
+
+CESTER_TODO_TEST(xstring_str_trim, _, {
+    
+})
+
 CESTER_OPTIONS(
     CESTER_VERBOSE_LEVEL(2);
 )
