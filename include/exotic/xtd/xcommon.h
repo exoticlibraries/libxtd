@@ -154,7 +154,7 @@ struct xcontainer_config {
 
 typedef struct xcontainer_config XConfig;
 
-void init_xcontainer_config(struct xcontainer_config *config) {
+static void init_xcontainer_config(struct xcontainer_config *config) {
     config->expansion_rate = XDEFAULT_CONTAINER_EXPANSION_RATE;
     config->capacity       = XDEFAULT_CONTAINER_CAPACITY;
     config->max_size       = XTD_CONTAINER_MAX_CAPACITY;
@@ -165,7 +165,7 @@ void init_xcontainer_config(struct xcontainer_config *config) {
 #endif
 }
 
-void init_xcontainer_config_max_size(struct xcontainer_config *config, size_t max_size) {
+static void init_xcontainer_config_max_size(struct xcontainer_config *config, size_t max_size) {
     config->expansion_rate = XDEFAULT_CONTAINER_CAPACITY > max_size ? 0 : XDEFAULT_CONTAINER_EXPANSION_RATE;
     config->capacity       = XDEFAULT_CONTAINER_CAPACITY > max_size ? max_size : XDEFAULT_CONTAINER_CAPACITY;
     config->max_size       = max_size;

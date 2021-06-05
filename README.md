@@ -26,8 +26,7 @@ Types to be implemented
 - [ ] hashset
 - [ ] tree
 - [ ] heap
-- [ ] string
-- [ ] xstring
+- [x] xstring
 
 ## Todo
 
