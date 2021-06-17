@@ -130,7 +130,7 @@ T xiterator_prev_xnode_##T(xnode_##T *node)\
 /**
 
 */
-#define xnode_get_data(node) (node->data)
+#define xnode_get_data(node) (node ? node->data : XTD_NULL)
 
 /**
 
@@ -186,6 +186,73 @@ T xiterator_prev_xnode_##T(xnode_##T *node)\
 
 */
 #define xnode_set_next_data(node, value) {if (node->next != XTD_NULL) { node->next->data = value; }}
+
+/* FIllers */
+
+/**
+
+*/
+#define xsingle_node_has_data xnode_has_data
+
+/**
+
+*/
+#define xsingle_node_get_data xnode_get_data
+
+/**
+
+*/
+#define xsingle_node_set_data xnode_set_data
+
+/**
+
+*/
+#define xsingle_node_has_prev xnode_has_prev
+
+/**
+
+*/
+#define xsingle_node_get_prev xnode_get_prev
+
+/**
+
+*/
+#define xsingle_node_link_prev xnode_link_prev
+
+/**
+
+*/
+#define xsingle_node_get_prev_data xnode_get_prev_data
+
+/**
+
+*/
+#define xsingle_node_set_prev_data xnode_set_prev_data
+
+/**
+
+*/
+#define xsingle_node_has_next xnode_has_next
+
+/**
+
+*/
+#define xsingle_node_get_next xnode_get_next
+
+/**
+
+*/
+#define xsingle_node_link_next xnode_link_next
+
+/**
+
+*/
+#define xsingle_node_get_next_data xnode_get_next_data
+
+/**
+
+*/
+#define xsingle_node_set_next_data xnode_set_next_data
 
 /**
 

@@ -24,7 +24,7 @@ extern "C" {
 /*
     
 */
-#define SETUP_XLIST_ONLY_FOR(T) typedef struct xlist_##T##_s { \
+#define SETUP_XLIST_ONLY_NO_NODE_FOR(T) typedef struct xlist_##T##_s { \
     size_t size;\
     size_t max_size;\
     xnode_##T *head;\
@@ -660,6 +660,16 @@ static XIterator *xiterator_init_xlist_##T(xlist_##T *container) \
 */
 #define xlist_clear(T) xlist_##T##_clear
 
+/**
+
+*/
+#define xlist_get_node_at(T) xlist_##T##_get_node_at
+
+/**
+
+*/
+#define xlist_get_node(T) xlist_##T##_get_node
+
 /*
 
 */
@@ -688,7 +698,12 @@ static XIterator *xiterator_init_xlist_##T(xlist_##T *container) \
 /*
 
 */
-#define SETUP_XLIST_FOR(T) SETUP_XNODE_FOR(T) SETUP_XLIST_ONLY_FOR(T) SETUP_ITERATOR_FOR_XLIST(T)
+#define SETUP_XLIST_ONLY_FOR(T) SETUP_XNODE_FOR(T) SETUP_XLIST_ONLY_NO_NODE_FOR(T)
+
+/*
+
+*/
+#define SETUP_XLIST_FOR(T) SETUP_XLIST_ONLY_FOR(T) SETUP_ITERATOR_FOR_XLIST(T)
 
 
 

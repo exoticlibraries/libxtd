@@ -13,9 +13,6 @@
 extern "C" {
 #endif
 
-#include <stdio.h>
-#include <stddef.h>
-#include <stdlib.h>
 #ifndef XTYPES_DONT_USE_BUILTIN
     #include <string.h>
     #define xtd_qsort qsort
@@ -101,6 +98,7 @@ extern "C" {
 #ifndef true
     #define true !false
 #endif
+
 /**
     The status codes for operation in the x-types 
     library.
@@ -114,6 +112,7 @@ enum x_stat {
     XTD_EMPTY_CONTAINER_ERR,
     XTD_MAX_SIZE_ERR,
     XTD_OUT_OF_RANGE_ERR,
+    XTD_PARAM_NULL_ERR,
     XTD_OUT_PARAM_NULL_ERR,
     XTD_STACK_OVERFLOW_ERR,
     XTD_STACK_UNDERFLOW_ERR,
@@ -155,22 +154,26 @@ struct xcontainer_config {
 
 typedef struct xcontainer_config XConfig;
 
-void init_xcontainer_config(struct xcontainer_config *config) {
+static void init_xcontainer_config(struct xcontainer_config *config) {
     config->expansion_rate = XDEFAULT_CONTAINER_EXPANSION_RATE;
     config->capacity       = XDEFAULT_CONTAINER_CAPACITY;
     config->max_size       = XTD_CONTAINER_MAX_CAPACITY;
+#if defined(_STDIO_H_) || defined(_INC_STDLIB) || defined(_STDLIB_H) || defined(_TR1_STDLIB_H)
     config->memory_alloc   = malloc;
     config->memory_calloc  = calloc;
     config->memory_free    = free;
+#endif
 }
 
-void init_xcontainer_config_max_size(struct xcontainer_config *config, size_t max_size) {
+static void init_xcontainer_config_max_size(struct xcontainer_config *config, size_t max_size) {
     config->expansion_rate = XDEFAULT_CONTAINER_CAPACITY > max_size ? 0 : XDEFAULT_CONTAINER_EXPANSION_RATE;
     config->capacity       = XDEFAULT_CONTAINER_CAPACITY > max_size ? max_size : XDEFAULT_CONTAINER_CAPACITY;
     config->max_size       = max_size;
+#if defined(_STDIO_H_) || defined(_INC_STDLIB) || defined(_STDLIB_H) || defined(_TR1_STDLIB_H)
     config->memory_alloc   = malloc;
     config->memory_calloc  = calloc;
     config->memory_free    = free;
+#endif
 }
 
 /* General container functions */
