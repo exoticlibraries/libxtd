@@ -29,7 +29,7 @@ extern "C" {
     size_t max_size;\
     xsingle_node_##T *head;\
     xsingle_node_##T *tail;\
-    void *(*memory_alloc)  (size_t size);\
+    void *(*memory_malloc)  (size_t size);\
     void *(*memory_calloc) (size_t blocks, size_t size);\
     void  (*memory_free)   (void *block);\
 } xslist_##T;\
@@ -63,7 +63,7 @@ enum x_stat xslist_##T##_new_config(struct xcontainer_config * const config, xsl
     }\
     container->size          = 0;\
     container->max_size      = config->max_size;\
-    container->memory_alloc  = config->allocator.memory_alloc;\
+    container->memory_malloc  = config->allocator.memory_malloc;\
     container->memory_calloc = config->allocator.memory_calloc;\
     container->memory_free   = config->allocator.memory_free;\
     *out = container;\
@@ -72,7 +72,7 @@ enum x_stat xslist_##T##_new_config(struct xcontainer_config * const config, xsl
 \
 enum x_stat xslist_##T##_destroy(xslist_##T *container) \
 {\
-    container->memory_free(container);\
+    container->memory_free((void *)container);\
     return XTD_OK;\
 }\
 \
@@ -574,11 +574,11 @@ static XIterator *xiterator_init_xslist_##T(xslist_##T *container) \
     if (container == XTD_NULL) {\
         return XTD_NULL;\
     }\
-    iterator = (XIterator *) container->memory_alloc(sizeof(XIterator));\
+    iterator = (XIterator *) container->memory_malloc(sizeof(XIterator));\
     if (iterator == XTD_NULL) {\
         return XTD_NULL;\
     }\
-    xslist_iterator = (xslist_iterator_##T *) container->memory_alloc(sizeof(xslist_iterator_##T));\
+    xslist_iterator = (xslist_iterator_##T *) container->memory_malloc(sizeof(xslist_iterator_##T));\
     if (xslist_iterator == XTD_NULL) {\
         container->memory_free(iterator);\
         return XTD_NULL;\

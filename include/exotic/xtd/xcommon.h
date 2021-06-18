@@ -143,12 +143,28 @@ enum x_stat {
     
 */
 struct xallocator_s {
-    void *(*memory_alloc)  (size_t size);                   /**<  memory allocator used to allocate the array and it buffer. malloc */
-    void *(*memory_calloc) (size_t blocks, size_t size);    /**<  memory allocator used to allocate the array and it buffer. calloc */
-    void  (*memory_free)   (void *block);                   /**<  the free funtion to release the memory of the array and it buffer */
+    void *(*memory_realloc) (void* ptr, size_t size);      /**<  memory allocator used to allocate the array and it buffer. realloc */
+    void *(*memory_malloc)  (size_t size);                  /**<  memory allocator used to allocate the array and it buffer. malloc */
+    void *(*memory_calloc)  (size_t blocks, size_t size);   /**<  memory allocator used to allocate the array and it buffer. calloc */
+    void  (*memory_free)    (void *block);                  /**<  the free funtion to release the memory of the array and it buffer */
 };
 
+/**
+    
+*/
 typedef struct xallocator_s XAllocator;
+
+/**
+    
+*/
+static void init_xallocator(struct xallocator_s *allocator) {
+#if defined(_STDIO_H_) || defined(_INC_STDLIB) || defined(_STDLIB_H) || defined(_TR1_STDLIB_H)
+    allocator->memory_realloc   = realloc;
+    allocator->memory_malloc   = malloc;
+    allocator->memory_calloc  = calloc;
+    allocator->memory_free    = free;
+#endif
+}
 
 /**
     The container configuration structure to initialize a new container with 
@@ -169,7 +185,8 @@ static void init_xcontainer_config(struct xcontainer_config *config) {
     config->capacity       = XDEFAULT_CONTAINER_CAPACITY;
     config->max_size       = XTD_CONTAINER_MAX_CAPACITY;
 #if defined(_STDIO_H_) || defined(_INC_STDLIB) || defined(_STDLIB_H) || defined(_TR1_STDLIB_H)
-    xallocator.memory_alloc   = malloc;
+    xallocator.memory_realloc   = realloc;
+    xallocator.memory_malloc   = malloc;
     xallocator.memory_calloc  = calloc;
     xallocator.memory_free    = free;
 #endif
@@ -182,7 +199,7 @@ static void init_xcontainer_config_max_size(struct xcontainer_config *config, si
     config->capacity       = XDEFAULT_CONTAINER_CAPACITY > max_size ? max_size : XDEFAULT_CONTAINER_CAPACITY;
     config->max_size       = max_size;
 #if defined(_STDIO_H_) || defined(_INC_STDLIB) || defined(_STDLIB_H) || defined(_TR1_STDLIB_H)
-    xallocator.memory_alloc   = malloc;
+    xallocator.memory_malloc   = malloc;
     xallocator.memory_calloc  = calloc;
     xallocator.memory_free    = free;
 #endif
@@ -235,6 +252,28 @@ static void init_xcontainer_config_max_size(struct xcontainer_config *config, si
 
 */
 #define xget_back(container) (container->size > 0 ? xget_at(container, container->size-1) : XTD_NULL)
+
+/**
+
+*/
+static size_t xptp_array_size(void **p2p) {
+    size_t index = 0;
+    if (p2p == XTD_NULL) { return index; }
+    for (; p2p[index] != XTD_NULL; index++);
+    return index;
+}
+
+/**
+
+*/
+static void xfreep2p(void **p2p, XAllocator allocator) {
+    size_t index = 0;
+    if (p2p == XTD_NULL) { return; }
+    for (; p2p[index] != XTD_NULL; index++) {
+        allocator.memory_free(p2p[index]);
+    }
+    allocator.memory_free(p2p);
+}
 
 /**
 

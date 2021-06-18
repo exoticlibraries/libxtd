@@ -30,7 +30,7 @@ CESTER_TEST(xlist_conf_init, _, {
     xlist(str) *fruits;
     enum x_stat status;
 
-    config.allocator.memory_alloc   = malloc;
+    config.allocator.memory_malloc   = malloc;
     config.allocator.memory_calloc  = calloc;
     config.allocator.memory_free    = free;
     config.expansion_rate = 5;
