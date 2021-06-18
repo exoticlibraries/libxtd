@@ -30,9 +30,9 @@ CESTER_TEST(xslist_conf_init, _, {
     xslist(str) *fruits;
     enum x_stat status;
 
-    config.memory_alloc   = malloc;
-    config.memory_calloc  = calloc;
-    config.memory_free    = free;
+    config.allocator.memory_alloc   = malloc;
+    config.allocator.memory_calloc  = calloc;
+    config.allocator.memory_free    = free;
     config.expansion_rate = 5;
     config.capacity       = 20;
     config.max_size       = 5000;

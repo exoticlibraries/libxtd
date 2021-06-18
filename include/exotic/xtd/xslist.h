@@ -57,15 +57,15 @@ enum x_stat xslist_##T##_new_max_size(xslist_##T **out, size_t max_size) \
 \
 enum x_stat xslist_##T##_new_config(struct xcontainer_config * const config, xslist_##T **out) \
 {\
-    xslist_##T *container = (xslist_##T *) config->memory_calloc(1, sizeof(xslist_##T));\
+    xslist_##T *container = (xslist_##T *) config->allocator.memory_calloc(1, sizeof(xslist_##T));\
     if (!container) {\
         return XTD_ALLOC_ERR;\
     }\
     container->size          = 0;\
     container->max_size      = config->max_size;\
-    container->memory_alloc  = config->memory_alloc;\
-    container->memory_calloc = config->memory_calloc;\
-    container->memory_free   = config->memory_free;\
+    container->memory_alloc  = config->allocator.memory_alloc;\
+    container->memory_calloc = config->allocator.memory_calloc;\
+    container->memory_free   = config->allocator.memory_free;\
     *out = container;\
     return XTD_OK;\
 }\

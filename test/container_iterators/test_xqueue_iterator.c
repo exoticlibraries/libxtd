@@ -1,6 +1,6 @@
+/*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc  -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
-/*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>

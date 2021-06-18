@@ -13,7 +13,7 @@ CESTER_TEST(xstring_str_length_1, _, {
 
     cester_assert_int_eq(xstring_str_length(text1), 21);
     cester_assert_int_eq(xstring_str_length(text2), 11);
-    cester_assert_int_eq(xstring_str_length(NULL), 0);
+    cester_assert_int_eq(xstring_str_length(XTD_NULL), 0);
 })
 
 CESTER_TEST(xstring_str_length_2, _, {
@@ -22,7 +22,7 @@ CESTER_TEST(xstring_str_length_2, _, {
 
     cester_assert_int_eq(xstring_str_length_2(text1), 21);
     cester_assert_int_eq(xstring_str_length_2(text2), 11);
-    cester_assert_int_eq(xstring_str_length_2(NULL), 0);
+    cester_assert_int_eq(xstring_str_length_2(XTD_NULL), 0);
 })
 
 CESTER_TEST(xstring_str_length_3, _, {
@@ -31,7 +31,7 @@ CESTER_TEST(xstring_str_length_3, _, {
 
     cester_assert_int_eq(xstring_str_length_3(text1), 21);
     cester_assert_int_eq(xstring_str_length_3(text2), 11);
-    cester_assert_int_eq(xstring_str_length_3(NULL), 0);
+    cester_assert_int_eq(xstring_str_length_3(XTD_NULL), 0);
 })
 
 CESTER_TEST(xstring_str_length, _, {
@@ -44,9 +44,9 @@ CESTER_TEST(xstring_str_length, _, {
     cester_assert_int_eq(xstring_str_length_1(text2), xstring_str_length_2(text2));
     cester_assert_int_eq(xstring_str_length_1(text2), xstring_str_length_3(text2));
     cester_assert_int_eq(xstring_str_length_2(text2), xstring_str_length_3(text2));
-    cester_assert_int_eq(xstring_str_length_1(NULL), xstring_str_length_2(NULL));
-    cester_assert_int_eq(xstring_str_length_1(NULL), xstring_str_length_3(NULL));
-    cester_assert_int_eq(xstring_str_length_2(NULL), xstring_str_length_3(NULL));
+    cester_assert_int_eq(xstring_str_length_1(XTD_NULL), xstring_str_length_2(XTD_NULL));
+    cester_assert_int_eq(xstring_str_length_1(XTD_NULL), xstring_str_length_3(XTD_NULL));
+    cester_assert_int_eq(xstring_str_length_2(XTD_NULL), xstring_str_length_3(XTD_NULL));
 })
 
 CESTER_TEST(xstring_str_equals, _, {
@@ -56,8 +56,8 @@ CESTER_TEST(xstring_str_equals, _, {
     cester_assert_str_equal(text1, "libxtd xstring length");
     cester_assert_true(xstring_str_equals(text1, "libxtd xstring length"));
     cester_assert_true(xstring_str_equals_1(text1, "libxtd xstring length"));
-    cester_assert_false(xstring_str_equals_1(text1, NULL));
-    cester_assert_true(xstring_str_equals_1(NULL, NULL));
+    cester_assert_false(xstring_str_equals_1(text1, XTD_NULL));
+    cester_assert_true(xstring_str_equals_1(XTD_NULL, XTD_NULL));
     cester_assert_true(xstring_str_equals_2(text1, "libxtd xstring length"));
     cester_assert_true(xstring_str_equals_3(text1, "libxtd xstring length"));
     cester_assert_true(xstring_str_equals_4(text1, "libxtd xstring length"));
@@ -67,7 +67,7 @@ CESTER_TEST(xstring_str_equals, _, {
     cester_assert_true(xstring_str_equals_4(text2, "Hello world"));
     cester_assert_false(xstring_str_equals_4(text2, "Hello"));
     cester_assert_false(xstring_str_equals_4(text2, "Hellooo World"));
-    cester_assert_false(xstring_str_equals_4(NULL, "Hellooo World"));
+    cester_assert_false(xstring_str_equals_4(XTD_NULL, "Hellooo World"));
 })
 
 CESTER_TEST(xstring_str_equals_ignore_case, _, {

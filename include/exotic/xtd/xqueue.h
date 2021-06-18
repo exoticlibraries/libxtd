@@ -61,13 +61,13 @@ enum x_stat xqueue_##T##_new_config(struct xcontainer_config * const config, xqu
     enum x_stat xinternal_vector_status;\
     xdeque_##T *xinternal_vector;\
     xqueue_##T *container;\
-    container = (xqueue_##T *) config->memory_calloc(1, sizeof(xqueue_##T));\
+    container = (xqueue_##T *) config->allocator.memory_calloc(1, sizeof(xqueue_##T));\
     if (!container) {\
         return XTD_ALLOC_ERR;\
     }\
     xinternal_vector_status = xdeque_##T##_new_config(config, &xinternal_vector);\
     if (xinternal_vector_status != XTD_OK) {\
-        config->memory_free(container);\
+        config->allocator.memory_free(container);\
         return xinternal_vector_status;\
     }\
     container->capacity         = config->capacity;\
@@ -75,9 +75,9 @@ enum x_stat xqueue_##T##_new_config(struct xcontainer_config * const config, xqu
     container->size             = 0;\
     container->xinternal_e7884708734_ximpl = xinternal_vector;\
     container->buffer           = xinternal_vector->buffer;\
-    container->memory_alloc     = config->memory_alloc;\
-    container->memory_calloc    = config->memory_calloc;\
-    container->memory_free      = config->memory_free;\
+    container->memory_alloc     = config->allocator.memory_alloc;\
+    container->memory_calloc    = config->allocator.memory_calloc;\
+    container->memory_free      = config->allocator.memory_free;\
     *out = container;\
     return XTD_OK;\
 }\

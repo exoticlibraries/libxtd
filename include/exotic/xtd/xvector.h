@@ -68,22 +68,22 @@ enum x_stat xvector_##T##_new_config(struct xcontainer_config * const config, xv
     if ((!config->capacity || expansion_rate >= (config->max_size / config->capacity)) && (config->max_size < config->capacity)) {\
         return XTD_INVALID_CAPACITY_ERR;\
     }\
-    container = (xvector_##T *) config->memory_calloc(1, sizeof(xvector_##T));\
+    container = (xvector_##T *) config->allocator.memory_calloc(1, sizeof(xvector_##T));\
     if (!container) {\
         return XTD_ALLOC_ERR;\
     }\
-    buffer = (T *) config->memory_alloc(config->capacity * sizeof(T));\
+    buffer = (T *) config->allocator.memory_alloc(config->capacity * sizeof(T));\
     if (!buffer) {\
-        config->memory_free(container);\
+        config->allocator.memory_free(container);\
         return XTD_ALLOC_ERR;\
     }\
     container->capacity             = config->capacity;\
     container->expansion_rate       = config->expansion_rate;\
     container->max_size             = config->max_size;\
     container->size                 = 0;\
-    container->memory_alloc         = config->memory_alloc;\
-    container->memory_calloc        = config->memory_calloc;\
-    container->memory_free          = config->memory_free;\
+    container->memory_alloc         = config->allocator.memory_alloc;\
+    container->memory_calloc        = config->allocator.memory_calloc;\
+    container->memory_free          = config->allocator.memory_free;\
     container->buffer               = buffer;\
     *out = container;\
     return XTD_OK;\

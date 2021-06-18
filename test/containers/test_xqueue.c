@@ -1,6 +1,6 @@
+/*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc  -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
-/*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
@@ -32,9 +32,9 @@ CESTER_TEST(xqueue_conf_init, _, {
     xqueue(str) *fruits;
     enum x_stat status;
 
-    config.memory_alloc   = malloc;
-    config.memory_calloc  = calloc;
-    config.memory_free    = free;
+    config.allocator.memory_alloc   = malloc;
+    config.allocator.memory_calloc  = calloc;
+    config.allocator.memory_free    = free;
     config.expansion_rate = 5;
     config.capacity       = 20;
     config.max_size       = 5000;
