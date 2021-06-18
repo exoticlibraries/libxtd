@@ -468,6 +468,21 @@ CESTER_TEST(xstring_str_char_at, _, {
     cester_assert_char_eq(xstring_str_char_at(text2, 7), 'o');
 })
 
+CESTER_TEST(xstring_str_split_with_length, _, {
+    char **splited;
+    char *text1 = "libxtd xstring length and string for xstring";
+    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    size_t text1_length = xstring_str_length(text1);
+    size_t text2_length = xstring_str_length(text2);
+
+    cester_assert_ptr_equal(xstring_str_split_with_length(text1_length, text1, XTD_NULL), XTD_NULL);
+    cester_assert_ptr_equal(xstring_str_split_with_length(text1_length, XTD_NULL, XTD_NULL), XTD_NULL);
+    splited = xstring_str_split_with_length(text1_length, text1, " ");
+    cester_assert_ptr_not_equal(splited, XTD_NULL);
+    cester_assert_str_equal(splited[0], "libxtd");
+    // xfreep2p, with allocator
+})
+
 CESTER_TODO_TEST(xstring_str_char_value, _, {
     
 })

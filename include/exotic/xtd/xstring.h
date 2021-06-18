@@ -434,6 +434,67 @@ static enum x_stat xstring_str_sub_string_1(char *char_array, size_t begin_index
 */
 #define xstring_str_char_at(char_array, index) char_array[index]
 
+/*
+    
+*/
+static char **xstring_str_split_with_length_1(size_t char_array_length, char *char_array, char *seperator) {
+    char **out;
+    char *value;
+    size_t str_index;
+    size_t str_index_cache;
+    size_t secondary_index;
+    size_t seperator_length;
+    size_t found_words_counts;
+    size_t last_seperator_position;
+    found_words_counts = 0;
+    if (char_array == XTD_NULL || seperator == XTD_NULL) {
+        goto xstring_str_split_with_length_1_release_and_return_null;
+    }
+    last_seperator_position = 0;
+    seperator_length = xstring_str_length(seperator);
+    out = (char **) calloc(7, sizeof(char *));
+    for (str_index = 0; str_index < char_array_length; ++str_index, str_index_cache = str_index) {
+        if (char_array[str_index] == seperator[0]) {
+            secondary_index = 0;
+            while (char_array[str_index] != '\0' && char_array[++str_index] == seperator[++secondary_index]);
+            if (seperator_length == secondary_index) {
+                value = (char *) calloc((str_index_cache - last_seperator_position), sizeof(char));
+                if (xstring_str_sub_string_in_range_1(char_array, last_seperator_position, str_index_cache, value) != XTD_OK) {
+                    free(value);
+                    goto xstring_str_split_with_length_1_release_and_return_null;
+                }
+                out[found_words_counts++] = value;
+            } else {
+                str_index = str_index_cache;
+            }
+            last_seperator_position = str_index;
+        }
+    }
+    if ((str_index_cache - last_seperator_position) > 1) {
+        value = (char *) calloc((str_index_cache - last_seperator_position), sizeof(char));
+        if (xstring_str_sub_string_in_range_1(char_array, last_seperator_position, str_index_cache, value) != XTD_OK) {
+            free(value);
+            goto xstring_str_split_with_length_1_release_and_return_null;
+        }
+        out[found_words_counts++] = value;
+    }
+    out[found_words_counts] = XTD_NULL;
+    return out;
+    xstring_str_split_with_length_1_release_and_return_null:
+        if (found_words_counts > 0) {
+            for (secondary_index = 0; secondary_index < found_words_counts; secondary_index++) {
+                free(out[secondary_index]);
+            }
+            free(out);
+        }
+        return XTD_NULL;
+}
+
+/*
+    
+*/
+#define xstring_str_split_with_length xstring_str_split_with_length_1
+
 /* TODO */
 #define xstring_str_char_value
 #define xstring_str_int_value
