@@ -15,8 +15,8 @@ Types to be implemented
 - [x] single node
 - [x] single linked list
 - [x] double linked list
-- [ ] set
-- [ ] unordered_set
+- [x] set
+- [x] unordered_set
 - [ ] map
 - [ ] element
 - [ ] ring

@@ -116,6 +116,7 @@ enum x_stat {
     XTD_OUT_PARAM_NULL_ERR,
     XTD_STACK_OVERFLOW_ERR,
     XTD_STACK_UNDERFLOW_ERR,
+    XTD_ALREADY_IN_CONTAINER_ERR,
     XTD_MAX_CAPACITY_ERR,             /**< the data type is full */
     XTD_VALUE_NOT_FOUND_ERR,          /**< the data type is full */  
     XTD_FAILED_TO_CLEANUP_ERR,        /**< the data type is full */    
