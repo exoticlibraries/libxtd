@@ -102,6 +102,11 @@ typedef struct xiterator_s XIterator;
 /**
 
 */
+#define XITERATOR_INIT2(xtype, T1, T2, container) xiterator_init_##xtype##_##T1##_##T2(container)
+
+/**
+
+*/
 #define XITERATOR_RESET(iterator) iterator->reset(iterator)
 
 /**

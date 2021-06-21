@@ -7,6 +7,7 @@
 #include <exotic/xtd/xstring.h>
 #include <exotic/xtd/xiterator.h>
 
+#ifdef __XTD_STDC_VERSION__
 CESTER_TEST(xstring_str_length_1, _, {
     char *text1 = "libxtd xstring length";
     char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
@@ -632,6 +633,7 @@ CESTER_TODO_TEST(xstring_str_to_upper_case, _, {
 CESTER_TODO_TEST(xstring_str_trim, _, {
     
 })
+#endif
 
 CESTER_OPTIONS(
     CESTER_VERBOSE_LEVEL(2);
