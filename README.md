@@ -17,16 +17,19 @@ Types to be implemented
 - [x] double linked list
 - [x] set
 - [x] unordered_set
+- [x] hashtable
 - [ ] map
+- [ ] multimap
+- [ ] hashset
+- [ ] unordered_hashset
+- [x] xstring
+- [ ] xpair
 - [ ] element
 - [ ] ring
 - [ ] treemap
 - [ ] tuple
-- [ ] hashtable
-- [ ] hashset
 - [ ] tree
 - [ ] heap
-- [x] xstring
 
 ## Todo
 

@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-#include "xcommon.h"
+#include "xmath.h"
 #include "xiterator.h"
 
 #ifdef __cplusplus
@@ -76,7 +76,7 @@ enum x_stat xdeque_##T##_new_config(struct xcontainer_config * const config, xde
         config->allocator.memory_free(container);\
         return XTD_ALLOC_ERR;\
     }\
-    container->capacity             = x_upper_pow_two(config->capacity);\
+    container->capacity             = xmath_round_power_of_two(config->capacity);\
     container->expansion_rate       = config->expansion_rate;\
     container->max_size             = config->max_size;\
     container->size                 = 0;\
@@ -398,7 +398,7 @@ static enum x_stat xdeque_##T##_shrink_to_fit(xdeque_##T *container)\
     if (container->capacity == container->size) {\
         return XTD_OK;\
     }\
-    new_size = x_upper_pow_two(container->size);\
+    new_size = xmath_round_power_of_two(container->size);\
     if (new_size == container->capacity) {\
         return XTD_OK;\
     }\
@@ -419,7 +419,7 @@ static enum x_stat xdeque_##T##_expand_capacity(xdeque_##T *container)\
 {\
     size_t new_capacity;\
     T *new_buffer;\
-    if (container->capacity == XTD_MAX_POW_TWO) {\
+    if (container->capacity == XTD_MATH_MAX_POW_TWO) {\
         return XTD_MAX_CAPACITY_ERR;\
     }\
     new_capacity = container->capacity << 1;\
