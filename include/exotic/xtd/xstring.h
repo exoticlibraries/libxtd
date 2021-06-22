@@ -26,7 +26,7 @@ extern "C" {
 /*
 
 */
-static size_t xstring_str_length_1(char char_array[]) {
+static size_t xstring_cstr_length_1(char char_array[]) {
     size_t length = 0;
     if (char_array == NULL) { return length; }
     while(char_array[length] != '\0') {
@@ -38,12 +38,12 @@ static size_t xstring_str_length_1(char char_array[]) {
 /*
 
 */
-#define xstring_str_length xstring_str_length_1
+#define xstring_cstr_length xstring_cstr_length_1
 
 /*
 
 */
-static size_t xstring_str_length_2(char char_array[]) {
+static size_t xstring_cstr_length_2(char char_array[]) {
     size_t length = 0;
     if (char_array == NULL) { return length; }
     for(; char_array[length] != '\0'; length++);
@@ -53,25 +53,25 @@ static size_t xstring_str_length_2(char char_array[]) {
 /*
 
 */
-static size_t xstring_str_length_3_internal__(char char_array[], size_t length) {
+static size_t xstring_cstr_length_3_internal__(char char_array[], size_t length) {
     if (char_array == NULL) { return length; }
     if (char_array[length] == '\0') {
         return length;
     }
-    return xstring_str_length_3_internal__(char_array, ++length);
+    return xstring_cstr_length_3_internal__(char_array, ++length);
 }
 
 /*
 
 */
-static bool xstring_str_length_3(char char_array[]) {
-    return xstring_str_length_3_internal__(char_array, 0);
+static bool xstring_cstr_length_3(char char_array[]) {
+    return xstring_cstr_length_3_internal__(char_array, 0);
 }
 
 /*
 
 */
-static bool xstring_str_equals_1(char *char_array1, char *char_array2) {
+static bool xstring_cstr_equals_1(char *char_array1, char *char_array2) {
     size_t index = 0;
     if (char_array1 == XTD_NULL || char_array2 == XTD_NULL) {
         return char_array1 == char_array2;
@@ -91,19 +91,19 @@ static bool xstring_str_equals_1(char *char_array1, char *char_array2) {
 /*
 
 */
-#define xstring_str_equals xstring_str_equals_1
+#define xstring_cstr_equals xstring_cstr_equals_1
 
 /*
 
 */
-static bool xstring_str_equals_2(char *char_array1, char *char_array2) {
+static bool xstring_cstr_equals_2(char *char_array1, char *char_array2) {
     return char_array1 == char_array2;
 }
 
 /*
 
 */
-static bool xstring_str_equals_3(char *char_array1, char *char_array2) {
+static bool xstring_cstr_equals_3(char *char_array1, char *char_array2) {
     if (char_array1 == XTD_NULL || char_array2 == XTD_NULL) {
         return char_array1 == char_array2;
     }
@@ -118,7 +118,7 @@ static bool xstring_str_equals_3(char *char_array1, char *char_array2) {
 /*
 
 */
-static bool xstring_str_equals_4(char *char_array1, char *char_array2) {
+static bool xstring_cstr_equals_4(char *char_array1, char *char_array2) {
     if (char_array1 == XTD_NULL || char_array2 == XTD_NULL) {
         return char_array1 == char_array2;
     }
@@ -134,7 +134,7 @@ static bool xstring_str_equals_4(char *char_array1, char *char_array2) {
 /*
 
 */
-static bool xstring_str_equals_ignore_case_1(char *char_array1, char *char_array2) {
+static bool xstring_cstr_equals_ignore_case_1(char *char_array1, char *char_array2) {
     if (char_array1 == XTD_NULL || char_array2 == XTD_NULL) {
         return char_array1 == char_array2;
     }
@@ -151,12 +151,12 @@ static bool xstring_str_equals_ignore_case_1(char *char_array1, char *char_array
 /*
 
 */
-#define xstring_str_equals_ignore_case xstring_str_equals_ignore_case_1
+#define xstring_cstr_equals_ignore_case xstring_cstr_equals_ignore_case_1
 
 /*
     Compares two strings lexicographically.
 */
-static size_t xstring_str_compare_1(char *char_array1, char *char_array2) {
+static size_t xstring_cstr_compare_1(char *char_array1, char *char_array2) {
     size_t index = 0;
     if (char_array1 == XTD_NULL || char_array2 == XTD_NULL) {
         return char_array1 == char_array2;
@@ -173,12 +173,12 @@ static size_t xstring_str_compare_1(char *char_array1, char *char_array2) {
 /*
     
 */
-#define xstring_str_compare xstring_str_compare_1
+#define xstring_cstr_compare xstring_cstr_compare_1
 
 /*
     Compares two strings lexicographically. using pointer
 */
-static size_t xstring_str_compare_2(char *char_array1, char *char_array2) {
+static size_t xstring_cstr_compare_2(char *char_array1, char *char_array2) {
     if (char_array1 == XTD_NULL || char_array2 == XTD_NULL) {
         return char_array1 == char_array2;
     }
@@ -191,7 +191,7 @@ static size_t xstring_str_compare_2(char *char_array1, char *char_array2) {
 /*
     
 */
-static size_t xstring_str_compare_ignore_case_1(char *char_array1, char *char_array2) {
+static size_t xstring_cstr_compare_ignore_case_1(char *char_array1, char *char_array2) {
     char char1;
     char char2;
     if (char_array1 == XTD_NULL || char_array2 == XTD_NULL) {
@@ -210,33 +210,33 @@ static size_t xstring_str_compare_ignore_case_1(char *char_array1, char *char_ar
 /*
 
 */
-#define xstring_str_compare_ignore_case xstring_str_compare_ignore_case_1
+#define xstring_cstr_compare_ignore_case xstring_cstr_compare_ignore_case_1
 
 /*
 
 */
-static bool xstring_str_is_empty_1(char char_array[]) {
-    return xstring_str_length(char_array) == 0;
+static bool xstring_cstr_is_empty_1(char char_array[]) {
+    return xstring_cstr_length(char_array) == 0;
 }
 
 /*
     
 */
-#define xstring_str_is_empty xstring_str_is_empty_1
+#define xstring_cstr_is_empty xstring_cstr_is_empty_1
 
 /*
     Does not check if char_array is NULL
 */
-static int xstring_str_index_of_from_pos_with_length_1(size_t char_array_length, char *char_array, char *str_to_check, size_t from) {
+static int xstring_cstr_index_of_from_pos_with_length_1(size_t char_array_length, char *char_array, char *str_to_check, size_t from) {
     size_t primary_index;
     size_t secondary_index;
-    size_t str_to_check_length = xstring_str_length(str_to_check);
+    size_t str_to_check_length = xstring_cstr_length(str_to_check);
     if ((char_array_length <= 0 || str_to_check_length <= 0) || (str_to_check_length > (char_array_length - from))) {
         return -1;
     }
     if (from < 0) { from = 0; }
     /*if (char_array_length == str_to_check_length) {
-        return (xstring_str_equals(char_array, str_to_check) ? 0 : -1);
+        return (xstring_cstr_equals(char_array, str_to_check) ? 0 : -1);
     }*/
     for (; from < char_array_length; ++from) {
         if (char_array[from] == str_to_check[0]) {
@@ -255,46 +255,46 @@ static int xstring_str_index_of_from_pos_with_length_1(size_t char_array_length,
 /*
     
 */
-#define xstring_str_index_of_from_pos_with_length xstring_str_index_of_from_pos_with_length_1
+#define xstring_cstr_index_of_from_pos_with_length xstring_cstr_index_of_from_pos_with_length_1
 
 /*
     
 */
-static int xstring_str_index_of_from_pos_1(char *char_array, char *str_to_check, size_t from) {
-    return xstring_str_index_of_from_pos_with_length_1(xstring_str_length(char_array), char_array, str_to_check, from);
+static int xstring_cstr_index_of_from_pos_1(char *char_array, char *str_to_check, size_t from) {
+    return xstring_cstr_index_of_from_pos_with_length_1(xstring_cstr_length(char_array), char_array, str_to_check, from);
 }
 
 /*
     
 */
-#define xstring_str_index_of_from_pos xstring_str_index_of_from_pos_1
+#define xstring_cstr_index_of_from_pos xstring_cstr_index_of_from_pos_1
 
 /*
     
 */
-static int xstring_str_index_of_1(char *char_array, char *str_to_check) {
-    return xstring_str_index_of_from_pos_with_length_1(xstring_str_length(char_array), char_array, str_to_check, 0);
+static int xstring_cstr_index_of_1(char *char_array, char *str_to_check) {
+    return xstring_cstr_index_of_from_pos_with_length_1(xstring_cstr_length(char_array), char_array, str_to_check, 0);
 }
 
 /*
     
 */
-#define xstring_str_index_of xstring_str_index_of_1
+#define xstring_cstr_index_of xstring_cstr_index_of_1
 
 /*
     Does not check if char_array is NULL, pos is from the backend
 */
-static int xstring_str_last_index_of_from_pos_with_length_1(size_t char_array_length, char *char_array, char *str_to_check, size_t from) {
+static int xstring_cstr_last_index_of_from_pos_with_length_1(size_t char_array_length, char *char_array, char *str_to_check, size_t from) {
     int right_most;
     size_t primary_index;
     size_t secondary_index;
-    size_t str_to_check_length = xstring_str_length(str_to_check);
+    size_t str_to_check_length = xstring_cstr_length(str_to_check);
     if ((char_array_length <= 0 || str_to_check_length <= 0) || (str_to_check_length > (char_array_length - from))) {
         return -1;
     }
     if (from < 0) { from = 0; }
     /*if (char_array_length == str_to_check_length) {
-        return (xstring_str_equals(char_array, str_to_check) ? 0 : -1);
+        return (xstring_cstr_equals(char_array, str_to_check) ? 0 : -1);
     }*/
     right_most = (char_array_length-1) - from;
     for (; right_most > -1 ; --right_most) {
@@ -312,79 +312,79 @@ static int xstring_str_last_index_of_from_pos_with_length_1(size_t char_array_le
 /*
 
 */
-#define xstring_str_last_index_of_from_pos_with_length xstring_str_last_index_of_from_pos_with_length_1
+#define xstring_cstr_last_index_of_from_pos_with_length xstring_cstr_last_index_of_from_pos_with_length_1
 
 /*
     
 */
-static int xstring_str_last_index_of_from_pos_1(char *char_array, char *str_to_check, size_t from) {
-    return xstring_str_last_index_of_from_pos_with_length_1(xstring_str_length(char_array), char_array, str_to_check, from);
+static int xstring_cstr_last_index_of_from_pos_1(char *char_array, char *str_to_check, size_t from) {
+    return xstring_cstr_last_index_of_from_pos_with_length_1(xstring_cstr_length(char_array), char_array, str_to_check, from);
 }
 
 /*
     
 */
-#define xstring_str_last_index_of_from_pos xstring_str_last_index_of_from_pos_1
+#define xstring_cstr_last_index_of_from_pos xstring_cstr_last_index_of_from_pos_1
 
 /*
     
 */
-static int xstring_str_last_index_of_1(char *char_array, char *str_to_check) {
-    return xstring_str_last_index_of_from_pos_with_length_1(xstring_str_length(char_array), char_array, str_to_check, 0);
+static int xstring_cstr_last_index_of_1(char *char_array, char *str_to_check) {
+    return xstring_cstr_last_index_of_from_pos_with_length_1(xstring_cstr_length(char_array), char_array, str_to_check, 0);
 }
 
 /*
     
 */
-#define xstring_str_last_index_of xstring_str_last_index_of_1
+#define xstring_cstr_last_index_of xstring_cstr_last_index_of_1
 
 /*
     
 */
-static bool xstring_str_contains_1(char *char_array, char *str_to_check) {
-    return xstring_str_index_of(char_array, str_to_check) > -1;
+static bool xstring_cstr_contains_1(char *char_array, char *str_to_check) {
+    return xstring_cstr_index_of(char_array, str_to_check) > -1;
 }
 
 /*
     
 */
-#define xstring_str_contains xstring_str_contains_1
+#define xstring_cstr_contains xstring_cstr_contains_1
 
 /*
     
 */
-static bool xstring_str_ends_with_1(char *char_array, char *str_to_check) {
-    size_t char_array_length = xstring_str_length(char_array);
-    size_t str_to_check_length = xstring_str_length(str_to_check);
-    return xstring_str_index_of_from_pos_1(char_array, str_to_check, (char_array_length - str_to_check_length)) > -1;
+static bool xstring_cstr_ends_with_1(char *char_array, char *str_to_check) {
+    size_t char_array_length = xstring_cstr_length(char_array);
+    size_t str_to_check_length = xstring_cstr_length(str_to_check);
+    return xstring_cstr_index_of_from_pos_1(char_array, str_to_check, (char_array_length - str_to_check_length)) > -1;
 }
 
 /*
     
 */
-#define xstring_str_ends_with xstring_str_ends_with_1
+#define xstring_cstr_ends_with xstring_cstr_ends_with_1
 
 /*
     
 */
-static bool xstring_str_starts_with_1(char *char_array, char *str_to_check) {
-    size_t char_array_length = xstring_str_length(char_array);
-    size_t str_to_check_length = xstring_str_length(str_to_check);
+static bool xstring_cstr_starts_with_1(char *char_array, char *str_to_check) {
+    size_t char_array_length = xstring_cstr_length(char_array);
+    size_t str_to_check_length = xstring_cstr_length(str_to_check);
     if (str_to_check_length > char_array_length) {
         return FALSE;
     }
-    return xstring_str_index_of_from_pos_with_length_1(str_to_check_length, char_array, str_to_check, 0) == 0;
+    return xstring_cstr_index_of_from_pos_with_length_1(str_to_check_length, char_array, str_to_check, 0) == 0;
 }
 
 /*
     
 */
-#define xstring_str_starts_with xstring_str_starts_with_1
+#define xstring_cstr_starts_with xstring_cstr_starts_with_1
 
 /*
     
 */
-static enum x_stat xstring_str_sub_string_in_range_with_length_1(size_t char_array_length, char *char_array, size_t begin_index, size_t end_index, char *out) {
+static enum x_stat xstring_cstr_sub_string_in_range_with_length_1(size_t char_array_length, char *char_array, size_t begin_index, size_t end_index, char *out) {
     size_t str_index = 0;
     if (begin_index < 0 || begin_index > char_array_length || end_index > char_array_length) {
         return XTD_OUT_OF_RANGE_ERR;
@@ -402,42 +402,42 @@ static enum x_stat xstring_str_sub_string_in_range_with_length_1(size_t char_arr
 /*
     
 */
-#define xstring_str_sub_string_in_range_with_length xstring_str_sub_string_in_range_with_length_1
+#define xstring_cstr_sub_string_in_range_with_length xstring_cstr_sub_string_in_range_with_length_1
 
 /*
     
 */
-static enum x_stat xstring_str_sub_string_in_range_1(char *char_array, size_t begin_index, size_t end_index, char *out) {
-    return xstring_str_sub_string_in_range_with_length_1(xstring_str_length(char_array), char_array, begin_index, end_index, out);
+static enum x_stat xstring_cstr_sub_string_in_range_1(char *char_array, size_t begin_index, size_t end_index, char *out) {
+    return xstring_cstr_sub_string_in_range_with_length_1(xstring_cstr_length(char_array), char_array, begin_index, end_index, out);
 }
 
 /*
     
 */
-#define xstring_str_sub_string_in_range xstring_str_sub_string_in_range_1
+#define xstring_cstr_sub_string_in_range xstring_cstr_sub_string_in_range_1
 
 /*
     
 */
-static enum x_stat xstring_str_sub_string_1(char *char_array, size_t begin_index, char *out) {
-    size_t char_array_length = xstring_str_length(char_array);
-    return xstring_str_sub_string_in_range_with_length_1(char_array_length, char_array, begin_index, char_array_length, out);
+static enum x_stat xstring_cstr_sub_string_1(char *char_array, size_t begin_index, char *out) {
+    size_t char_array_length = xstring_cstr_length(char_array);
+    return xstring_cstr_sub_string_in_range_with_length_1(char_array_length, char_array, begin_index, char_array_length, out);
 }
 
 /*
     
 */
-#define xstring_str_sub_string xstring_str_sub_string_1
+#define xstring_cstr_sub_string xstring_cstr_sub_string_1
 
 /*
     
 */
-#define xstring_str_char_at(char_array, index) char_array[index]
+#define xstring_cstr_char_at(char_array, index) char_array[index]
 
 /*
     
 */
-static char **xstring_str_split_with_length_1(size_t char_array_length, char *char_array, char *seperator, XAllocator allocator) {
+static char **xstring_cstr_split_with_length_1(size_t char_array_length, char *char_array, char *seperator, XAllocator allocator) {
     char **out;
     char *value;
     char **tmp_out;
@@ -450,25 +450,25 @@ static char **xstring_str_split_with_length_1(size_t char_array_length, char *ch
     size_t last_seperator_position;
     found_words_counts = 0;
     if (char_array == XTD_NULL || seperator == XTD_NULL) {
-        goto xstring_str_split_with_length_1_release_and_return_null;
+        goto xstring_cstr_split_with_length_1_release_and_return_null;
     }
     out = XTD_NULL;
     last_seperator_position = 0;
-    seperator_length = xstring_str_length(seperator);
+    seperator_length = xstring_cstr_length(seperator);
     for (str_index = 0; str_index < char_array_length; ++str_index, str_index_cache = str_index) {
         if (char_array[str_index] == seperator[0]) {
             secondary_index = 0;
             while (char_array[str_index] != '\0' && char_array[++str_index] == seperator[++secondary_index]);
             if (seperator_length == secondary_index) {
                 value = (char *) allocator.memory_malloc((str_index_cache - last_seperator_position) * sizeof(char));
-                if (xstring_str_sub_string_in_range_1(char_array, last_seperator_position, str_index_cache, value) != XTD_OK) {
+                if (xstring_cstr_sub_string_in_range_1(char_array, last_seperator_position, str_index_cache, value) != XTD_OK) {
                     allocator.memory_free(value);
-                    goto xstring_str_split_with_length_1_release_and_return_null;
+                    goto xstring_cstr_split_with_length_1_release_and_return_null;
                 }
                 found_words_counts++;
                 tmp_out = (char **) allocator.memory_realloc(out, found_words_counts * sizeof(char *));
                 if (!tmp_out) {
-                    goto xstring_str_split_with_length_1_release_and_return_null;
+                    goto xstring_cstr_split_with_length_1_release_and_return_null;
                 }
                 out = tmp_out;
                 out[found_words_counts-1] = value;
@@ -480,21 +480,21 @@ static char **xstring_str_split_with_length_1(size_t char_array_length, char *ch
     }
     if ((str_index_cache - last_seperator_position) > 1) {
         value = (char *) allocator.memory_malloc((str_index_cache - last_seperator_position) * sizeof(char));
-        if (xstring_str_sub_string_in_range_1(char_array, last_seperator_position, str_index_cache, value) != XTD_OK) {
+        if (xstring_cstr_sub_string_in_range_1(char_array, last_seperator_position, str_index_cache, value) != XTD_OK) {
             allocator.memory_free(value);
-            goto xstring_str_split_with_length_1_release_and_return_null;
+            goto xstring_cstr_split_with_length_1_release_and_return_null;
         }
         found_words_counts++;
         tmp_out = (char **) allocator.memory_realloc(out, found_words_counts * sizeof(char *));
         if (!tmp_out) {
-            goto xstring_str_split_with_length_1_release_and_return_null;
+            goto xstring_cstr_split_with_length_1_release_and_return_null;
         }
         out = tmp_out;
         out[found_words_counts-1] = value;
     }
     out[found_words_counts] = XTD_NULL;
     return out;
-    xstring_str_split_with_length_1_release_and_return_null:
+    xstring_cstr_split_with_length_1_release_and_return_null:
         if (found_words_counts > 0) {
             for (secondary_index = 0; secondary_index < found_words_counts-1; secondary_index++) {
                 allocator.memory_free(out[secondary_index]);
@@ -507,42 +507,42 @@ static char **xstring_str_split_with_length_1(size_t char_array_length, char *ch
 /*
     
 */
-#define xstring_str_split_with_length xstring_str_split_with_length_1
+#define xstring_cstr_split_with_length xstring_cstr_split_with_length_1
 
 /*
     
 */
-static char **xstring_str_split_1(char *char_array, char *seperator, XAllocator allocator) {
-    return xstring_str_split_with_length_1(xstring_str_length(char_array), char_array, seperator, allocator);
+static char **xstring_cstr_split_1(char *char_array, char *seperator, XAllocator allocator) {
+    return xstring_cstr_split_with_length_1(xstring_cstr_length(char_array), char_array, seperator, allocator);
 }
 
 /*
     
 */
-#define xstring_str_split xstring_str_split_1
+#define xstring_cstr_split xstring_cstr_split_1
 
 /* TODO */
-#define xstring_str_char_value
-#define xstring_str_int_value
-#define xstring_str_long_value
-#define xstring_str_double_value
-#define xstring_str_float_value
-#define xstring_str_pointer_value
-#define xstring_str_concat_str
-#define xstring_str_concat_char
-#define xstring_str_concat_int
-#define xstring_str_concat_long
-#define xstring_str_concat_double
-#define xstring_str_concat_float
-#define xstring_str_concat_pointer
-#define xstring_str_format
-#define xstring_str_hashcode
-#define xstring_str_replace
-#define xstring_str_replace_first
-#define xstring_str_replace_last
-#define xstring_str_to_lower_case
-#define xstring_str_to_upper_case
-#define xstring_str_trim
+#define xstring_cstr_char_value
+#define xstring_cstr_int_value
+#define xstring_cstr_long_value
+#define xstring_cstr_double_value
+#define xstring_cstr_float_value
+#define xstring_cstr_pointer_value
+#define xstring_cstr_concat_str
+#define xstring_cstr_concat_char
+#define xstring_cstr_concat_int
+#define xstring_cstr_concat_long
+#define xstring_cstr_concat_double
+#define xstring_cstr_concat_float
+#define xstring_cstr_concat_pointer
+#define xstring_cstr_format
+#define xstring_cstr_hashcode
+#define xstring_cstr_replace
+#define xstring_cstr_replace_first
+#define xstring_cstr_replace_last
+#define xstring_cstr_to_lower_case
+#define xstring_cstr_to_upper_case
+#define xstring_cstr_trim
 
 /*
 
