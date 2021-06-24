@@ -479,13 +479,15 @@ void xhashtable_iterator_##T1##_##T2##_destroy(void *iterator_) {\
 }\
 \
 bool xhashtable_iterator_##T1##_##T2##_has_next(void *iterator_) {\
+    xhashtable_##T1##_##T2 *container;\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return FALSE;\
     }\
     xhashtable_iterator = ((xhashtable_iterator_##T1##_##T2 *) iterator->container);\
-    return xhashtable_iterator->forward_iter != XTD_NULL;\
+    container = xhashtable_iterator->container;\
+    return container->size > 0 && xhashtable_iterator->forward_iter != XTD_NULL;\
 }\
 \
 void *xhashtable_iterator_##T1##_##T2##_next(void *iterator_) {\
@@ -516,13 +518,15 @@ void *xhashtable_iterator_##T1##_##T2##_next(void *iterator_) {\
 }\
 \
 bool xhashtable_iterator_##T1##_##T2##_has_prev(void *iterator_) {\
+    xhashtable_##T1##_##T2 *container;\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return FALSE;\
     }\
     xhashtable_iterator = ((xhashtable_iterator_##T1##_##T2 *) iterator->container);\
-    return xhashtable_iterator->backward_iter != XTD_NULL;\
+    container = xhashtable_iterator->container;\
+    return container->size > 0 && xhashtable_iterator->backward_iter != XTD_NULL;\
 }\
 \
 void *xhashtable_iterator_##T1##_##T2##_prev(void *iterator_) {\

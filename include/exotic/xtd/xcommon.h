@@ -1,5 +1,5 @@
 
-/**
+/*!
     \copyright MIT License Copyright (c) 2020, Adewale Azeez 
     \author Adewale Azeez <azeezadewale98@gmail.com>
     \date 07 April 2020
@@ -21,7 +21,7 @@ extern "C" {
 #endif
 
 
-/** 
+/*! 
     The inline keyword to optimize the function. In 
     C89 and C90 the inline keyword semantic is 
     different from current C standard semantic hence 
@@ -70,9 +70,9 @@ extern "C" {
 #endif
 #ifndef __cplusplus
     #if EXOTICTYPES_WINDLLEXPORT
-        #define EXOTIC_API __declspec(dllexport) /**< the platform is windows use windows export keyword __declspec(dllexport) */ 
+        #define EXOTIC_API __declspec(dllexport) /*!< the platform is windows use windows export keyword __declspec(dllexport) */ 
     #else
-        #define EXOTIC_API extern                /**< Keyword to export the functions to allow ussage dynamically. NOT USED. IGNORED  */
+        #define EXOTIC_API extern                /*!< Keyword to export the functions to allow ussage dynamically. NOT USED. IGNORED  */
     #endif
 #else
     #define EXOTIC_API
@@ -80,7 +80,7 @@ extern "C" {
 
 #define x_free(x) free(x); x = XTD_NULL;
 
-/**
+/*!
     Define bool to be unsigned
 */
 #ifndef bool 
@@ -106,16 +106,16 @@ extern "C" {
 typedef unsigned int uint32_t;
 #endif
 
-/**
+/*!
     The status codes for operation in the x-types 
     library.
 */
 enum x_stat {
-    XTD_OK = 0,                       /**< the operation successful */
-    XTD_ERR,                           /**< An operation fails */
-    XTD_ALLOC_ERR,                    /**< unable to allocate memory for a pointer */
-    XTD_INVALID_CAPACITY_ERR,         /**< the capacity is more than available for the data type */
-    XTD_INDEX_OUT_OF_RANGE_ERR,       /**< the index is equal or more than the size of the container elements */
+    XTD_OK = 0,                       /*!< the operation successful */
+    XTD_ERR,                           /*!< An operation fails */
+    XTD_ALLOC_ERR,                    /*!< unable to allocate memory for a pointer */
+    XTD_INVALID_CAPACITY_ERR,         /*!< the capacity is more than available for the data type */
+    XTD_INDEX_OUT_OF_RANGE_ERR,       /*!< the index is equal or more than the size of the container elements */
     XTD_INDEX_LESS_THAN_ZERO_ERR,
     XTD_EMPTY_CONTAINER_ERR,
     XTD_MAX_SIZE_ERR,
@@ -125,16 +125,34 @@ enum x_stat {
     XTD_STACK_OVERFLOW_ERR,
     XTD_STACK_UNDERFLOW_ERR,
     XTD_ALREADY_IN_CONTAINER_ERR,
-    XTD_MAX_CAPACITY_ERR,             /**< the data type is full */
-    XTD_VALUE_NOT_FOUND_ERR,          /**< the data type is full */  
+    XTD_MAX_CAPACITY_ERR,             /*!< the data type is full */
+    XTD_VALUE_NOT_FOUND_ERR,          /*!< the data type is full */  
     XTD_KEY_NOT_FOUND_ERR,
-    XTD_FAILED_TO_CLEANUP_ERR,        /**< the data type is full */    
-    XTD_INDEXES_OVERLAP_ERR,          /**< Two index value overlap each other */
-    XTD_CRITICAL_ERR,                 /**< An error impossible to recover from occur. The program should terminate immediately if encountered */
-    XTD_NO_OP,                        /**< No operation caried out */
-    XTD_ITER_END,                     /**< The loop has reached the end of the iteration */
-    XTD_INVALID_PARAMETER
+    XTD_FAILED_TO_CLEANUP_ERR,        /*!< the data type is full */    
+    XTD_INDEXES_OVERLAP_ERR,          /*!< Two index value overlap each other */
+    XTD_CRITICAL_ERR,                 /*!< An error impossible to recover from occur. The program should terminate immediately if encountered */
+    XTD_NO_OP,                        /*!< No operation caried out */
+    XTD_ITER_END,                     /*!< The loop has reached the end of the iteration */
+    XTD_INVALID_PARAMETER,
+    XTD_DUPLICATE_ERR,
+    XTD_NOT_FOUND_ERR,
+    XTD_INVALID_PARAMETER_FOUND_ERR
 };
+
+/*!
+    
+*/
+#define XTD_INVALID_OPTION_ERR XTD_INVALID_PARAMETER_ERR
+
+/*!
+    
+*/
+#define XTD_INVALID_ARGUMENT_ERR XTD_INVALID_PARAMETER_ERR
+
+/*!
+    
+*/
+#define XTD_VALUE_NOT_IN_OPTION_ERR XTD_KEY_NOT_FOUND_ERR
 
 #ifdef ARCH_64
     #define XTD_MATH_MAX_POW_TWO (((size_t) 1) << 63)
@@ -149,22 +167,22 @@ enum x_stat {
 #define XDEFAULT_XHASHTABLE_DEFAULT_CAPACITY 16
 #define XDEFAULT_XHASHTABLE_LOAD_FACTOR 0.75f
 
-/**
+/*!
     
 */
 struct xallocator_s {
-    void *(*memory_realloc) (void* ptr, size_t size);      /**<  memory allocator used to allocate the array and it buffer. realloc */
-    void *(*memory_malloc)  (size_t size);                  /**<  memory allocator used to allocate the array and it buffer. malloc */
-    void *(*memory_calloc)  (size_t blocks, size_t size);   /**<  memory allocator used to allocate the array and it buffer. calloc */
-    void  (*memory_free)    (void *block);                  /**<  the free funtion to release the memory of the array and it buffer */
+    void *(*memory_realloc) (void* ptr, size_t size);      /*!<  memory allocator used to allocate the array and it buffer. realloc */
+    void *(*memory_malloc)  (size_t size);                  /*!<  memory allocator used to allocate the array and it buffer. malloc */
+    void *(*memory_calloc)  (size_t blocks, size_t size);   /*!<  memory allocator used to allocate the array and it buffer. calloc */
+    void  (*memory_free)    (void *block);                  /*!<  the free funtion to release the memory of the array and it buffer */
 };
 
-/**
+/*!
     
 */
 typedef struct xallocator_s XAllocator;
 
-/**
+/*!
     
 */
 static void init_xallocator(struct xallocator_s *allocator) {
@@ -176,7 +194,7 @@ static void init_xallocator(struct xallocator_s *allocator) {
 #endif
 }
 
-/**
+/*!
     The container configuration structure to initialize a new container with 
     specific fields and memory allocation funtions. 
 */
@@ -184,18 +202,18 @@ struct xcontainer_config {
     float load_factor;
     int key_length;
     uint32_t hash_seed;
-    size_t capacity;                                        /**<  the default capacity of the array */
-    size_t expansion_rate;                                  /**<  the rate at which the array buffer expands (capacity * expand_rate) */
-    size_t max_size;                                        /**<  the max size of the container */
-    XAllocator allocator;                                   /**<   */
+    size_t capacity;                                        /*!<  the default capacity of the array */
+    size_t expansion_rate;                                  /*!<  the rate at which the array buffer expands (capacity * expand_rate) */
+    size_t max_size;                                        /*!<  the max size of the container */
+    XAllocator allocator;                                   /*!<   */
 };
 
-/**
+/*!
 
 */
 typedef struct xcontainer_config XConfig;
 
-/**
+/*!
 
 */
 static void init_xcontainer_config_max_size(struct xcontainer_config *config, size_t max_size) {
@@ -215,7 +233,7 @@ static void init_xcontainer_config_max_size(struct xcontainer_config *config, si
     config->allocator   = xallocator;
 }
 
-/**
+/*!
 
 */
 static void init_xcontainer_config(struct xcontainer_config *config) {
@@ -224,52 +242,52 @@ static void init_xcontainer_config(struct xcontainer_config *config) {
 
 /* General container functions */
 
-/**
+/*!
 
 */
 #define xcapacity(container) (container->capacity)
 
-/**
+/*!
 
 */
 #define xsize(container) (container->size)
 
-/**
+/*!
 
 */
 #define xmax_size(container) (container->max_size)
 
-/**
+/*!
 
 */
 #define xis_empty(container) (container->size == 0)
 
-/**
+/*!
 
 */
 #define xget_buffer(container) (container->buffer)
 
-/**
+/*!
 
 */
 #define xget_internal_impl(container) (container->xinternal_e7884708734_ximpl)
 
-/**
+/*!
 
 */
 #define xget_at(container, index) (container->buffer[index])
 
-/**
+/*!
 
 */
 #define xget_front(container) (container->size > 0 ? xget_at(container, 0) : XTD_NULL)
 
-/**
+/*!
 
 */
 #define xget_back(container) (container->size > 0 ? xget_at(container, container->size-1) : XTD_NULL)
 
-/**
+/*!
 
 */
 static size_t xptp_array_size(void **p2p) {
@@ -279,7 +297,7 @@ static size_t xptp_array_size(void **p2p) {
     return index;
 }
 
-/**
+/*!
 
 */
 static void xfreep2p(void **p2p, XAllocator allocator) {
@@ -290,6 +308,11 @@ static void xfreep2p(void **p2p, XAllocator allocator) {
     }
     allocator.memory_free(p2p);
 }
+
+/*!
+
+*/
+#define xptp_free xfreep2p
 
 #ifdef __cplusplus
 }

@@ -71,7 +71,7 @@ static bool xstring_cstr_length_3(char char_array[]) {
 /*
 
 */
-static bool xstring_cstr_equals_1(char *char_array1, char *char_array2) {
+static bool xstring_cstr_equals_1(const char *char_array1, const char *char_array2) {
     size_t index = 0;
     if (char_array1 == XTD_NULL || char_array2 == XTD_NULL) {
         return char_array1 == char_array2;
@@ -460,7 +460,7 @@ static char **xstring_cstr_split_with_length_1(size_t char_array_length, char *c
             secondary_index = 0;
             while (char_array[str_index] != '\0' && char_array[++str_index] == seperator[++secondary_index]);
             if (seperator_length == secondary_index) {
-                value = (char *) allocator.memory_malloc((str_index_cache - last_seperator_position) * sizeof(char));
+                value = (char *) allocator.memory_malloc((str_index_cache+1 - last_seperator_position) * sizeof(char));
                 if (xstring_cstr_sub_string_in_range_1(char_array, last_seperator_position, str_index_cache, value) != XTD_OK) {
                     allocator.memory_free(value);
                     goto xstring_cstr_split_with_length_1_release_and_return_null;
@@ -479,7 +479,7 @@ static char **xstring_cstr_split_with_length_1(size_t char_array_length, char *c
         }
     }
     if ((str_index_cache - last_seperator_position) > 1) {
-        value = (char *) allocator.memory_malloc((str_index_cache - last_seperator_position) * sizeof(char));
+        value = (char *) allocator.memory_malloc((str_index_cache+1 - last_seperator_position) * sizeof(char));
         if (xstring_cstr_sub_string_in_range_1(char_array, last_seperator_position, str_index_cache, value) != XTD_OK) {
             allocator.memory_free(value);
             goto xstring_cstr_split_with_length_1_release_and_return_null;
