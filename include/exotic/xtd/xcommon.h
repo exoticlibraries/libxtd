@@ -105,6 +105,9 @@ extern "C" {
 #ifndef uint32_t
 typedef unsigned int uint32_t;
 #endif
+#ifndef uint32_t
+typedef unsigned short uint16_t;
+#endif
 
 /*!
     The status codes for operation in the x-types 
@@ -136,7 +139,8 @@ enum x_stat {
     XTD_INVALID_PARAMETER,
     XTD_DUPLICATE_ERR,
     XTD_NOT_FOUND_ERR,
-    XTD_INVALID_PARAMETER_FOUND_ERR
+    XTD_INVALID_PARAMETER_FOUND_ERR,
+    XTD_MISSING_PARAM_ERR
 };
 
 /*!

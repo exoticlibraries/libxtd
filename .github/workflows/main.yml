@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Setup Exotic Libraries And Run Regression
-        uses: exoticlibraries/exotic-action@v1.1
+        uses: exoticlibraries/exotic-action@v1.3
         with:
           download-exotic-libraries: true
           run-regression: true
@@ -47,7 +47,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Setup Exotic Libraries
-        uses: exoticlibraries/exotic-action@v1.1
+        uses: exoticlibraries/exotic-action@v1.3
         with:
           download-exotic-libraries: true
           run-regression: false

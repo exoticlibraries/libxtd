@@ -104,10 +104,11 @@ static bool xstring_cstr_equals_2(char *char_array1, char *char_array2) {
 
 */
 static bool xstring_cstr_equals_3(char *char_array1, char *char_array2) {
+    size_t index;
     if (char_array1 == XTD_NULL || char_array2 == XTD_NULL) {
         return char_array1 == char_array2;
     }
-    for(size_t index = 0; char_array1[index] != '\0' || char_array2[index] != '\0'; index++) {
+    for(index = 0; char_array1[index] != '\0' || char_array2[index] != '\0'; index++) {
         if(char_array1[index] != char_array2[index]) {
             return FALSE;
         }
@@ -521,19 +522,281 @@ static char **xstring_cstr_split_1(char *char_array, char *seperator, XAllocator
 */
 #define xstring_cstr_split xstring_cstr_split_1
 
-/* TODO */
-#define xstring_cstr_char_value
-#define xstring_cstr_int_value
-#define xstring_cstr_long_value
-#define xstring_cstr_double_value
-#define xstring_cstr_float_value
+/*!
+    
+*/
+static void xstring_cstr_copy(char *src, char *dest, size_t len) {
+    char* pDst = (char *) dest;
+    char const * pSrc = (char const *) src;
+    while(len--){
+        *pDst++ = *pSrc++;
+    }
+}
+
+/*!
+    
+*/
+static char *xstring_cstr_trim_memory_to_size(char *mem_allocated_chars, XAllocator allocator) {
+    size_t length = xstring_cstr_length(mem_allocated_chars);
+    char *copy = (char *) allocator.memory_malloc(length);
+    xstring_cstr_copy(mem_allocated_chars, copy, length);
+    copy[length] = '\0';
+    allocator.memory_free(mem_allocated_chars);
+    return copy;
+}
+
+/*!
+    
+*/
+static const char *xstring_cstr_char_value(char ch, XAllocator allocator) {
+    char *cstr = (char *) allocator.memory_malloc(2 * sizeof(char));
+    cstr[0] = ch;
+    cstr[1] = '\0';
+    return cstr;
+}
+
+/**
+ * C++ version 0.4 char* style "itoa":
+ * Written by Lukás Chmela
+ * Released under GPLv3.
+ */
+static char* itoa_by_lukas(long value, char* result, int base) {
+    // check that the base if valid
+    if (base < 2 || base > 36) { *result = '\0'; return result; }
+
+    char* ptr = result, *ptr1 = result, tmp_char;
+    long tmp_value;
+
+    do {
+        tmp_value = value;
+        value /= base;
+        *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+    } while ( value );
+
+    // Apply negative sign
+    if (tmp_value < 0) *ptr++ = '-';
+    *ptr-- = '\0';
+    while(ptr1 < ptr) {
+        tmp_char = *ptr;
+        *ptr--= *ptr1;
+        *ptr1++ = tmp_char;
+    }
+    return result;
+}
+
+/*!
+    
+*/
+#define XTD_FLOAT_PRECISION_STR_SIZE 21
+
+/*!
+    TODO: update to show all floating values
+*/
+static char *xstring_float_to_cstr_internal(double value, char *result, int decimal_places) {
+    uint16_t decimals;
+    long units;
+    long index;
+    char *cstr = result + (XTD_FLOAT_PRECISION_STR_SIZE+decimal_places);
+
+    if (value < 0) {
+        decimals = (long)(value * -100) % 100;
+        units = (long)(-1 * value);
+    } else {
+        decimals = (long)(value * 100) % 100;
+        units = (long)value;
+    }
+    index = 0;
+    *--cstr = '\0';
+    while (decimal_places-- > 0) {
+        *--cstr = (decimals % 10) + '0';
+        decimals /= 10;
+    }
+    *--cstr = '.';
+    do {
+        *--cstr = (units % 10) + '0';
+        units /= 10;
+    } while (units > 0);
+    if (value < 0) result[index++] = '-';
+    while(*cstr != '\0') {
+        result[index++] = *cstr++;
+    }
+    result[index] = '\0';
+
+    return result;
+}
+
+/*!
+    
+*/
+static const char *xstring_cstr_int_value(int value, XAllocator allocator) {
+    char *cstr = (char *) allocator.memory_malloc(12 * sizeof(char));
+    cstr = itoa_by_lukas(value, cstr, 10);
+#ifndef XTD_DONT_TRIM_MANAGED_CSTRING
+    cstr = xstring_cstr_trim_memory_to_size(cstr, allocator);
+#endif
+    return cstr;
+}
+
+/*!
+    
+*/
+static const char *xstring_cstr_long_value(long value, XAllocator allocator) {
+    char *cstr = (char *) allocator.memory_malloc(12 * sizeof(char));
+    cstr = itoa_by_lukas(value, cstr, 10);
+#ifndef XTD_DONT_TRIM_MANAGED_CSTRING
+    cstr = xstring_cstr_trim_memory_to_size(cstr, allocator);
+#endif
+    return cstr;
+}
+
+/*!
+    
+*/
+static const char *xstring_cstr_float_value(float value, int decimal_places, XAllocator allocator) {
+    char *cstr = (char *) allocator.memory_malloc(XTD_FLOAT_PRECISION_STR_SIZE+decimal_places * sizeof(char));
+    cstr = xstring_float_to_cstr_internal(value, cstr, decimal_places);
+#ifndef XTD_DONT_TRIM_MANAGED_CSTRING
+    cstr = xstring_cstr_trim_memory_to_size(cstr, allocator);
+#endif
+    return cstr;
+}
+
+/*!
+    
+*/
+static const char *xstring_cstr_double_value(double value, int decimal_places, XAllocator allocator) {
+    char *cstr = (char *) allocator.memory_malloc(XTD_FLOAT_PRECISION_STR_SIZE+decimal_places * sizeof(char));
+    cstr = xstring_float_to_cstr_internal(value, cstr, decimal_places);
+#ifndef XTD_DONT_TRIM_MANAGED_CSTRING
+    cstr = xstring_cstr_trim_memory_to_size(cstr, allocator);
+#endif
+    return cstr;
+}
+
+/*!
+    
+*/
 #define xstring_cstr_pointer_value
-#define xstring_cstr_concat_str
-#define xstring_cstr_concat_char
-#define xstring_cstr_concat_int
-#define xstring_cstr_concat_long
-#define xstring_cstr_concat_double
-#define xstring_cstr_concat_float
+
+/*!
+    
+*/
+static const char *xstring_cstr_concat_cstr(char *dest, char *to_concat, XAllocator allocator) {
+    size_t index;
+    size_t dest_length = xstring_cstr_length(dest);
+    size_t to_concat_length = xstring_cstr_length(to_concat);
+    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length - 1);
+    for (index = 0; index < dest_length; index++) {
+        cstr[index] = dest[index];
+    }
+    for (; index < to_concat_length+dest_length; index++) {
+        cstr[index] = to_concat[index-dest_length];
+    }
+    cstr[index] = '\0';
+    return cstr;
+}
+
+/*!
+    
+*/
+static const char *xstring_cstr_concat_char(char *dest, char value, XAllocator allocator) {
+    size_t index;
+    char *to_concat = xstring_cstr_char_value(value, allocator);
+    size_t dest_length = xstring_cstr_length(dest);
+    size_t to_concat_length = xstring_cstr_length(to_concat);
+    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length - 1);
+    for (index = 0; index < dest_length; index++) {
+        cstr[index] = dest[index];
+    }
+    for (; index < to_concat_length+dest_length; index++) {
+        cstr[index] = to_concat[index-dest_length];
+    }
+    cstr[index] = '\0';
+    allocator.memory_free(to_concat);
+    return cstr;
+}
+
+/*!
+    
+*/
+static const char *xstring_cstr_concat_int(char *dest, int value, XAllocator allocator) {
+    size_t index;
+    char *to_concat = xstring_cstr_int_value(value, allocator);
+    size_t dest_length = xstring_cstr_length(dest);
+    size_t to_concat_length = xstring_cstr_length(to_concat);
+    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length - 1);
+    for (index = 0; index < dest_length; index++) {
+        cstr[index] = dest[index];
+    }
+    for (; index < to_concat_length+dest_length; index++) {
+        cstr[index] = to_concat[index-dest_length];
+    }
+    cstr[index] = '\0';
+    allocator.memory_free(to_concat);
+    return cstr;
+}
+
+/*!
+    
+*/
+static const char *xstring_cstr_concat_long(char *dest, long value, XAllocator allocator) {
+    size_t index;
+    char *to_concat = xstring_cstr_long_value(value, allocator);
+    size_t dest_length = xstring_cstr_length(dest);
+    size_t to_concat_length = xstring_cstr_length(to_concat);
+    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length - 1);
+    for (index = 0; index < dest_length; index++) {
+        cstr[index] = dest[index];
+    }
+    for (; index < to_concat_length+dest_length; index++) {
+        cstr[index] = to_concat[index-dest_length];
+    }
+    cstr[index] = '\0';
+    allocator.memory_free(to_concat);
+    return cstr;
+}
+
+/*!
+    
+*/
+static const char *xstring_cstr_concat_double(char *dest, double value, XAllocator allocator) {
+    size_t index;
+    char *to_concat = xstring_cstr_double_value(value, 2, allocator);
+    size_t dest_length = xstring_cstr_length(dest);
+    size_t to_concat_length = xstring_cstr_length(to_concat);
+    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length - 1);
+    for (index = 0; index < dest_length; index++) {
+        cstr[index] = dest[index];
+    }
+    for (; index < to_concat_length+dest_length; index++) {
+        cstr[index] = to_concat[index-dest_length];
+    }
+    cstr[index] = '\0';
+    allocator.memory_free(to_concat);
+    return cstr;
+}
+
+/*!
+    
+*/
+static const char *xstring_cstr_concat_float(char *dest, float value, XAllocator allocator) {
+    size_t index;
+    char *to_concat = xstring_cstr_float_value(value, 2, allocator);
+    size_t dest_length = xstring_cstr_length(dest);
+    size_t to_concat_length = xstring_cstr_length(to_concat);
+    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length - 1);
+    for (index = 0; index < dest_length; index++) {
+        cstr[index] = dest[index];
+    }
+    for (; index < to_concat_length+dest_length; index++) {
+        cstr[index] = to_concat[index-dest_length];
+    }
+    cstr[index] = '\0';
+    allocator.memory_free(to_concat);
+    return cstr;
+}
+
+/* TODO */
 #define xstring_cstr_concat_pointer
 #define xstring_cstr_format
 #define xstring_cstr_hashcode
