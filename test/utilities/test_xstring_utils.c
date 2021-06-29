@@ -772,4 +772,8 @@ CESTER_OPTIONS(
     CESTER_VERBOSE_LEVEL(2);
 )
 
-
+/*
+write tests for 
+xstring_cstr_copy
+xstring_cstr_trim_memory_to_size
+*/

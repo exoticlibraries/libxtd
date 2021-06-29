@@ -685,7 +685,7 @@ static const char *xstring_cstr_concat_cstr(char *dest, char *to_concat, XAlloca
     size_t index;
     size_t dest_length = xstring_cstr_length(dest);
     size_t to_concat_length = xstring_cstr_length(to_concat);
-    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length - 1);
+    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length + 1);
     for (index = 0; index < dest_length; index++) {
         cstr[index] = dest[index];
     }
@@ -704,7 +704,7 @@ static const char *xstring_cstr_concat_char(char *dest, char value, XAllocator a
     char *to_concat = xstring_cstr_char_value(value, allocator);
     size_t dest_length = xstring_cstr_length(dest);
     size_t to_concat_length = xstring_cstr_length(to_concat);
-    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length - 1);
+    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length + 1);
     for (index = 0; index < dest_length; index++) {
         cstr[index] = dest[index];
     }
@@ -724,7 +724,7 @@ static const char *xstring_cstr_concat_int(char *dest, int value, XAllocator all
     char *to_concat = xstring_cstr_int_value(value, allocator);
     size_t dest_length = xstring_cstr_length(dest);
     size_t to_concat_length = xstring_cstr_length(to_concat);
-    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length - 1);
+    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length + 1);
     for (index = 0; index < dest_length; index++) {
         cstr[index] = dest[index];
     }
@@ -744,7 +744,7 @@ static const char *xstring_cstr_concat_long(char *dest, long value, XAllocator a
     char *to_concat = xstring_cstr_long_value(value, allocator);
     size_t dest_length = xstring_cstr_length(dest);
     size_t to_concat_length = xstring_cstr_length(to_concat);
-    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length - 1);
+    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length + 1);
     for (index = 0; index < dest_length; index++) {
         cstr[index] = dest[index];
     }
@@ -764,7 +764,7 @@ static const char *xstring_cstr_concat_double(char *dest, double value, XAllocat
     char *to_concat = xstring_cstr_double_value(value, 2, allocator);
     size_t dest_length = xstring_cstr_length(dest);
     size_t to_concat_length = xstring_cstr_length(to_concat);
-    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length - 1);
+    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length + 1);
     for (index = 0; index < dest_length; index++) {
         cstr[index] = dest[index];
     }
@@ -784,7 +784,7 @@ static const char *xstring_cstr_concat_float(char *dest, float value, XAllocator
     char *to_concat = xstring_cstr_float_value(value, 2, allocator);
     size_t dest_length = xstring_cstr_length(dest);
     size_t to_concat_length = xstring_cstr_length(to_concat);
-    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length - 1);
+    char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length + 1);
     for (index = 0; index < dest_length; index++) {
         cstr[index] = dest[index];
     }
