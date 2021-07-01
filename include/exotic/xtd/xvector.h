@@ -271,7 +271,7 @@ static enum x_stat xvector_##T##_expand_capacity(xvector_##T *container)\
 */
 #define SETUP_ITERATOR_FOR_XVECTOR(T) \
 \
-void xvector_iterator_##T##_reset_forward(void *iterator_) {\
+static void xvector_iterator_##T##_reset_forward(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -279,7 +279,7 @@ void xvector_iterator_##T##_reset_forward(void *iterator_) {\
     iterator->forward_index = 0;\
 }\
 \
-void xvector_iterator_##T##_reset_backward(void *iterator_) {\
+static void xvector_iterator_##T##_reset_backward(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -287,7 +287,7 @@ void xvector_iterator_##T##_reset_backward(void *iterator_) {\
     iterator->backward_index = ((xvector_##T *) iterator->container)->size-1;\
 }\
 \
-void xvector_iterator_##T##_reset(void *iterator_) {\
+static void xvector_iterator_##T##_reset(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -296,7 +296,7 @@ void xvector_iterator_##T##_reset(void *iterator_) {\
     iterator->backward_index = ((xvector_##T *) iterator->container)->size-1;\
 }\
 \
-void xvector_iterator_##T##_destroy(void *iterator_) {\
+static void xvector_iterator_##T##_destroy(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL) {\
         return;\
@@ -308,7 +308,7 @@ void xvector_iterator_##T##_destroy(void *iterator_) {\
     x_free(iterator);\
 }\
 \
-void xvector_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
+static void xvector_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -316,7 +316,7 @@ void xvector_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
     iterator->forward_index += distance;\
 }\
 \
-void xvector_iterator_##T##_decrement(void *iterator_) {\
+static void xvector_iterator_##T##_decrement(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -324,7 +324,7 @@ void xvector_iterator_##T##_decrement(void *iterator_) {\
     iterator->forward_index--;\
 }\
 \
-void xvector_iterator_##T##_increment(void *iterator_) {\
+static void xvector_iterator_##T##_increment(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -332,7 +332,7 @@ void xvector_iterator_##T##_increment(void *iterator_) {\
     iterator->forward_index++;\
 }\
 \
-bool xvector_iterator_##T##_has_next(void *iterator_) {\
+static bool xvector_iterator_##T##_has_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xvector_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
@@ -342,7 +342,7 @@ bool xvector_iterator_##T##_has_next(void *iterator_) {\
     return (container != XTD_NULL && iterator->forward_index < container->size);\
 }\
 \
-void *xvector_iterator_##T##_next(void *iterator_) {\
+static void *xvector_iterator_##T##_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xvector_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
@@ -352,7 +352,7 @@ void *xvector_iterator_##T##_next(void *iterator_) {\
     return (void *) container->buffer[iterator->forward_index++];\
 }\
 \
-bool xvector_iterator_##T##_has_prev(void *iterator_) {\
+static bool xvector_iterator_##T##_has_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xvector_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
@@ -362,7 +362,7 @@ bool xvector_iterator_##T##_has_prev(void *iterator_) {\
     return (container != XTD_NULL && iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
 }\
 \
-void *xvector_iterator_##T##_prev(void *iterator_) {\
+static void *xvector_iterator_##T##_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xvector_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\

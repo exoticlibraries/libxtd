@@ -366,7 +366,7 @@ static xnode_##T *xlist_##T##_get_node(xlist_##T *container, T element)\
     xlist_##T *container;\
 } xlist_iterator_##T;\
 \
-void xlist_iterator_##T##_reset_forward(void *iterator_) {\
+static void xlist_iterator_##T##_reset_forward(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -379,7 +379,7 @@ void xlist_iterator_##T##_reset_forward(void *iterator_) {\
     iterator->forward_index = 0;\
 }\
 \
-void xlist_iterator_##T##_reset_backward(void *iterator_) {\
+static void xlist_iterator_##T##_reset_backward(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -392,7 +392,7 @@ void xlist_iterator_##T##_reset_backward(void *iterator_) {\
     iterator->backward_index = container->size-1;\
 }\
 \
-void xlist_iterator_##T##_reset(void *iterator_) {\
+static void xlist_iterator_##T##_reset(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -407,7 +407,7 @@ void xlist_iterator_##T##_reset(void *iterator_) {\
     iterator->backward_index = container->size-1;\
 }\
 \
-void xlist_iterator_##T##_destroy(void *iterator_) {\
+static void xlist_iterator_##T##_destroy(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -424,7 +424,7 @@ void xlist_iterator_##T##_destroy(void *iterator_) {\
     container->memory_free(iterator);\
 }\
 \
-void xlist_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
+static void xlist_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -439,7 +439,7 @@ void xlist_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
     }\
 }\
 \
-void xlist_iterator_##T##_decrement(void *iterator_) {\
+static void xlist_iterator_##T##_decrement(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -457,7 +457,7 @@ void xlist_iterator_##T##_decrement(void *iterator_) {\
     }\
 }\
 \
-void xlist_iterator_##T##_increment(void *iterator_) {\
+static void xlist_iterator_##T##_increment(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -475,7 +475,7 @@ void xlist_iterator_##T##_increment(void *iterator_) {\
     }\
 }\
 \
-bool xlist_iterator_##T##_has_next(void *iterator_) {\
+static bool xlist_iterator_##T##_has_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -487,7 +487,7 @@ bool xlist_iterator_##T##_has_next(void *iterator_) {\
     return (container != XTD_NULL && xlist_iterator->forward_iter != XTD_NULL && xnode_has_data(xlist_iterator->forward_iter));\
 }\
 \
-void *xlist_iterator_##T##_next(void *iterator_) {\
+static void *xlist_iterator_##T##_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -503,7 +503,7 @@ void *xlist_iterator_##T##_next(void *iterator_) {\
     return (void *) value;\
 }\
 \
-bool xlist_iterator_##T##_has_prev(void *iterator_) {\
+static bool xlist_iterator_##T##_has_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -515,7 +515,7 @@ bool xlist_iterator_##T##_has_prev(void *iterator_) {\
     return (container != XTD_NULL && xlist_iterator->backward_iter != XTD_NULL && xnode_has_data(xlist_iterator->backward_iter));\
 }\
 \
-void *xlist_iterator_##T##_prev(void *iterator_) {\
+static void *xlist_iterator_##T##_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
