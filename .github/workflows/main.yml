@@ -41,6 +41,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         platform: [x64]
+        compiler: [gnu]
 
     steps:
       - name: Checkout

@@ -38,30 +38,30 @@ extern "C" {
     void  (*memory_free)   (void *block);\
 } xset_##T;\
 \
-enum x_stat xset_##T##_new(xset_##T **out, bool (*xset_element_equals)  (T,T), bool (*xset_element_greater_than)  (T,T));\
-enum x_stat xset_##T##_new_config(struct xcontainer_config * const config, xset_##T **out, bool (*xset_element_equals)  (T,T), bool (*xset_element_greater_than)  (T,T));\
-enum x_stat xset_##T##_get_at(xset_##T *container, size_t index, T *out);\
-enum x_stat xset_##T##_get_front(xset_##T *container, T *out);\
-enum x_stat xset_##T##_get_back(xset_##T *container, T *out);\
-enum x_stat xset_##T##_add(xset_##T *container, T element);\
-enum x_stat xset_##T##_index_of(xset_##T *container, T element, int *out);\
+static enum x_stat xset_##T##_new(xset_##T **out, bool (*xset_element_equals)  (T,T), bool (*xset_element_greater_than)  (T,T));\
+static enum x_stat xset_##T##_new_config(struct xcontainer_config * const config, xset_##T **out, bool (*xset_element_equals)  (T,T), bool (*xset_element_greater_than)  (T,T));\
+static enum x_stat xset_##T##_get_at(xset_##T *container, size_t index, T *out);\
+static enum x_stat xset_##T##_get_front(xset_##T *container, T *out);\
+static enum x_stat xset_##T##_get_back(xset_##T *container, T *out);\
+static enum x_stat xset_##T##_add(xset_##T *container, T element);\
+static enum x_stat xset_##T##_index_of(xset_##T *container, T element, int *out);\
 static enum x_stat xset_##T##_expand_capacity(xset_##T *container);\
 \
-enum x_stat xset_##T##_new(xset_##T **out, bool (*xset_element_equals)  (T,T), bool (*xset_element_greater_than)  (T,T)) \
+static enum x_stat xset_##T##_new(xset_##T **out, bool (*xset_element_equals)  (T,T), bool (*xset_element_greater_than)  (T,T)) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config(&config);\
     return xset_##T##_new_config(&config, out, xset_element_equals, xset_element_greater_than);\
 }\
 \
-enum x_stat xset_##T##_new_max_size(xset_##T **out, size_t max_size, bool (*xset_element_equals)  (T,T), bool (*xset_element_greater_than)  (T,T)) \
+static enum x_stat xset_##T##_new_max_size(xset_##T **out, size_t max_size, bool (*xset_element_equals)  (T,T), bool (*xset_element_greater_than)  (T,T)) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config_max_size(&config, max_size);\
     return xset_##T##_new_config(&config, out, xset_element_equals, xset_element_greater_than);\
 }\
 \
-enum x_stat xset_##T##_new_config(struct xcontainer_config * const config, xset_##T **out, bool (*xset_element_equals)  (T,T), bool (*xset_element_greater_than)  (T,T)) \
+static enum x_stat xset_##T##_new_config(struct xcontainer_config * const config, xset_##T **out, bool (*xset_element_equals)  (T,T), bool (*xset_element_greater_than)  (T,T)) \
 {\
     size_t expansion_rate;\
     xset_##T *container;\
@@ -97,9 +97,9 @@ enum x_stat xset_##T##_new_config(struct xcontainer_config * const config, xset_
     return XTD_OK;\
 }\
 \
-enum x_stat xset_##T##_add_at(xset_##T *container, T element, size_t index);\
+static enum x_stat xset_##T##_add_at(xset_##T *container, T element, size_t index);\
 \
-enum x_stat xset_##T##_add(xset_##T *container, T element)\
+static enum x_stat xset_##T##_add(xset_##T *container, T element)\
 {\
     T last_element;\
     int index = -1;\
@@ -136,7 +136,7 @@ enum x_stat xset_##T##_add(xset_##T *container, T element)\
     return XTD_OK;\
 }\
 \
-enum x_stat xset_##T##_add_at(xset_##T *container, T element, size_t index) \
+static enum x_stat xset_##T##_add_at(xset_##T *container, T element, size_t index) \
 {\
     int ele_pos = -1;\
     size_t num;\
@@ -170,7 +170,7 @@ enum x_stat xset_##T##_add_at(xset_##T *container, T element, size_t index) \
     return XTD_OK;\
 }\
 \
-enum x_stat xset_##T##_index_of(xset_##T *container, T element, int *out)\
+static enum x_stat xset_##T##_index_of(xset_##T *container, T element, int *out)\
 {\
     int index;\
     if (!out) {\
@@ -185,7 +185,7 @@ enum x_stat xset_##T##_index_of(xset_##T *container, T element, int *out)\
     return XTD_OUT_OF_RANGE_ERR;\
 }\
 \
-enum x_stat xset_##T##_get_at(xset_##T *container, size_t index, T *out)\
+static enum x_stat xset_##T##_get_at(xset_##T *container, size_t index, T *out)\
 {\
     if (!out) {\
         return XTD_OUT_PARAM_NULL_ERR;\
@@ -197,7 +197,7 @@ enum x_stat xset_##T##_get_at(xset_##T *container, size_t index, T *out)\
     return XTD_OK;\
 }\
 \
-enum x_stat xset_##T##_get_front(xset_##T *container, T *out)\
+static enum x_stat xset_##T##_get_front(xset_##T *container, T *out)\
 {\
     if (!out) {\
         return XTD_OUT_PARAM_NULL_ERR;\
@@ -209,7 +209,7 @@ enum x_stat xset_##T##_get_front(xset_##T *container, T *out)\
     return XTD_OK;\
 }\
 \
-enum x_stat xset_##T##_get_back(xset_##T *container, T *out)\
+static enum x_stat xset_##T##_get_back(xset_##T *container, T *out)\
 {\
     if (!out) {\
         return XTD_OUT_PARAM_NULL_ERR;\
@@ -221,7 +221,7 @@ enum x_stat xset_##T##_get_back(xset_##T *container, T *out)\
     return XTD_OK;\
 }\
 \
-enum x_stat xset_##T##_replace_at(xset_##T *container, size_t index, T element, T *out)\
+static enum x_stat xset_##T##_replace_at(xset_##T *container, size_t index, T element, T *out)\
 {\
     if (index >= container->size) {\
         return XTD_INDEX_OUT_OF_RANGE_ERR;\
@@ -233,7 +233,7 @@ enum x_stat xset_##T##_replace_at(xset_##T *container, size_t index, T element, 
     return XTD_OK;\
 }\
 \
-enum x_stat xset_##T##_remove_at(xset_##T *container, size_t index, T *out)\
+static enum x_stat xset_##T##_remove_at(xset_##T *container, size_t index, T *out)\
 {\
     size_t mem_size;\
     if (index < 0 || index >= container->size) {\
@@ -250,17 +250,17 @@ enum x_stat xset_##T##_remove_at(xset_##T *container, size_t index, T *out)\
     return XTD_OK;\
 }\
 \
-enum x_stat xset_##T##_remove_front(xset_##T *container, T *out)\
+static enum x_stat xset_##T##_remove_front(xset_##T *container, T *out)\
 {\
     return xset_##T##_remove_at(container, 0, out);\
 }\
 \
-enum x_stat xset_##T##_remove_back(xset_##T *container, T *out)\
+static enum x_stat xset_##T##_remove_back(xset_##T *container, T *out)\
 {\
     return xset_##T##_remove_at(container, container->size-1, out);\
 }\
 \
-enum x_stat xset_##T##_clear(xset_##T *container)\
+static enum x_stat xset_##T##_clear(xset_##T *container)\
 {\
     enum x_stat status;\
     while (container->size > 0) {\
@@ -322,7 +322,7 @@ static enum x_stat xset_##T##_expand_capacity(xset_##T *container)\
 */
 #define SETUP_ITERATOR_FOR_XSET(T) \
 \
-void xset_iterator_##T##_reset_forward(void *iterator_) {\
+static void xset_iterator_##T##_reset_forward(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -330,7 +330,7 @@ void xset_iterator_##T##_reset_forward(void *iterator_) {\
     iterator->forward_index = 0;\
 }\
 \
-void xset_iterator_##T##_reset_backward(void *iterator_) {\
+static void xset_iterator_##T##_reset_backward(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -338,7 +338,7 @@ void xset_iterator_##T##_reset_backward(void *iterator_) {\
     iterator->backward_index = ((xset_##T *) iterator->container)->size-1;\
 }\
 \
-void xset_iterator_##T##_reset(void *iterator_) {\
+static void xset_iterator_##T##_reset(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -347,7 +347,7 @@ void xset_iterator_##T##_reset(void *iterator_) {\
     iterator->backward_index = ((xset_##T *) iterator->container)->size-1;\
 }\
 \
-void xset_iterator_##T##_destroy(void *iterator_) {\
+static void xset_iterator_##T##_destroy(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL) {\
         return;\
@@ -359,7 +359,7 @@ void xset_iterator_##T##_destroy(void *iterator_) {\
     x_free(iterator);\
 }\
 \
-void xset_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
+static void xset_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -367,7 +367,7 @@ void xset_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
     iterator->forward_index += distance;\
 }\
 \
-void xset_iterator_##T##_decrement(void *iterator_) {\
+static void xset_iterator_##T##_decrement(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -375,7 +375,7 @@ void xset_iterator_##T##_decrement(void *iterator_) {\
     iterator->forward_index--;\
 }\
 \
-void xset_iterator_##T##_increment(void *iterator_) {\
+static void xset_iterator_##T##_increment(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -383,7 +383,7 @@ void xset_iterator_##T##_increment(void *iterator_) {\
     iterator->forward_index++;\
 }\
 \
-bool xset_iterator_##T##_has_next(void *iterator_) {\
+static bool xset_iterator_##T##_has_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xset_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
@@ -393,7 +393,7 @@ bool xset_iterator_##T##_has_next(void *iterator_) {\
     return (container != XTD_NULL && iterator->forward_index < container->size);\
 }\
 \
-void *xset_iterator_##T##_next(void *iterator_) {\
+static void *xset_iterator_##T##_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xset_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
@@ -403,7 +403,7 @@ void *xset_iterator_##T##_next(void *iterator_) {\
     return (void *) container->buffer[iterator->forward_index++];\
 }\
 \
-bool xset_iterator_##T##_has_prev(void *iterator_) {\
+static bool xset_iterator_##T##_has_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xset_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
@@ -413,7 +413,7 @@ bool xset_iterator_##T##_has_prev(void *iterator_) {\
     return (container != XTD_NULL && iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
 }\
 \
-void *xset_iterator_##T##_prev(void *iterator_) {\
+static void *xset_iterator_##T##_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xset_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\

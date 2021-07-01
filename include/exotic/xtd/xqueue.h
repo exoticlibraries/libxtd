@@ -40,23 +40,23 @@ extern "C" {
     xdeque(T) *xinternal_e7884708734_ximpl;\
 } xqueue_##T;\
 \
-enum x_stat xqueue_##T##_new_config(struct xcontainer_config * const config, xqueue_##T **out);\
+static enum x_stat xqueue_##T##_new_config(struct xcontainer_config * const config, xqueue_##T **out);\
 \
-enum x_stat xqueue_##T##_new(xqueue_##T **out) \
+static enum x_stat xqueue_##T##_new(xqueue_##T **out) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config(&config);\
     return xqueue_##T##_new_config(&config, out);\
 }\
 \
-enum x_stat xqueue_##T##_new_max_size(xqueue_##T **out, size_t max_size) \
+static enum x_stat xqueue_##T##_new_max_size(xqueue_##T **out, size_t max_size) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config_max_size(&config, max_size);\
     return xqueue_##T##_new_config(&config, out);\
 }\
 \
-enum x_stat xqueue_##T##_new_config(struct xcontainer_config * const config, xqueue_##T **out) \
+static enum x_stat xqueue_##T##_new_config(struct xcontainer_config * const config, xqueue_##T **out) \
 {\
     enum x_stat xinternal_vector_status;\
     xdeque_##T *xinternal_vector;\
@@ -82,7 +82,7 @@ enum x_stat xqueue_##T##_new_config(struct xcontainer_config * const config, xqu
     return XTD_OK;\
 }\
 \
-enum x_stat xqueue_##T##_push(xqueue_##T *container, T element)\
+static enum x_stat xqueue_##T##_push(xqueue_##T *container, T element)\
 {\
     enum x_stat status;\
     if (container->size >= container->max_size) {\
@@ -97,12 +97,12 @@ enum x_stat xqueue_##T##_push(xqueue_##T *container, T element)\
     return status;\
 }\
 \
-enum x_stat xqueue_##T##_peek(xqueue_##T *container, T *element)\
+static enum x_stat xqueue_##T##_peek(xqueue_##T *container, T *element)\
 {\
     return xdeque_##T##_get_front(container->xinternal_e7884708734_ximpl, element);\
 }\
 \
-enum x_stat xqueue_##T##_pop(xqueue_##T *container, T *element)\
+static enum x_stat xqueue_##T##_pop(xqueue_##T *container, T *element)\
 {\
     enum x_stat status;\
     if (container->size == 0) {\
