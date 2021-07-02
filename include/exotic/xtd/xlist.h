@@ -29,7 +29,7 @@ extern "C" {
     size_t max_size;\
     xnode_##T *head;\
     xnode_##T *tail;\
-    void *(*memory_alloc)  (size_t size);\
+    void *(*memory_malloc)  (size_t size);\
     void *(*memory_calloc) (size_t blocks, size_t size);\
     void  (*memory_free)   (void *block);\
 } xlist_##T;\
@@ -57,22 +57,22 @@ enum x_stat xlist_##T##_new_max_size(xlist_##T **out, size_t max_size) \
 \
 enum x_stat xlist_##T##_new_config(struct xcontainer_config * const config, xlist_##T **out) \
 {\
-    xlist_##T *container = (xlist_##T *) config->memory_calloc(1, sizeof(xlist_##T));\
+    xlist_##T *container = (xlist_##T *) config->allocator.memory_calloc(1, sizeof(xlist_##T));\
     if (!container) {\
         return XTD_ALLOC_ERR;\
     }\
     container->size          = 0;\
     container->max_size      = config->max_size;\
-    container->memory_alloc  = config->memory_alloc;\
-    container->memory_calloc = config->memory_calloc;\
-    container->memory_free   = config->memory_free;\
+    container->memory_malloc  = config->allocator.memory_malloc;\
+    container->memory_calloc = config->allocator.memory_calloc;\
+    container->memory_free   = config->allocator.memory_free;\
     *out = container;\
     return XTD_OK;\
 }\
 \
 enum x_stat xlist_##T##_destroy(xlist_##T *container) \
 {\
-    container->memory_free(container);\
+    container->memory_free((void *)container);\
     return XTD_OK;\
 }\
 \
@@ -538,11 +538,11 @@ static XIterator *xiterator_init_xlist_##T(xlist_##T *container) \
     if (container == XTD_NULL) {\
         return XTD_NULL;\
     }\
-    iterator = (XIterator *) container->memory_alloc(sizeof(XIterator));\
+    iterator = (XIterator *) container->memory_malloc(sizeof(XIterator));\
     if (iterator == XTD_NULL) {\
         return XTD_NULL;\
     }\
-    xlist_iterator = (xlist_iterator_##T *) container->memory_alloc(sizeof(xlist_iterator_##T));\
+    xlist_iterator = (xlist_iterator_##T *) container->memory_malloc(sizeof(xlist_iterator_##T));\
     if (xlist_iterator == XTD_NULL) {\
         container->memory_free(iterator);\
         return XTD_NULL;\

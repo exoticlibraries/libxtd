@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-#include "xcommon.h"
+#include "xmath.h"
 #include "xiterator.h"
 
 #ifdef __cplusplus
@@ -30,7 +30,7 @@ extern "C" {
     size_t first;\
     size_t last;\
     T *buffer;\
-    void *(*memory_alloc)  (size_t size);\
+    void *(*memory_malloc)  (size_t size);\
     void *(*memory_calloc) (size_t blocks, size_t size);\
     void  (*memory_free)   (void *block);\
 } xdeque_##T;\
@@ -67,24 +67,24 @@ enum x_stat xdeque_##T##_new_config(struct xcontainer_config * const config, xde
     if ((!config->capacity || expansion_rate >= (config->max_size / config->capacity)) && (config->max_size < config->capacity)) {\
         return XTD_INVALID_CAPACITY_ERR;\
     }\
-    container = (xdeque_##T *) config->memory_calloc(1, sizeof(xdeque_##T));\
+    container = (xdeque_##T *) config->allocator.memory_calloc(1, sizeof(xdeque_##T));\
     if (!container) {\
         return XTD_ALLOC_ERR;\
     }\
-    buffer = (T *) config->memory_alloc(config->capacity * sizeof(T));\
+    buffer = (T *) config->allocator.memory_malloc(config->capacity * sizeof(T));\
     if (!buffer) {\
-        config->memory_free(container);\
+        config->allocator.memory_free(container);\
         return XTD_ALLOC_ERR;\
     }\
-    container->capacity             = x_upper_pow_two(config->capacity);\
+    container->capacity             = xmath_round_power_of_two(config->capacity);\
     container->expansion_rate       = config->expansion_rate;\
     container->max_size             = config->max_size;\
     container->size                 = 0;\
     container->first                = 0;\
     container->last                 = 0;\
-    container->memory_alloc         = config->memory_alloc;\
-    container->memory_calloc        = config->memory_calloc;\
-    container->memory_free          = config->memory_free;\
+    container->memory_malloc         = config->allocator.memory_malloc;\
+    container->memory_calloc        = config->allocator.memory_calloc;\
+    container->memory_free          = config->allocator.memory_free;\
     container->buffer               = buffer;\
     *out = container;\
     return XTD_OK;\
@@ -398,11 +398,11 @@ static enum x_stat xdeque_##T##_shrink_to_fit(xdeque_##T *container)\
     if (container->capacity == container->size) {\
         return XTD_OK;\
     }\
-    new_size = x_upper_pow_two(container->size);\
+    new_size = xmath_round_power_of_two(container->size);\
     if (new_size == container->capacity) {\
         return XTD_OK;\
     }\
-    new_buffer = (T *) container->memory_alloc(sizeof(T) * new_size);\
+    new_buffer = (T *) container->memory_malloc(sizeof(T) * new_size);\
     if (!new_buffer) {\
         return XTD_ALLOC_ERR;\
     }\
@@ -419,7 +419,7 @@ static enum x_stat xdeque_##T##_expand_capacity(xdeque_##T *container)\
 {\
     size_t new_capacity;\
     T *new_buffer;\
-    if (container->capacity == XTD_MAX_POW_TWO) {\
+    if (container->capacity == XTD_MATH_MAX_POW_TWO) {\
         return XTD_MAX_CAPACITY_ERR;\
     }\
     new_capacity = container->capacity << 1;\
@@ -551,7 +551,7 @@ static XIterator *xiterator_init_xdeque_##T(xdeque_##T *container) \
     if (container == XTD_NULL) {\
         return XTD_NULL;\
     }\
-    iterator = (XIterator *) container->memory_alloc(sizeof(XIterator));\
+    iterator = (XIterator *) container->memory_malloc(sizeof(XIterator));\
     if (iterator == XTD_NULL) {\
         return XTD_NULL;\
     }\
@@ -665,7 +665,7 @@ static XIterator *xiterator_init_xdeque_##T(xdeque_##T *container) \
 */
 #define xdeque_destroy(container) { \
         container->memory_free(container->buffer); \
-        container->memory_free(container); \
+        container->memory_free((void *)container); \
     }
 
 /*

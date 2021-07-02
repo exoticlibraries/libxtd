@@ -35,9 +35,9 @@ CESTER_TEST(xdeque_conf_init, _, {
     xdeque(str) *fruits;
     enum x_stat status;
 
-    config.memory_alloc   = malloc;
-    config.memory_calloc  = calloc;
-    config.memory_free    = free;
+    config.allocator.memory_malloc   = malloc;
+    config.allocator.memory_calloc  = calloc;
+    config.allocator.memory_free    = free;
     config.expansion_rate = 5;
     config.capacity       = 20;
     config.max_size       = 5000;

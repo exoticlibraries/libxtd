@@ -15,18 +15,21 @@ Types to be implemented
 - [x] single node
 - [x] single linked list
 - [x] double linked list
-- [ ] set
-- [ ] unordered_set
+- [x] set
+- [x] unordered_set
+- [x] hashtable
 - [ ] map
+- [ ] multimap
+- [ ] hashset
+- [ ] unordered_hashset
+- [x] xstring
+- [ ] xpair
 - [ ] element
 - [ ] ring
 - [ ] treemap
 - [ ] tuple
-- [ ] hashtable
-- [ ] hashset
 - [ ] tree
 - [ ] heap
-- [x] xstring
 
 ## Todo
 

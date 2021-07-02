@@ -37,7 +37,7 @@ extern "C" {
     size_t size;\
     size_t max_size;\
     T *buffer;\
-    void *(*memory_alloc)  (size_t size);\
+    void *(*memory_malloc)  (size_t size);\
     void *(*memory_calloc) (size_t blocks, size_t size);\
     void  (*memory_free)   (void *block);\
     bool  (*cmp) (const T a, const T b);\
@@ -78,22 +78,22 @@ enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * const co
     if ((!config->capacity || expansion_rate >= (config->max_size / config->capacity)) && (config->max_size < config->capacity)) {\
         return XTD_INVALID_CAPACITY_ERR;\
     }\
-    container = (xpriority_queue_##T *) config->memory_calloc(1, sizeof(xpriority_queue_##T));\
+    container = (xpriority_queue_##T *) config->allocator.memory_calloc(1, sizeof(xpriority_queue_##T));\
     if (!container) {\
         return XTD_ALLOC_ERR;\
     }\
-    buffer = (T *) config->memory_alloc(config->capacity * sizeof(T));\
+    buffer = (T *) config->allocator.memory_malloc(config->capacity * sizeof(T));\
     if (!buffer) {\
-        config->memory_free(container);\
+        config->allocator.memory_free(container);\
         return XTD_ALLOC_ERR;\
     }\
     container->capacity             = config->capacity;\
     container->expansion_rate       = config->expansion_rate;\
     container->max_size             = config->max_size;\
     container->size                 = 0;\
-    container->memory_alloc         = config->memory_alloc;\
-    container->memory_calloc        = config->memory_calloc;\
-    container->memory_free          = config->memory_free;\
+    container->memory_malloc         = config->allocator.memory_malloc;\
+    container->memory_calloc        = config->allocator.memory_calloc;\
+    container->memory_free          = config->allocator.memory_free;\
     container->cmp                  = cmp;\
     container->buffer               = buffer;\
     *out = container;\
@@ -193,7 +193,7 @@ static enum x_stat xpriority_queue_##T##_expand_capacity(xpriority_queue_##T *co
     } else {\
         container->capacity = temp_capacity;\
     }\
-    new_buffer = (T *) container->memory_alloc(temp_capacity * sizeof(T));\
+    new_buffer = (T *) container->memory_malloc(temp_capacity * sizeof(T));\
     if (!new_buffer) {\
         return XTD_ALLOC_ERR;\
     }\
@@ -353,7 +353,7 @@ static XIterator *xiterator_init_xpriority_queue_##T(xpriority_queue_##T *contai
     if (container == XTD_NULL) {\
         return XTD_NULL;\
     }\
-    iterator = (XIterator *) container->memory_alloc(sizeof(XIterator));\
+    iterator = (XIterator *) container->memory_malloc(sizeof(XIterator));\
     if (iterator == XTD_NULL) {\
         return XTD_NULL;\
     }\
@@ -432,7 +432,7 @@ static XIterator *xiterator_init_xpriority_queue_##T(xpriority_queue_##T *contai
 */
 #define xpriority_queue_destroy(container) { \
         container->memory_free(container->buffer); \
-        container->memory_free(container); \
+        container->memory_free((void *)container); \
     }
 
 /*

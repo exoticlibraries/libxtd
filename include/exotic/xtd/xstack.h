@@ -33,7 +33,7 @@ extern "C" {
     size_t size;\
     size_t max_size;\
     T *buffer;\
-    void *(*memory_alloc)  (size_t size);\
+    void *(*memory_malloc)  (size_t size);\
     void *(*memory_calloc) (size_t blocks, size_t size);\
     void  (*memory_free)   (void *block);\
     \
@@ -61,13 +61,13 @@ enum x_stat xstack_##T##_new_config(struct xcontainer_config * const config, xst
     enum x_stat xinternal_vector_status;\
     xdeque_##T *xinternal_vector;\
     xstack_##T *container;\
-    container = (xstack_##T *) config->memory_calloc(1, sizeof(xstack_##T));\
+    container = (xstack_##T *) config->allocator.memory_calloc(1, sizeof(xstack_##T));\
     if (!container) {\
         return XTD_ALLOC_ERR;\
     }\
     xinternal_vector_status = xdeque_##T##_new_config(config, &xinternal_vector);\
     if (xinternal_vector_status != XTD_OK) {\
-        config->memory_free(container);\
+        config->allocator.memory_free(container);\
         return xinternal_vector_status;\
     }\
     container->capacity         = config->capacity;\
@@ -75,9 +75,9 @@ enum x_stat xstack_##T##_new_config(struct xcontainer_config * const config, xst
     container->size             = 0;\
     container->xinternal_e7884708734_ximpl = xinternal_vector;\
     container->buffer           = xinternal_vector->buffer;\
-    container->memory_alloc     = config->memory_alloc;\
-    container->memory_calloc    = config->memory_calloc;\
-    container->memory_free      = config->memory_free;\
+    container->memory_malloc     = config->allocator.memory_malloc;\
+    container->memory_calloc    = config->allocator.memory_calloc;\
+    container->memory_free      = config->allocator.memory_free;\
     *out = container;\
     return XTD_OK;\
 }\
@@ -174,7 +174,7 @@ static XIterator *xiterator_init_xstack_##T(xstack_##T *container) \
 #define xstack_destroy(container) { \
         container->memory_free(container->xinternal_e7884708734_ximpl->buffer); \
         container->memory_free(container->xinternal_e7884708734_ximpl); \
-        container->memory_free(container); \
+        container->memory_free((void *)container); \
     }
 
 /*
