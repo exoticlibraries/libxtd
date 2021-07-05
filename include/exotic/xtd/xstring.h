@@ -681,7 +681,7 @@ static const char *xstring_cstr_double_value(double value, int decimal_places, X
 /*!
     
 */
-static const char *xstring_cstr_concat_cstr(char *dest, char *to_concat, XAllocator allocator) {
+static char *xstring_cstr_concat_cstr(char *dest, char *to_concat, XAllocator allocator) {
     size_t index;
     size_t dest_length = xstring_cstr_length(dest);
     size_t to_concat_length = xstring_cstr_length(to_concat);
@@ -699,9 +699,18 @@ static const char *xstring_cstr_concat_cstr(char *dest, char *to_concat, XAlloca
 /*!
     
 */
-static const char *xstring_cstr_concat_char(char *dest, char value, XAllocator allocator) {
+static char *xstring_cstr_concat_cstr_free_old(char *dest, char *to_concat, XAllocator allocator) {
+    char *cstr = xstring_cstr_concat_cstr(dest, to_concat, allocator);
+    allocator.memory_free(dest);
+    return cstr;
+}
+
+/*!
+    
+*/
+static char *xstring_cstr_concat_char(char *dest, char value, XAllocator allocator) {
     size_t index;
-    char *to_concat = xstring_cstr_char_value(value, allocator);
+    char *to_concat = (char *) xstring_cstr_char_value(value, allocator);
     size_t dest_length = xstring_cstr_length(dest);
     size_t to_concat_length = xstring_cstr_length(to_concat);
     char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length + 1);
@@ -719,9 +728,18 @@ static const char *xstring_cstr_concat_char(char *dest, char value, XAllocator a
 /*!
     
 */
-static const char *xstring_cstr_concat_int(char *dest, int value, XAllocator allocator) {
+static char *xstring_cstr_concat_char_free_old(char *dest, char value, XAllocator allocator) {
+    char *cstr = xstring_cstr_concat_char(dest, value, allocator);
+    allocator.memory_free(dest);
+    return cstr;
+}
+
+/*!
+    
+*/
+static char *xstring_cstr_concat_int(char *dest, int value, XAllocator allocator) {
     size_t index;
-    char *to_concat = xstring_cstr_int_value(value, allocator);
+    char *to_concat = (char *) xstring_cstr_int_value(value, allocator);
     size_t dest_length = xstring_cstr_length(dest);
     size_t to_concat_length = xstring_cstr_length(to_concat);
     char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length + 1);
@@ -739,9 +757,18 @@ static const char *xstring_cstr_concat_int(char *dest, int value, XAllocator all
 /*!
     
 */
-static const char *xstring_cstr_concat_long(char *dest, long value, XAllocator allocator) {
+static char *xstring_cstr_concat_int_free_old(char *dest, int value, XAllocator allocator) {
+    char *cstr = xstring_cstr_concat_int(dest, value, allocator);
+    allocator.memory_free(dest);
+    return cstr;
+}
+
+/*!
+    
+*/
+static char *xstring_cstr_concat_long(char *dest, long value, XAllocator allocator) {
     size_t index;
-    char *to_concat = xstring_cstr_long_value(value, allocator);
+    char *to_concat = (char *) xstring_cstr_long_value(value, allocator);
     size_t dest_length = xstring_cstr_length(dest);
     size_t to_concat_length = xstring_cstr_length(to_concat);
     char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length + 1);
@@ -759,9 +786,18 @@ static const char *xstring_cstr_concat_long(char *dest, long value, XAllocator a
 /*!
     
 */
-static const char *xstring_cstr_concat_double(char *dest, double value, XAllocator allocator) {
+static char *xstring_cstr_concat_long_free_old(char *dest, long value, XAllocator allocator) {
+    char *cstr = xstring_cstr_concat_long(dest, value, allocator);
+    allocator.memory_free(dest);
+    return cstr;
+}
+
+/*!
+    
+*/
+static char *xstring_cstr_concat_double(char *dest, double value, XAllocator allocator) {
     size_t index;
-    char *to_concat = xstring_cstr_double_value(value, 2, allocator);
+    char *to_concat = (char *) xstring_cstr_double_value(value, 2, allocator);
     size_t dest_length = xstring_cstr_length(dest);
     size_t to_concat_length = xstring_cstr_length(to_concat);
     char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length + 1);
@@ -779,9 +815,18 @@ static const char *xstring_cstr_concat_double(char *dest, double value, XAllocat
 /*!
     
 */
-static const char *xstring_cstr_concat_float(char *dest, float value, XAllocator allocator) {
+static char *xstring_cstr_concat_double_free_old(char *dest, double value, XAllocator allocator) {
+    char *cstr = xstring_cstr_concat_double(dest, value, allocator);
+    allocator.memory_free(dest);
+    return cstr;
+}
+
+/*!
+    
+*/
+static char *xstring_cstr_concat_float(char *dest, float value, XAllocator allocator) {
     size_t index;
-    char *to_concat = xstring_cstr_float_value(value, 2, allocator);
+    char *to_concat = (char *) xstring_cstr_float_value(value, 2, allocator);
     size_t dest_length = xstring_cstr_length(dest);
     size_t to_concat_length = xstring_cstr_length(to_concat);
     char *cstr = (char *) allocator.memory_malloc(sizeof(char) * dest_length + to_concat_length + 1);
@@ -795,11 +840,101 @@ static const char *xstring_cstr_concat_float(char *dest, float value, XAllocator
     allocator.memory_free(to_concat);
     return cstr;
 }
+
+/*!
+    
+*/
+static char *xstring_cstr_concat_float_free_old(char *dest, float value, XAllocator allocator) {
+    char *cstr = xstring_cstr_concat_float(dest, value, allocator);
+    allocator.memory_free(dest);
+    return cstr;
+}
+
+/*!
+    
+*/
+static char *xstring_cstr_format_1(XAllocator allocator, const char *str, ...) {
+    va_list ap;
+    unsigned argscount;
+    char *version_text = allocator.memory_malloc(2000 * sizeof(char));
+    va_start(ap, argscount);
+    va_end(ap);
+    return version_text;
+}
+
+/*!
+
+*/
+#define XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ(case_char, char) case case_char:\
+    value = xstring_cstr_concat_char_free_old(value, char, allocator);\
+    break
+
+/*!
+    /see https://en.wikipedia.org/wiki/Escape_sequences_in_C#Table_of_escape_sequences
+*/
+static enum x_stat xstring_cstr_escape_sequences(char *unescape_cstr, XAllocator allocator, char **out, size_t *err_pos_out) {
+    size_t index;
+    char *value = xstring_cstr_concat_cstr(XTD_NULL, "", allocator);
+    size_t unescape_cstr_length = xstring_cstr_length(unescape_cstr);
+    for (index = 0; index < unescape_cstr_length; index++) {
+        if (unescape_cstr[index] == '\\') {
+            index++;
+            switch (unescape_cstr[index]) {
+                XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('a', '\a');
+                XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('b', '\b');
+                XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('e', '\e');
+                XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('f', '\f');
+                XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('n', '\n');
+                XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('r', '\r');
+                XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('t', '\t');
+                XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('v', '\v');
+                XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('\\', '\\');
+                XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('\'', '\'');
+                XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('\"', '\"');
+                XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('?', '\?');
+                // treat octaland hexadecimal
+                case 'u':
+                    break;
+                case 'U':
+                    break;
+                default:
+                    if (out != XTD_NULL) *out = XTD_NULL;
+                    if (err_pos_out != XTD_NULL) *err_pos_out = index;
+                    allocator.memory_free(value);
+                    return XTD_PARSING_ERR;
+            }
+        } else {
+            value = xstring_cstr_concat_char_free_old(value, unescape_cstr[index], allocator);
+        }
+    }
+    printf("%s\n", value);
+    if (out != XTD_NULL) *out = value;
+    return XTD_OK;
+}
+
+/*!
+
+*/
+static char *xstring_cstr_unescape_sequences(char *escaped_cstr) {
+
+}
+
+/*!
+
+
+*/
+static char *xstring_cstr_expand_escape_chars(char *unescape_cstr) {
+
+}
+
+/*!
+    
+*/
+#define xstring_cstr_format xstring_cstr_format_1
 
 /* TODO */
 #define xstring_cstr_concat_pointer
-#define xstring_cstr_format
-#define xstring_cstr_hashcode
+#define xstring_cstr_hash
 #define xstring_cstr_replace
 #define xstring_cstr_replace_first
 #define xstring_cstr_replace_last

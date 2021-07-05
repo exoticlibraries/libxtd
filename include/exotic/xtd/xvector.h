@@ -146,7 +146,7 @@ static enum x_stat xvector_##T##_get_at(xvector_##T *container, int index, T *ou
     return XTD_OK;\
 }\
 \
-enum x_stat xvector_##T##_get_front(xvector_##T *container, T *out)\
+static enum x_stat xvector_##T##_get_front(xvector_##T *container, T *out)\
 {\
     if (!out) {\
         return XTD_OUT_PARAM_NULL_ERR;\

@@ -731,6 +731,40 @@ CESTER_TEST(xstring_cstr_concat_float, _, {
     cester_assert_str_equal_(value, "Year -678876.00"); free(value);
 })
 
+CESTER_TEST(xstring_cstr_escape_sequences, _, {
+    char *value;
+    size_t err_pos;
+    char *cstr1 = "Hello\tWorld";
+    char *cstr2 = "Hello\\tWorld";
+    char *cstr3 = "Hello\\qWorld";
+    char *cstr4 = "Hello\u00d1World";
+    char *cstr5 = "Hello\\u00d1World";
+    XAllocator allocator;
+    allocator.memory_malloc = malloc;
+    allocator.memory_calloc = calloc;
+    allocator.memory_realloc = realloc;
+    allocator.memory_free = free;
+
+    cester_assert_str_equal(cstr1, "Hello\tWorld");
+    cester_assert_str_not_equal(cstr2, "Hello\tWorld");
+    cester_assert_uint_eq(xstring_cstr_escape_sequences(cstr2, allocator, &value, XTD_NULL), XTD_OK);
+    cester_assert_str_equal(value, cstr1);
+    cester_assert_str_equal(value, "Hello\tWorld");
+    cester_assert_uint_ne(xstring_cstr_escape_sequences(cstr3, allocator, &value, XTD_NULL), XTD_OK);
+    cester_assert_uint_eq(xstring_cstr_escape_sequences(cstr3, allocator, &value, &err_pos), XTD_PARSING_ERR);
+    cester_assert_int_eq(err_pos, 6);
+    cester_assert_char_eq(cstr3[err_pos], 'q');
+    cester_assert_str_equal(cstr4, "Hello\u00d1World");
+    cester_assert_uint_eq(xstring_cstr_escape_sequences(cstr5, allocator, &value, XTD_NULL), XTD_OK);
+    cester_assert_str_equal(value, "Hello\u00d1World");
+})
+
+CESTER_TODO_TEST(xstring_cstr_escape_sequences_extended, _, {
+    char *cstr1 = "Hello\tWorld";
+
+    cester_assert_str_equal_(cstr1, "Hello\tWorld");
+})
+
 CESTER_TODO_TEST(xstring_cstr_concat_pointer, _, {
     
 })

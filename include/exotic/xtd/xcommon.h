@@ -140,7 +140,8 @@ enum x_stat {
     XTD_DUPLICATE_ERR,
     XTD_NOT_FOUND_ERR,
     XTD_INVALID_PARAMETER_FOUND_ERR,
-    XTD_MISSING_PARAM_ERR
+    XTD_MISSING_PARAM_ERR,
+    XTD_PARSING_ERR
 };
 
 /*!
@@ -190,7 +191,7 @@ typedef struct xallocator_s XAllocator;
     
 */
 static void init_xallocator(struct xallocator_s *allocator) {
-#if defined(_STDIO_H_) || defined(_INC_STDLIB) || defined(_STDLIB_H) || defined(_TR1_STDLIB_H)
+#if defined(_STDIO_H_) || defined(_INC_STDLIB) || defined(_STDLIB_H) || defined(_TR1_STDLIB_H) || defined(_CRT_ALLOCATION_DEFINED)
     allocator->memory_realloc   = realloc;
     allocator->memory_malloc   = malloc;
     allocator->memory_calloc  = calloc;
@@ -220,6 +221,18 @@ typedef struct xcontainer_config XConfig;
 /*!
 
 */
+static void init_xcontainer_config_without_allocator(struct xcontainer_config *config) {
+    config->expansion_rate = XDEFAULT_CONTAINER_CAPACITY > XTD_CONTAINER_MAX_CAPACITY ? 0 : XDEFAULT_CONTAINER_EXPANSION_RATE;
+    config->capacity       = XDEFAULT_CONTAINER_CAPACITY > XTD_CONTAINER_MAX_CAPACITY ? XTD_CONTAINER_MAX_CAPACITY : XDEFAULT_CONTAINER_CAPACITY;
+    config->max_size       = XTD_CONTAINER_MAX_CAPACITY;
+    config->key_length     = XHASHTABLE_KEY_LENGTH_VARIABLE;
+    config->load_factor    = XDEFAULT_XHASHTABLE_LOAD_FACTOR;
+    config->hash_seed      = 0;
+}
+
+/*!
+
+*/
 static void init_xcontainer_config_max_size(struct xcontainer_config *config, size_t max_size) {
     XAllocator xallocator;
     config->expansion_rate = XDEFAULT_CONTAINER_CAPACITY > max_size ? 0 : XDEFAULT_CONTAINER_EXPANSION_RATE;
@@ -228,7 +241,7 @@ static void init_xcontainer_config_max_size(struct xcontainer_config *config, si
     config->key_length     = XHASHTABLE_KEY_LENGTH_VARIABLE;
     config->load_factor    = XDEFAULT_XHASHTABLE_LOAD_FACTOR;
     config->hash_seed      = 0;
-#if defined(_STDIO_H_) || defined(_INC_STDLIB) || defined(_STDLIB_H) || defined(_TR1_STDLIB_H)
+#if defined(_STDIO_H_) || defined(_INC_STDLIB) || defined(_STDLIB_H) || defined(_TR1_STDLIB_H) || defined(_CRT_ALLOCATION_DEFINED)
     xallocator.memory_realloc   = realloc;
     xallocator.memory_malloc   = malloc;
     xallocator.memory_calloc  = calloc;
