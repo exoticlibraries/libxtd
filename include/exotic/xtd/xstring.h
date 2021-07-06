@@ -865,17 +865,19 @@ static char *xstring_cstr_format_1(XAllocator allocator, const char *str, ...) {
 /*!
 
 */
-#define XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ(case_char, char) case case_char:\
-    value = xstring_cstr_concat_char_free_old(value, char, allocator);\
+#define XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ(case_char, ch) case case_char:\
+    value = xstring_cstr_concat_char_free_old(value, ch, allocator);\
     break
 
 /*!
     /see https://en.wikipedia.org/wiki/Escape_sequences_in_C#Table_of_escape_sequences
 */
+// treat octaland hexadecimal, unicode u and U
 static enum x_stat xstring_cstr_escape_sequences(char *unescape_cstr, XAllocator allocator, char **out, size_t *err_pos_out) {
     size_t index;
     char *value = xstring_cstr_concat_cstr(XTD_NULL, "", allocator);
     size_t unescape_cstr_length = xstring_cstr_length(unescape_cstr);
+
     for (index = 0; index < unescape_cstr_length; index++) {
         if (unescape_cstr[index] == '\\') {
             index++;
@@ -892,11 +894,6 @@ static enum x_stat xstring_cstr_escape_sequences(char *unescape_cstr, XAllocator
                 XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('\'', '\'');
                 XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('\"', '\"');
                 XTD__INTERNAL__XSTRING_CONCAT_ESCAPE_SEQ('?', '\?');
-                // treat octaland hexadecimal
-                case 'u':
-                    break;
-                case 'U':
-                    break;
                 default:
                     if (out != XTD_NULL) *out = XTD_NULL;
                     if (err_pos_out != XTD_NULL) *err_pos_out = index;
@@ -907,24 +904,47 @@ static enum x_stat xstring_cstr_escape_sequences(char *unescape_cstr, XAllocator
             value = xstring_cstr_concat_char_free_old(value, unescape_cstr[index], allocator);
         }
     }
-    printf("%s\n", value);
     if (out != XTD_NULL) *out = value;
+
     return XTD_OK;
 }
 
 /*!
 
 */
-static char *xstring_cstr_unescape_sequences(char *escaped_cstr) {
-
-}
+#define XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ(case_char, cstr) case case_char:\
+    value = xstring_cstr_concat_cstr_free_old(value, cstr, allocator);\
+    break
 
 /*!
 
-
 */
-static char *xstring_cstr_expand_escape_chars(char *unescape_cstr) {
+static enum x_stat xstring_cstr_unescape_sequences(char *escaped_cstr, XAllocator allocator, char **out, size_t *err_pos_out) {
+    size_t index;
+    char *value = xstring_cstr_concat_cstr(XTD_NULL, "", allocator);
+    size_t escaped_cstr_length = xstring_cstr_length(escaped_cstr);
 
+    for (index = 0; index < escaped_cstr_length; index++) {
+        switch (escaped_cstr[index]) {
+            XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ('\a', "\\a");
+            XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ('\b', "\\b");
+            XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ('\e', "\\e");
+            XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ('\f', "\\f");
+            XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ('\n', "\\n");
+            XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ('\r', "\\r");
+            XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ('\t', "\\t");
+            XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ('\v', "\\v");
+            XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ('\\', "\\\\");
+            XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ('\'', "\\'");
+            XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ('\"', "\\\"");
+            XTD__INTERNAL__XSTRING_CONCAT_UNESCAPE_SEQ('\?', "\\?");
+            default:
+                value = xstring_cstr_concat_char_free_old(value, escaped_cstr[index], allocator);
+        }
+    }
+    if (out != XTD_NULL) *out = value;
+
+    return XTD_OK;
 }
 
 /*!

@@ -737,8 +737,8 @@ CESTER_TEST(xstring_cstr_escape_sequences, _, {
     char *cstr1 = "Hello\tWorld";
     char *cstr2 = "Hello\\tWorld";
     char *cstr3 = "Hello\\qWorld";
-    char *cstr4 = "Hello\u00d1World";
-    char *cstr5 = "Hello\\u00d1World";
+    char *cstr4 = "Tab\t\tNew Line\tCariage \rAlert beep\aBackspacee\bEscape char\eFormfeed PageBreak\fVertical tab \vBackslash\\Apostle\'Double quote\"Question Mark \?";
+    char *cstr5 = "Tab\\t\\tNew Line\\tCariage \\rAlert beep\\aBackspacee\\bEscape char\\eFormfeed PageBreak\\fVertical tab \\vBackslash\\\\Apostle\\'Double quote\\\"Question Mark \\?";
     XAllocator allocator;
     allocator.memory_malloc = malloc;
     allocator.memory_calloc = calloc;
@@ -754,9 +754,37 @@ CESTER_TEST(xstring_cstr_escape_sequences, _, {
     cester_assert_uint_eq(xstring_cstr_escape_sequences(cstr3, allocator, &value, &err_pos), XTD_PARSING_ERR);
     cester_assert_int_eq(err_pos, 6);
     cester_assert_char_eq(cstr3[err_pos], 'q');
-    cester_assert_str_equal(cstr4, "Hello\u00d1World");
-    cester_assert_uint_eq(xstring_cstr_escape_sequences(cstr5, allocator, &value, XTD_NULL), XTD_OK);
-    cester_assert_str_equal(value, "Hello\u00d1World");
+    cester_assert_str_equal(cstr4, "Tab\t\tNew Line\tCariage \rAlert beep\aBackspacee\bEscape char\eFormfeed PageBreak\fVertical tab \vBackslash\\Apostle\'Double quote\"Question Mark \?");
+    cester_assert_str_not_equal(cstr5, cstr4);
+    cester_assert_uint_eq(xstring_cstr_escape_sequences(cstr5, allocator, &value, &err_pos), XTD_OK);
+    cester_assert_str_equal(value, cstr4);
+    cester_assert_str_equal(value, "Tab\t\tNew Line\tCariage \rAlert beep\aBackspacee\bEscape char\eFormfeed PageBreak\fVertical tab \vBackslash\\Apostle\'Double quote\"Question Mark \?");
+})
+
+CESTER_TEST(xstring_cstr_unescape_sequences, _, {
+    char *value;
+    size_t err_pos;
+    char *cstr1 = "Hello\tWorld";
+    char *cstr2 = "Hello\\tWorld";
+    char *cstr3 = "Hello\\qWorld";
+    char *cstr4 = "Tab\t\tNew Line\tCariage \rAlert beep\aBackspacee\bEscape char\eFormfeed PageBreak\fVertical tab \vBackslash\\Apostle\'Double quote\"Question Mark \?";
+    char *cstr5 = "Tab\\t\\tNew Line\\tCariage \\rAlert beep\\aBackspacee\\bEscape char\\eFormfeed PageBreak\\fVertical tab \\vBackslash\\\\Apostle\\'Double quote\\\"Question Mark \\?";
+    XAllocator allocator;
+    allocator.memory_malloc = malloc;
+    allocator.memory_calloc = calloc;
+    allocator.memory_realloc = realloc;
+    allocator.memory_free = free;
+
+    cester_assert_str_equal(cstr2, "Hello\\tWorld");
+    cester_assert_str_not_equal(cstr2, "Hello\tWorld");
+    cester_assert_uint_eq(xstring_cstr_unescape_sequences(cstr1, allocator, &value, XTD_NULL), XTD_OK);
+    cester_assert_str_equal(value, cstr2);
+    cester_assert_str_equal(value, "Hello\\tWorld");
+    cester_assert_str_equal(cstr5, "Tab\\t\\tNew Line\\tCariage \\rAlert beep\\aBackspacee\\bEscape char\\eFormfeed PageBreak\\fVertical tab \\vBackslash\\\\Apostle\\'Double quote\\\"Question Mark \\?");
+    cester_assert_str_not_equal(cstr5, cstr4);
+    cester_assert_uint_eq(xstring_cstr_unescape_sequences(cstr4, allocator, &value, &err_pos), XTD_OK);
+    cester_assert_str_equal(value, cstr5);
+    cester_assert_str_equal(value, "Tab\\t\\tNew Line\\tCariage \\rAlert beep\\aBackspacee\\bEscape char\\eFormfeed PageBreak\\fVertical tab \\vBackslash\\\\Apostle\\'Double quote\\\"Question Mark \\?");
 })
 
 CESTER_TODO_TEST(xstring_cstr_escape_sequences_extended, _, {
