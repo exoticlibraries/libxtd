@@ -89,6 +89,39 @@ static enum x_stat xvector_##T##_new_config(struct xcontainer_config * const con
     return XTD_OK;\
 }\
 \
+static enum x_stat xvector_##T##_index_of(xvector_##T *container, T element, size_t *index)\
+{\
+    size_t iter_index;\
+    for (iter_index = 0; iter_index < container->size; iter_index++) {\
+        if (container->buffer[iter_index] == element) {\
+            *index = iter_index;\
+            return XTD_OK;\
+        }\
+    }\
+    return XTD_OUT_OF_RANGE_ERR;\
+}\
+\
+static bool xvector_##T##_contains(xvector_##T *container, T element)\
+{\
+    size_t iter_index;\
+    for (iter_index = 0; iter_index < container->size; iter_index++) {\
+        if (container->buffer[iter_index] == element) {\
+            return TRUE;\
+        }\
+    }\
+    return FALSE;\
+}\
+\
+static size_t xvector_##T##_element_count(xvector_##T *container, T element)\
+{\
+    size_t iter_index;\
+    size_t occurence_count = 0;\
+    for (iter_index = 0; iter_index < container->size; iter_index++) {\
+        if (container->buffer[iter_index] == element) occurence_count++;\
+    }\
+    return occurence_count;\
+}\
+\
 static enum x_stat xvector_##T##_add(xvector_##T *container, T element)\
 {\
     enum x_stat status;\
@@ -421,6 +454,21 @@ static XIterator *xiterator_init_xvector_##T(xvector_##T *container) \
 
 */
 #define xvector_new_config(T) xvector_##T##_new_config
+
+/**
+
+*/
+#define xvector_index_of(T) xvector_##T##_index_of
+
+/**
+
+*/
+#define xvector_contains(T) xvector_##T##_contains
+
+/**
+
+*/
+#define xvector_element_count(T) xvector_##T##_element_count
 
 /**
 

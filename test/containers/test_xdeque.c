@@ -1,10 +1,10 @@
-/*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
-/*!clang++ {0} -I. -I../../include/ -I../../../libcester/include -o out.exe; ./out.exe */
-/*!clang -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out.exe; ./out.exe */
-/*!clang {0} -I. -I../../include/ -I../../../libcester/include -o out.exe; ./out.exe */
-/*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
-/*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
-/*!gcc  -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
+/*!gcc {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
+/*!clang++ {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out.exe; ./out.exe */
+/*!clang -ansi -pedantic-errors {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out.exe; ./out.exe */
+/*!clang {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out.exe; ./out.exe */
+/*!g++ -std=c++11 {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
+/*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
+/*!gcc  -ansi -pedantic-errors {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
 #include <exotic/xtd/xdeque.h>
@@ -93,6 +93,76 @@ CESTER_TEST(xdeque_add_str, _, {
     status = xdeque_add(str)(fruits, "Mango");
     cester_assert_uint_eq(status, XTD_OK);
     cester_assert_uint_eq(xdeque_size(fruits), 5); 
+
+    xdeque_destroy(fruits);
+})
+
+CESTER_TEST(xdeque_index_of, _, {
+    size_t index;
+    xdeque(str) *fruits;
+    enum x_stat status;
+
+    status = xdeque_new(str)(&fruits);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Apple"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Banana"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Coconut"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Pawpaw"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Mango"), XTD_OK);
+
+    cester_assert_uint_eq(xdeque_index_of(str)(fruits, "Avocado", &index), XTD_OUT_OF_RANGE_ERR);
+    cester_assert_uint_eq(xdeque_index_of(str)(fruits, "Banana", &index), XTD_OK);
+    cester_assert_uint_eq(index, 1);
+    cester_assert_uint_eq(xdeque_index_of(str)(fruits, "Pawpaw", &index), XTD_OK);
+    cester_assert_uint_eq(index, 3);
+    cester_assert_uint_eq(xdeque_index_of(str)(fruits, "Mango", &index), XTD_OK);
+    cester_assert_uint_eq(index, 4);
+    cester_assert_uint_eq(xdeque_index_of(str)(fruits, "Grape", &index), XTD_OUT_OF_RANGE_ERR);
+    cester_assert_uint_eq(xdeque_index_of(str)(fruits, "Apple", &index), XTD_OK);
+    cester_assert_uint_eq(index, 0);
+
+    xdeque_destroy(fruits);
+})
+
+CESTER_TEST(xdeque_contains, _, {
+    xdeque(str) *fruits;
+    enum x_stat status;
+
+    status = xdeque_new(str)(&fruits);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Apple"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Banana"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Coconut"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Mango"), XTD_OK);
+
+    cester_assert_uint_eq(xdeque_contains(str)(fruits, "Avocado"), FALSE);
+    cester_assert_uint_eq(xdeque_contains(str)(fruits, "Banana"), TRUE);
+    cester_assert_uint_eq(xdeque_contains(str)(fruits, "Mango"), TRUE);
+    cester_assert_uint_eq(xdeque_contains(str)(fruits, "Grape"), FALSE);
+    cester_assert_uint_eq(xdeque_contains(str)(fruits, "Apple"), TRUE);
+
+    xdeque_destroy(fruits);
+})
+
+CESTER_TEST(xdeque_element_count, _, {
+    xdeque(str) *fruits;
+    enum x_stat status;
+
+    status = xdeque_new(str)(&fruits);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Apple"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Banana"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Coconut"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Mango"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Banana"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Apple"), XTD_OK);
+    cester_assert_uint_eq(xdeque_add(str)(fruits, "Banana"), XTD_OK);
+
+    cester_assert_uint_eq(xdeque_element_count(str)(fruits, "Avocado"), 0);
+    cester_assert_uint_eq(xdeque_element_count(str)(fruits, "Banana"), 3);
+    cester_assert_uint_eq(xdeque_element_count(str)(fruits, "Mango"), 1);
+    cester_assert_uint_eq(xdeque_element_count(str)(fruits, "Grape"), 0);
+    cester_assert_uint_eq(xdeque_element_count(str)(fruits, "Apple"), 2);
 
     xdeque_destroy(fruits);
 })

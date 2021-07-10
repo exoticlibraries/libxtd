@@ -44,7 +44,7 @@ static enum x_stat xset_##T##_get_at(xset_##T *container, size_t index, T *out);
 static enum x_stat xset_##T##_get_front(xset_##T *container, T *out);\
 static enum x_stat xset_##T##_get_back(xset_##T *container, T *out);\
 static enum x_stat xset_##T##_add(xset_##T *container, T element);\
-static enum x_stat xset_##T##_index_of(xset_##T *container, T element, int *out);\
+static enum x_stat xset_##T##_index_of(xset_##T *container, T element, size_t *out);\
 static enum x_stat xset_##T##_expand_capacity(xset_##T *container);\
 \
 static enum x_stat xset_##T##_new(xset_##T **out, bool (*xset_element_equals)  (T,T), bool (*xset_element_greater_than)  (T,T)) \
@@ -102,15 +102,13 @@ static enum x_stat xset_##T##_add_at(xset_##T *container, T element, size_t inde
 static enum x_stat xset_##T##_add(xset_##T *container, T element)\
 {\
     T last_element;\
-    int index = -1;\
+    size_t index;\
     enum x_stat status;\
     if (container->size >= container->max_size) {\
         return XTD_MAX_SIZE_ERR;\
     }\
     if (xset_##T##_index_of(container, element, &index) == XTD_OK) {\
-        if (index > -1) {\
-            return XTD_ALREADY_IN_CONTAINER_ERR;\
-        }\
+        return XTD_ALREADY_IN_CONTAINER_ERR;\
     }\
     if (container->size >= container->capacity) {\
         status = xset_##T##_expand_capacity(container);\
@@ -138,7 +136,7 @@ static enum x_stat xset_##T##_add(xset_##T *container, T element)\
 \
 static enum x_stat xset_##T##_add_at(xset_##T *container, T element, size_t index) \
 {\
-    int ele_pos = -1;\
+    size_t ele_pos;\
     size_t num;\
     enum x_stat status;\
     if (index == container->size) {\
@@ -151,9 +149,7 @@ static enum x_stat xset_##T##_add_at(xset_##T *container, T element, size_t inde
         return XTD_MAX_SIZE_ERR;\
     }\
     if (xset_##T##_index_of(container, element, &ele_pos) == XTD_OK) {\
-        if (ele_pos > -1) {\
-            return XTD_ALREADY_IN_CONTAINER_ERR;\
-        }\
+        return XTD_ALREADY_IN_CONTAINER_ERR;\
     }\
     if (container->size >= container->capacity) {\
         status = xset_##T##_expand_capacity(container);\
@@ -170,7 +166,7 @@ static enum x_stat xset_##T##_add_at(xset_##T *container, T element, size_t inde
     return XTD_OK;\
 }\
 \
-static enum x_stat xset_##T##_index_of(xset_##T *container, T element, int *out)\
+static enum x_stat xset_##T##_index_of(xset_##T *container, T element, size_t *out)\
 {\
     int index;\
     if (!out) {\
@@ -183,6 +179,27 @@ static enum x_stat xset_##T##_index_of(xset_##T *container, T element, int *out)
         }\
     }\
     return XTD_OUT_OF_RANGE_ERR;\
+}\
+\
+static bool xset_##T##_contains(xset_##T *container, T element)\
+{\
+    size_t iter_index;\
+    for (iter_index = 0; iter_index < container->size; iter_index++) {\
+        if (container->buffer[iter_index] == element) {\
+            return TRUE;\
+        }\
+    }\
+    return FALSE;\
+}\
+\
+static size_t xset_##T##_element_count(xset_##T *container, T element)\
+{\
+    size_t iter_index;\
+    size_t occurence_count = 0;\
+    for (iter_index = 0; iter_index < container->size; iter_index++) {\
+        if (container->buffer[iter_index] == element) occurence_count++;\
+    }\
+    return occurence_count;\
 }\
 \
 static enum x_stat xset_##T##_get_at(xset_##T *container, size_t index, T *out)\
@@ -472,6 +489,21 @@ static XIterator *xiterator_init_xset_##T(xset_##T *container) \
 
 */
 #define xset_new_config(T) xset_##T##_new_config
+
+/**
+
+*/
+#define xset_index_of(T) xset_##T##_index_of
+
+/**
+
+*/
+#define xset_contains(T) xset_##T##_contains
+
+/**
+
+*/
+#define xset_element_count(T) xset_##T##_element_count
 
 /**
 

@@ -438,6 +438,7 @@ static enum x_stat xstring_cstr_sub_string_1(char *char_array, size_t begin_inde
 /*
     
 */
+// valgrind the shit out of this function, I suspect lot of mem leaks
 static char **xstring_cstr_split_with_length_1(size_t char_array_length, char *char_array, char *seperator, XAllocator allocator) {
     char **out;
     char *value;
@@ -448,23 +449,34 @@ static char **xstring_cstr_split_with_length_1(size_t char_array_length, char *c
     size_t secondary_index;
     size_t seperator_length;
     size_t found_words_counts;
+    size_t allocated_value_size;
     size_t last_seperator_position;
     found_words_counts = 0;
     if (char_array == XTD_NULL || seperator == XTD_NULL) {
         goto xstring_cstr_split_with_length_1_release_and_return_null;
     }
     out = XTD_NULL;
-    last_seperator_position = 0;
+    str_index = 0;
+    tmp_out_index = 0;
+    str_index_cache = 0;
+    secondary_index = 0;
     seperator_length = xstring_cstr_length(seperator);
-    for (str_index = 0; str_index < char_array_length; ++str_index, str_index_cache = str_index) {
+    found_words_counts = 0;
+    allocated_value_size = 0;
+    last_seperator_position = 0;
+    for (; str_index < char_array_length; ++str_index, allocated_value_size++, str_index_cache = str_index) {
         if (char_array[str_index] == seperator[0]) {
             secondary_index = 0;
             while (char_array[str_index] != '\0' && char_array[++str_index] == seperator[++secondary_index]);
             if (seperator_length == secondary_index) {
-                value = (char *) allocator.memory_malloc((str_index_cache+1 - last_seperator_position) * sizeof(char));
-                if (xstring_cstr_sub_string_in_range_1(char_array, last_seperator_position, str_index_cache, value) != XTD_OK) {
-                    allocator.memory_free(value);
-                    goto xstring_cstr_split_with_length_1_release_and_return_null;
+                value = (char *) allocator.memory_malloc(allocated_value_size+2 * sizeof(char));
+                if (allocated_value_size == 1) {
+                    value[0] = '\0';
+                } else {
+                    if (xstring_cstr_sub_string_in_range_1(char_array, last_seperator_position, str_index_cache, value) != XTD_OK) {
+                        allocator.memory_free(value);
+                        goto xstring_cstr_split_with_length_1_release_and_return_null;
+                    }
                 }
                 found_words_counts++;
                 tmp_out = (char **) allocator.memory_realloc(out, found_words_counts * sizeof(char *));
@@ -473,17 +485,21 @@ static char **xstring_cstr_split_with_length_1(size_t char_array_length, char *c
                 }
                 out = tmp_out;
                 out[found_words_counts-1] = value;
-            } else {
-                str_index = str_index_cache;
             }
-            last_seperator_position = str_index;
+            str_index--;
+            allocated_value_size = 0;
+            last_seperator_position = str_index + (seperator_length == 1 ? 1 : 0);
         }
     }
-    if ((str_index_cache - last_seperator_position) > 1) {
-        value = (char *) allocator.memory_malloc((str_index_cache+1 - last_seperator_position) * sizeof(char));
-        if (xstring_cstr_sub_string_in_range_1(char_array, last_seperator_position, str_index_cache, value) != XTD_OK) {
-            allocator.memory_free(value);
-            goto xstring_cstr_split_with_length_1_release_and_return_null;
+    if (str_index_cache > 0) {
+        value = (char *) allocator.memory_malloc(allocated_value_size+2 * sizeof(char));
+        if (allocated_value_size == 1) {
+            value[0] = '\0';
+        } else {
+            if (xstring_cstr_sub_string_in_range_1(char_array, (last_seperator_position-(seperator_length == 1 && found_words_counts-1 == 0 ? 1 : 0)), str_index_cache, value) != XTD_OK) {
+                allocator.memory_free(value);
+                goto xstring_cstr_split_with_length_1_release_and_return_null;
+            }
         }
         found_words_counts++;
         tmp_out = (char **) allocator.memory_realloc(out, found_words_counts * sizeof(char *));
@@ -853,6 +869,7 @@ static char *xstring_cstr_concat_float_free_old(char *dest, float value, XAlloca
 /*!
     
 */
+#include <stdarg.h>
 static char *xstring_cstr_format_1(XAllocator allocator, const char *str, ...) {
     va_list ap;
     unsigned argscount;
@@ -861,6 +878,11 @@ static char *xstring_cstr_format_1(XAllocator allocator, const char *str, ...) {
     va_end(ap);
     return version_text;
 }
+
+/*!
+    
+*/
+#define xstring_cstr_format xstring_cstr_format_1
 
 /*!
 
@@ -946,11 +968,6 @@ static enum x_stat xstring_cstr_unescape_sequences(char *escaped_cstr, XAllocato
 
     return XTD_OK;
 }
-
-/*!
-    
-*/
-#define xstring_cstr_format xstring_cstr_format_1
 
 /* TODO */
 #define xstring_cstr_concat_pointer

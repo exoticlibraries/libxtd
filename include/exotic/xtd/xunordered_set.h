@@ -85,6 +85,21 @@ static XIterator *xiterator_init_xunordered_set_##T(xset_##T *container) {\
 /**
 
 */
+#define xunordered_set_index_of(T) xset_##T##_index_of
+
+/**
+
+*/
+#define xunordered_set_contains(T) xset_##T##_contains
+
+/**
+
+*/
+#define xunordered_set_element_count(T) xset_##T##_element_count
+
+/**
+
+*/
 #define xunordered_set_add(T) xset_##T##_add
 
 /**

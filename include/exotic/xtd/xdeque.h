@@ -90,6 +90,42 @@ static enum x_stat xdeque_##T##_new_config(struct xcontainer_config * const conf
     return XTD_OK;\
 }\
 \
+static enum x_stat xdeque_##T##_index_of(xdeque_##T *container, T element, size_t *index)\
+{\
+    size_t iter_index;\
+    for (iter_index = 0; iter_index < container->size; iter_index++) {\
+        size_t actual_index = (container->first + iter_index) & (container->capacity - 1);\
+        if (container->buffer[actual_index] == element) {\
+            *index = iter_index;\
+            return XTD_OK;\
+        }\
+    }\
+    return XTD_OUT_OF_RANGE_ERR;\
+}\
+\
+static bool xdeque_##T##_contains(xdeque_##T *container, T element)\
+{\
+    size_t iter_index;\
+    for (iter_index = 0; iter_index < container->size; iter_index++) {\
+        size_t actual_index = (container->first + iter_index) & (container->capacity - 1);\
+        if (container->buffer[actual_index] == element) {\
+            return TRUE;\
+        }\
+    }\
+    return FALSE;\
+}\
+\
+static size_t xdeque_##T##_element_count(xdeque_##T *container, T element)\
+{\
+    size_t iter_index;\
+    size_t occurence_count = 0;\
+    for (iter_index = 0; iter_index < container->size; iter_index++) {\
+        size_t actual_index = (container->first + iter_index) & (container->capacity - 1);\
+        if (container->buffer[actual_index] == element) occurence_count++;\
+    }\
+    return occurence_count;\
+}\
+\
 static enum x_stat xdeque_##T##_add_front(xdeque_##T *container, T element)\
 {\
     if (container->size >= container->max_size) {\
@@ -594,6 +630,21 @@ static XIterator *xiterator_init_xdeque_##T(xdeque_##T *container) \
 
 */
 #define xdeque_new_config(T) xdeque_##T##_new_config
+
+/**
+
+*/
+#define xdeque_index_of(T) xdeque_##T##_index_of
+
+/**
+
+*/
+#define xdeque_contains(T) xdeque_##T##_contains
+
+/**
+
+*/
+#define xdeque_element_count(T) xdeque_##T##_element_count
 
 /**
 

@@ -15,7 +15,13 @@ extern "C" {
 
 #include "xcommon.h"
 
-/**
+/*!
+
+*/
+#define XMATH_MAX(num1, num2) (((num1) >= (num2)) ? (num1) : (num2))
+#define XMATH_MIN(num1, num2) (((num1) <= (num2)) ? (num1) : (num2))
+
+/*
     \see http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2Float
 */
 static __XTD_INLINE__ size_t xmath_round_power_of_two(size_t num)
