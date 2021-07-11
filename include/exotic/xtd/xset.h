@@ -185,7 +185,7 @@ static bool xset_##T##_contains(xset_##T *container, T element)\
 {\
     size_t iter_index;\
     for (iter_index = 0; iter_index < container->size; iter_index++) {\
-        if (container->buffer[iter_index] == element) {\
+        if (container->element_equals(container->buffer[iter_index], element)) {\
             return TRUE;\
         }\
     }\
@@ -197,7 +197,7 @@ static size_t xset_##T##_element_count(xset_##T *container, T element)\
     size_t iter_index;\
     size_t occurence_count = 0;\
     for (iter_index = 0; iter_index < container->size; iter_index++) {\
-        if (container->buffer[iter_index] == element) occurence_count++;\
+        if (container->element_equals(container->buffer[iter_index], element)) occurence_count++;\
     }\
     return occurence_count;\
 }\

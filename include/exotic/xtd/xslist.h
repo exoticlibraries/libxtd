@@ -390,6 +390,48 @@ static enum x_stat xslist_##T##_get_node(xslist_##T *container, T element, xsing
     return XTD_VALUE_NOT_FOUND_ERR;\
 }\
 \
+static enum x_stat xslist_##T##_index_of(xslist_##T *container, T element, size_t *index)\
+{\
+    size_t iter_index = 0;\
+    xsingle_node_##T *node = container->head;\
+    while (node) {\
+        if (node->data == element) {\
+            *index = iter_index;\
+            return XTD_OK;\
+        }\
+        node = node->next;\
+        iter_index++;\
+    }\
+    return XTD_OUT_OF_RANGE_ERR;\
+}\
+\
+static bool xslist_##T##_contains(xslist_##T *container, T element)\
+{\
+    size_t iter_index = 0;\
+    xsingle_node_##T *node = container->head;\
+    while (node) {\
+        if (node->data == element) return TRUE;\
+        node = node->next;\
+        iter_index++;\
+    }\
+    return FALSE;\
+}\
+\
+static size_t xslist_##T##_element_count(xslist_##T *container, T element)\
+{\
+    size_t iter_index;\
+    size_t occurence_count = 0;\
+    xsingle_node_##T *node = container->head;\
+    while (node) {\
+        if (node->data == element) {\
+            occurence_count++;\
+        }\
+        node = node->next;\
+        iter_index++;\
+    }\
+    return occurence_count;\
+}\
+\
 \
 \
 
@@ -625,6 +667,21 @@ static XIterator *xiterator_init_xslist_##T(xslist_##T *container) \
 
 */
 #define xslist_new_config(T) xslist_##T##_new_config
+
+/**
+
+*/
+#define xslist_index_of(T) xslist_##T##_index_of
+
+/**
+
+*/
+#define xslist_contains(T) xslist_##T##_contains
+
+/**
+
+*/
+#define xslist_element_count(T) xslist_##T##_element_count
 
 /**
 
