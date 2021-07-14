@@ -46,7 +46,7 @@ static size_t xstring_cstr_length_1(char char_array[]) {
 static size_t xstring_cstr_length_2(char char_array[]) {
     size_t length = 0;
     if (char_array == NULL) { return length; }
-    for(; char_array[length] != '\0'; length++);
+    for (; char_array[length] != '\0'; length++);
     return length;
 }
 
