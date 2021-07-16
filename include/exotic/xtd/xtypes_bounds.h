@@ -200,6 +200,7 @@ static bool xbound_cstr_is_sentence_case(char *char_array) {
 /*!
 
 */
+<<<<<<< HEAD
 static bool xbound_cstr_is_decimal_with_seperator(char *char_array, char seperator) {
     size_t index = 0;
     bool found_e = FALSE;
@@ -314,6 +315,18 @@ static bool xbound_cstr_is_binary_with_prefix_and_seperator(char *char_array, ch
 #define xbound_cstr_is_binary(char_array) xbound_cstr_is_binary_with_prefix(char_array, XTD_NULL)
 
 //xbound_cstr_is_number
+=======
+static bool xbound_cstr_is_number(char *char_array) {
+    size_t length = 0;
+    if (char_array == NULL) { return FALSE; }
+    for (; char_array[length] != '\0'; length++) {
+        if (!xbound_char_is_digit(char_array[length])) {
+            return FALSE;
+        };
+    }
+    return TRUE;
+}
+>>>>>>> 1a3556cecc00c4aadd2380f70bea8a3c67a17a5e
 
 // TODO add int, long e.t.c. min max, bounds e.t.c
 
