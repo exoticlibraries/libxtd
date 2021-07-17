@@ -112,7 +112,6 @@ CESTER_TEST(xbound_cstr_is_sentence_case, _, {
     cester_assert_false(xbound_cstr_is_sentence_case("123libxtd"));
 })
 
-<<<<<<< HEAD
 CESTER_TEST(xbound_cstr_is_decimal_with_seperator, _, {
     cester_assert_true(xbound_cstr_is_decimal_with_seperator("1_000_000", '_'));
     cester_assert_true(xbound_cstr_is_decimal_with_seperator("1.000.000", '.'));
@@ -280,14 +279,6 @@ CESTER_TEST(xbound_cstr_is_binary, _, {
     cester_assert_false(xbound_cstr_is_binary(".123"));
     cester_assert_false(xbound_cstr_is_binary("123."));
 })
-=======
-CESTER_TEST(xbound_cstr_is_number, _, {
-    cester_assert_true(xbound_cstr_is_number("12345"));
-    cester_assert_true(xbound_cstr_is_number("12345.90778"));
-    cester_assert_true(xbound_cstr_is_number("12345f"));
-})
-
->>>>>>> 1a3556cecc00c4aadd2380f70bea8a3c67a17a5e
 
 
 
