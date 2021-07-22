@@ -73,7 +73,7 @@ static bool xbound_cstr_is_uppercase(char *char_array) {
     for (; char_array[length] != '\0'; length++) {
         if (!xbound_char_is_uppercase(char_array[length])) return FALSE;
     }
-    return TRUE;
+    return length > 0;
 }
 
 /*!
@@ -85,7 +85,7 @@ static bool xbound_cstr_is_lowercase(char *char_array) {
     for (; char_array[length] != '\0'; length++) {
         if (!xbound_char_is_lowercase(char_array[length])) return FALSE;
     }
-    return TRUE;
+    return length > 0;
 }
 
 /*!
@@ -97,7 +97,7 @@ static bool xbound_cstr_is_alpha(char *char_array) {
     for (; char_array[length] != '\0'; length++) {
         if (!xbound_char_is_alpha(char_array[length])) return FALSE;
     }
-    return TRUE;
+    return length > 0;
 }
 
 /*!
@@ -109,7 +109,7 @@ static bool xbound_cstr_is_digit(char *char_array) {
     for (; char_array[length] != '\0'; length++) {
         if (!xbound_char_is_digit(char_array[length])) return FALSE;
     }
-    return TRUE;
+    return length > 0;
 }
 
 /*!
@@ -121,7 +121,7 @@ static bool xbound_cstr_is_alphanum(char *char_array) {
     for (; char_array[length] != '\0'; length++) {
         if (!xbound_char_is_alphanum(char_array[length])) return FALSE;
     }
-    return TRUE;
+    return length > 0;
 }
 
 /*!
@@ -133,7 +133,7 @@ static bool xbound_cstr_is_white_space(char *char_array) {
     for (; char_array[length] != '\0'; length++) {
         if (!xbound_char_is_white_space(char_array[length])) return FALSE;
     }
-    return TRUE;
+    return length > 0;
 }
 
 /*!
@@ -145,7 +145,7 @@ static bool xbound_cstr_is_cntrl(char *char_array) {
     for (; char_array[length] != '\0'; length++) {
         if (!xbound_char_is_cntrl(char_array[length])) return FALSE;
     }
-    return TRUE;
+    return length > 0;
 }
 
 /*!
