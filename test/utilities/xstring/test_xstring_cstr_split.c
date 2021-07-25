@@ -31,29 +31,29 @@ CESTER_TEST(xstring_cstr_split_with_length, _, {
     allocator.memory_realloc = realloc;
     allocator.memory_free = free;
 
-    cester_assert_ptr_equal(xstring_cstr_split_with_length(text1_length, text1, XTD_NULL, allocator), XTD_NULL);
-    cester_assert_ptr_equal(xstring_cstr_split_with_length(text1_length, XTD_NULL, XTD_NULL, allocator), XTD_NULL);
-    splited1 = xstring_cstr_split_with_length(text1_length, text1, " ", allocator);
+    cester_assert_ptr_equal(xstring_cstr_split_with_length(allocator, text1_length, text1, XTD_NULL), XTD_NULL);
+    cester_assert_ptr_equal(xstring_cstr_split_with_length(allocator, text1_length, XTD_NULL, XTD_NULL), XTD_NULL);
+    splited1 = xstring_cstr_split_with_length(allocator, text1_length, text1, " ");
     /*cester_assert_ptr_not_equal(splited1, XTD_NULL);*/
     cester_assert_int_eq(xptp_array_size((void **)splited1), 7);
     cester_assert_str_equal_(splited1[0], "libxtd");
     cester_assert_str_equal_(splited1[2], "length");
     cester_assert_str_equal_(splited1[3], "and");
     cester_assert_str_equal_(splited1[6], "xstring");
-    splited2 = xstring_cstr_split_with_length(text2_length, text2, "o w", allocator);
+    splited2 = xstring_cstr_split_with_length(allocator, text2_length, text2, "o w");
     /*cester_assert_ptr_not_equal(splited2, XTD_NULL);*/
     cester_assert_int_eq(xptp_array_size((void **)splited2), 2);
     cester_assert_str_equal_(splited2[0], "Hell");
     cester_assert_str_equal_(splited2[1], "orld");
-    splited3 = xstring_cstr_split_with_length(17, "Whole cake island", "", allocator);
+    splited3 = xstring_cstr_split_with_length(allocator, 17, "Whole cake island", "");
     /*cester_assert_ptr_not_equal(splited3, XTD_NULL);*/
     cester_assert_int_eq(xptp_array_size((void **)splited3), 1);
     cester_assert_str_equal_(splited3[0], "Whole cake island");
     /*cester_assert_ptr_equal(splited3[1], XTD_NULL);*/
 
-    xfreep2p((void **)splited1, allocator);
-    xfreep2p((void **)splited2, allocator);
-    xfreep2p((void **)splited3, allocator);
+    xfreep2p(allocator, (void **)splited1);
+    xfreep2p(allocator, (void **)splited2);
+    xfreep2p(allocator, (void **)splited3);
 })
 
 CESTER_TEST(xstring_cstr_split, _, {
@@ -72,29 +72,29 @@ CESTER_TEST(xstring_cstr_split, _, {
     allocator.memory_realloc = realloc;
     allocator.memory_free = free;
 
-    cester_assert_ptr_equal(xstring_cstr_split(text1, XTD_NULL, allocator), XTD_NULL);
-    cester_assert_ptr_equal(xstring_cstr_split(XTD_NULL, XTD_NULL, allocator), XTD_NULL);
-    splited1 = xstring_cstr_split(text1, " ", allocator);
+    cester_assert_ptr_equal(xstring_cstr_split(allocator, text1, XTD_NULL), XTD_NULL);
+    cester_assert_ptr_equal(xstring_cstr_split(allocator, XTD_NULL, XTD_NULL), XTD_NULL);
+    splited1 = xstring_cstr_split(allocator, text1, " ");
     cester_assert_ptr_not_equal(splited1, XTD_NULL);
     cester_assert_int_eq(xptp_array_size((void **)splited1), 7);
     cester_assert_str_equal_(splited1[0], "libxtd");
     cester_assert_str_equal_(splited1[2], "length");
     cester_assert_str_equal_(splited1[3], "and");
     cester_assert_str_equal_(splited1[6], "xstring");
-    splited2 = xstring_cstr_split(text2, "o w", allocator);
+    splited2 = xstring_cstr_split(allocator, text2, "o w");
     cester_assert_ptr_not_equal(splited2, XTD_NULL);
     cester_assert_int_eq(xptp_array_size((void **)splited2), 2);
     cester_assert_str_equal_(splited2[0], "Hell");
     cester_assert_str_equal(splited2[1], "orld");
-    splited3 = xstring_cstr_split("Whole cake island", "", allocator);
+    splited3 = xstring_cstr_split(allocator, "Whole cake island", "");
     cester_assert_ptr_not_equal(splited3, XTD_NULL);
     cester_assert_int_eq(xptp_array_size((void **)splited3), 1);
     cester_assert_str_equal_(splited3[0], "Whole cake island");
     cester_assert_ptr_equal(splited3[1], XTD_NULL);
-    splited4 = xstring_cstr_split(text3, "\n", allocator);
+    splited4 = xstring_cstr_split(allocator, text3, "\n");
     cester_assert_ptr_not_equal(splited4, XTD_NULL);
     cester_assert_int_eq(xptp_array_size((void **)splited4), 12);
-    splited5 = xstring_cstr_split(text4, "o w", allocator);
+    splited5 = xstring_cstr_split(allocator, text4, "o w");
     cester_assert_ptr_not_equal(splited5, XTD_NULL);
     cester_assert_int_eq(xptp_array_size((void **)splited5), 3);
     cester_assert_str_equal_(splited5[0], "Hell");
@@ -104,11 +104,11 @@ CESTER_TEST(xstring_cstr_split, _, {
     for (; splited5[index] != XTD_NULL; index++) printf("::::::::::::::::::::::::::::::::::::::::%s\n", splited5[index]);
     return;
 
-    xfreep2p((void **)splited1, allocator);
-    xfreep2p((void **)splited2, allocator);
-    xfreep2p((void **)splited3, allocator);
-    xfreep2p((void **)splited4, allocator);
-    xfreep2p((void **)splited5, allocator);
+    xfreep2p(allocator, (void **)splited1);
+    xfreep2p(allocator, (void **)splited2);
+    xfreep2p(allocator, (void **)splited3);
+    xfreep2p(allocator, (void **)splited4);
+    xfreep2p(allocator, (void **)splited5);
 })
 
 CESTER_OPTIONS(

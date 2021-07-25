@@ -317,7 +317,7 @@ static size_t xptp_array_size(void **p2p) {
 /*!
 
 */
-static void xfreep2p(void **p2p, XAllocator allocator) {
+static void xfreep2p(XAllocator allocator, void **p2p) {
     size_t index = 0;
     if (p2p == XTD_NULL) { return; }
     for (; p2p[index] != XTD_NULL; index++) {
