@@ -15,9 +15,14 @@ CESTER_COMMENT(
 #define cester_assert_str_equal_(x,y) cester_assert_true(xstring_cstr_equals(x,y))
 
 #ifdef __XTD_STDC_VERSION__
+#define TEST_CASE_CHAR_ARRAY_HELLO_WORLD {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'}
+#else
+#define TEST_CASE_CHAR_ARRAY_HELLO_WORLD "Hello world"
+#endif
+
 CESTER_TEST(xstring_cstr_length_1, _, {
     char *text1 = "libxtd xstring length";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
 
     cester_assert_int_eq(xstring_cstr_length(text1), 21);
     cester_assert_int_eq(xstring_cstr_length(text2), 11);
@@ -26,7 +31,7 @@ CESTER_TEST(xstring_cstr_length_1, _, {
 
 CESTER_TEST(xstring_cstr_length_2, _, {
     char *text1 = "libxtd xstring length";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
 
     cester_assert_int_eq(xstring_cstr_length_2(text1), 21);
     cester_assert_int_eq(xstring_cstr_length_2(text2), 11);
@@ -35,7 +40,7 @@ CESTER_TEST(xstring_cstr_length_2, _, {
 
 CESTER_TEST(xstring_cstr_length_3, _, {
     char *text1 = "libxtd xstring length";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
 
     cester_assert_int_eq(xstring_cstr_length_3(text1), 21);
     cester_assert_int_eq(xstring_cstr_length_3(text2), 11);
@@ -44,7 +49,7 @@ CESTER_TEST(xstring_cstr_length_3, _, {
 
 CESTER_TEST(xstring_cstr_length, _, {
     char *text1 = "libxtd xstring length";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
 
     cester_assert_int_eq(xstring_cstr_length_1(text1), xstring_cstr_length_2(text1));
     cester_assert_int_eq(xstring_cstr_length_1(text1), xstring_cstr_length_3(text1));
@@ -59,7 +64,7 @@ CESTER_TEST(xstring_cstr_length, _, {
 
 CESTER_TEST(xstring_cstr_equals, _, {
     char *text1 = "libxtd xstring length";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
 
     cester_assert_str_equal_(text1, "libxtd xstring length");
     cester_assert_true(xstring_cstr_equals(text1, "libxtd xstring length"));
@@ -80,7 +85,7 @@ CESTER_TEST(xstring_cstr_equals, _, {
 
 CESTER_TEST(xstring_cstr_equals_ignore_case, _, {
     char *text1 = "libxtd xstring length";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
 
     cester_assert_true(xstring_cstr_equals_ignore_case(text1, "LIBXTD XSTRING LENGTH"));
     cester_assert_true(xstring_cstr_equals_ignore_case(text2, "HELLO WORLD"));
@@ -136,7 +141,7 @@ CESTER_TEST(xstring_cstr_compare_ignore_case, _, {
 
 CESTER_TEST(xstring_cstr_is_empty, _, {
     char *text1 = "libxtd xstring length";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
     char *text3 = "";
     char text4[20] = {};
 
@@ -150,8 +155,6 @@ CESTER_TEST(xstring_cstr_is_empty, _, {
 CESTER_TODO_TEST(xstring_cstr_hashcode, _, {
     
 })
-
-#endif
 
 CESTER_OPTIONS(
     CESTER_VERBOSE_LEVEL(2);

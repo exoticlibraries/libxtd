@@ -9,10 +9,16 @@
 
 #define cester_assert_str_equal_(x,y) cester_assert_true(xstring_cstr_equals(x,y))
 
+#ifdef __XTD_STDC_VERSION__
+#define TEST_CASE_CHAR_ARRAY_HELLO_WORLD {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'}
+#else
+#define TEST_CASE_CHAR_ARRAY_HELLO_WORLD "Hello world"
+#endif
+
 CESTER_TEST(xstring_cstr_sub_string_in_range_with_length, _, {
     enum x_stat status;
     char *text1 = "libxtd xstring length xstring";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
     size_t text1_length = xstring_cstr_length(text1);
     size_t text2_length = xstring_cstr_length(text2);
     char *substr_value1 = (char *) malloc(text1_length * sizeof(char));
@@ -62,7 +68,7 @@ CESTER_TEST(xstring_cstr_sub_string_in_range_with_length, _, {
 CESTER_TEST(xstring_cstr_sub_string_in_range, _, {
     enum x_stat status;
     char *text1 = "libxtd xstring length xstring";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
     size_t text1_length = xstring_cstr_length(text1);
     size_t text2_length = xstring_cstr_length(text2);
     char *substr_value1 = (char *) malloc(text1_length * sizeof(char));
@@ -112,7 +118,7 @@ CESTER_TEST(xstring_cstr_sub_string_in_range, _, {
 CESTER_TEST(xstring_cstr_sub_string, _, {
     enum x_stat status;
     char *text1 = "libxtd xstring length xstring";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
     size_t text1_length = xstring_cstr_length(text1);
     size_t text2_length = xstring_cstr_length(text2);
     char *substr_value1 = (char *) malloc(text1_length * sizeof(char));
@@ -154,7 +160,7 @@ CESTER_TEST(xstring_cstr_sub_string, _, {
 
 CESTER_TEST(xstring_cstr_char_at, _, {
     char *text1 = "libxtd xstring length";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
 
     cester_assert_char_eq(xstring_cstr_char_at(text1, 0), 'l');
     cester_assert_char_eq(xstring_cstr_char_at(text1, 20), 'h');

@@ -7,6 +7,7 @@ set(INCLUDE_PATHS -I${PWD}/../../include/ -I${PWD}/../include/ -I../../include/ 
 include_directories(${PWD}/../../include/ ${PWD}/../include/ ../../include/ ../include/)
 add_executable(cester_test ./empty_c_file.c)
 set_target_properties(cester_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY ./build/ )
+set(echo_var "")
 
 IF (WIN32)
     set(FILE_EXT ".exe")
@@ -18,6 +19,9 @@ foreach(filepath ${files})
     message(STATUS "FilePath: " ${filepath}  )
     get_filename_component(filename ${filepath} NAME)
     get_filename_component(filenameonly ${filepath} NAME_WLE)
+    if("${filepath}" MATCHES "test_xstring_cstr_split.c")
+        set(echo_var "echo")
+    endif()
     
     add_custom_target(${filenameonly}__
         
@@ -26,14 +30,14 @@ foreach(filepath ${files})
         COMMAND echo -------------------------------------------
         
         # clang 
-        COMMAND clang -I. ${INCLUDE_PATHS} ${filepath} -o ./build/${filenameonly}_clang${FILE_EXT}
-        COMMAND clang -ansi -pedantic-errors -I. ${INCLUDE_PATHS} ${filepath} -o ./build/${filenameonly}_clang_ansi${FILE_EXT}
-        #COMMAND clang++ -I. ${INCLUDE_PATHS} ${filepath} -o ./build/${filenameonly}_clang_cpp${FILE_EXT}
+        COMMAND ${echo_var} clang -I. ${INCLUDE_PATHS} ${filepath} -o ./build/${filenameonly}_clang${FILE_EXT}
+        COMMAND ${echo_var} clang -ansi -pedantic-errors -I. ${INCLUDE_PATHS} ${filepath} -o ./build/${filenameonly}_clang_ansi${FILE_EXT}
+        #COMMAND ${echo_var} clang++ -I. ${INCLUDE_PATHS} ${filepath} -o ./build/${filenameonly}_clang_cpp${FILE_EXT}
     
         # gcc
-        COMMAND gcc -I. ${INCLUDE_PATHS} ${filepath} -o ./build/${filenameonly}_gcc${FILE_EXT}
-        COMMAND gcc -ansi -pedantic-errors -I. ${INCLUDE_PATHS} ${filepath} -o ./build/${filenameonly}_gcc_ansi${FILE_EXT}
-        #COMMAND g++ -I. ${INCLUDE_PATHS} ${filepath} -o ./build/${filenameonly}_gcc_cpp${FILE_EXT}
+        COMMAND ${echo_var} gcc -I. ${INCLUDE_PATHS} ${filepath} -o ./build/${filenameonly}_gcc${FILE_EXT}
+        COMMAND ${echo_var} gcc -ansi -pedantic-errors -I. ${INCLUDE_PATHS} ${filepath} -o ./build/${filenameonly}_gcc_ansi${FILE_EXT}
+        #COMMAND ${echo_var} g++ -I. ${INCLUDE_PATHS} ${filepath} -o ./build/${filenameonly}_gcc_cpp${FILE_EXT}
     )
     
     add_custom_command(TARGET cester_test
@@ -44,14 +48,14 @@ foreach(filepath ${files})
         COMMAND echo -------------------------------------------
         
         # clang
-        COMMAND ./build/${filenameonly}_clang${FILE_EXT}
-        COMMAND ./build/${filenameonly}_clang_ansi${FILE_EXT} --cester-output=junitxml
-        #COMMAND ./build/${filenameonly}_clang_cpp${FILE_EXT} --cester-output=tap
+        COMMAND ${echo_var} ./build/${filenameonly}_clang${FILE_EXT}
+        COMMAND ${echo_var} ./build/${filenameonly}_clang_ansi${FILE_EXT} --cester-output=junitxml
+        #COMMAND ${echo_var} ./build/${filenameonly}_clang_cpp${FILE_EXT} --cester-output=tap
         
         # gcc
-        COMMAND ./build/${filenameonly}_gcc${FILE_EXT}
-        COMMAND ./build/${filenameonly}_gcc_ansi${FILE_EXT} --cester-output=junitxml
-        #COMMAND ./build/${filenameonly}_gcc_cpp${FILE_EXT} --cester-output=tapV13
+        COMMAND ${echo_var} ./build/${filenameonly}_gcc${FILE_EXT}
+        COMMAND ${echo_var} ./build/${filenameonly}_gcc_ansi${FILE_EXT} --cester-output=junitxml
+        #COMMAND ${echo_var} ./build/${filenameonly}_gcc_cpp${FILE_EXT} --cester-output=tapV13
     )
     
     add_dependencies(cester_test ${filenameonly}__)

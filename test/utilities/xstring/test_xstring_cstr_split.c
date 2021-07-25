@@ -9,13 +9,21 @@
 
 #define cester_assert_str_equal_(x,y) cester_assert_true(xstring_cstr_equals(x,y))
 
+#ifdef __XTD_STDC_VERSION__
+#define TEST_CASE_CHAR_ARRAY_HELLO_WORLD {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'}
+#define TEST_CASE_CHAR_ARRAY_HELLO_WORLD2 {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd', 'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'}
+#else
+#define TEST_CASE_CHAR_ARRAY_HELLO_WORLD "Hello world"
+#define TEST_CASE_CHAR_ARRAY_HELLO_WORLD2 "Hello world Hello world"
+#endif
+
 CESTER_TEST(xstring_cstr_split_with_length, _, {
     XAllocator allocator;
     char **splited1;
     char **splited2;
     char **splited3;
     char *text1 = "libxtd xstring length and string for xstring";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
     size_t text1_length = xstring_cstr_length(text1);
     size_t text2_length = xstring_cstr_length(text2);
     allocator.memory_malloc = malloc;
@@ -56,9 +64,9 @@ CESTER_TEST(xstring_cstr_split, _, {
     char **splited4;
     char **splited5;
     char *text1 = "libxtd xstring length and string for xstring";
-    char text2[20] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
     char *text3 = "libxtd xstring \nlength \nand \nstring for xstring\n\n\n\n\n\n\n\n";
-    char text4[40] = {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd', 'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'};
+    char text4[40] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD2;
     allocator.memory_malloc = malloc;
     allocator.memory_calloc = calloc;
     allocator.memory_realloc = realloc;

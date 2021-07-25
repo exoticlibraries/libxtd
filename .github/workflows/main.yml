@@ -30,6 +30,7 @@ jobs:
             test/
           test-exclude-file-pattern: |
             crash_test.c
+            test_xstring_cstr_split
           compiler-options-for-tests: |
             -I. -I../include -I../../include -I../../../include -I./include
           regression-cli-options: |
