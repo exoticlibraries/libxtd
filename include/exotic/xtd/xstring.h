@@ -1266,13 +1266,97 @@ static enum x_stat xstring_cstr_unescape_sequences(XAllocator allocator, char *e
     return XTD_OK;
 }
 
+/*!
+
+*/
+#define xstring_cstr_char_to_lower(ch) ((ch >= 'A' && ch <= 'Z') ? ch - 'A' + 'a' : ch)
+
+/*!
+
+*/
+#define xstring_cstr_char_to_lower_ref(ch) ((ch >= 'A' && ch <= 'Z') ? ch += 32 : ch)
+
+/*!
+
+*/
+#define xstring_cstr_char_to_upper(ch) ((ch >= 'a' && ch <= 'z') ? ch - 'a' + 'A' : ch)
+
+/*!
+
+*/
+#define xstring_cstr_char_to_upper_ref(ch) ((ch >= 'a' && ch <= 'z') ? ch -= 32 : ch)
+
+/*!
+
+*/
+static enum x_stat xstring_cstr_to_lower_case(XAllocator allocator, char *char_array, char **out) {
+    size_t index;
+    size_t length;
+    char *changed_case;
+    
+    length = xstring_cstr_length(char_array);
+    if (length == 0 || out == XTD_NULL) return XTD_NO_OP;
+    changed_case = (char *) allocator.memory_calloc(length+1, sizeof(char));
+    if (!changed_case) return XTD_ALLOC_ERR;
+    for (index = 0; index < length; index++) {
+        changed_case[index] = xstring_cstr_char_to_lower(char_array[index]);
+    }
+    changed_case[length] = '\0';
+    *out = changed_case;
+
+    return XTD_OK;
+}
+
+/*!
+
+*/
+static char *xstring_cstr_to_lower_case_ref(char *char_array) {
+    size_t length = 0;
+    for (; char_array[length] != '\0';) {
+        xstring_cstr_char_to_lower_ref(char_array[length]);
+        length++;
+    }
+    return char_array;
+}
+
+/*!
+
+*/
+static enum x_stat xstring_cstr_to_upper_case(XAllocator allocator, char *char_array, char **out) {
+    size_t index;
+    size_t length;
+    char *changed_case;
+    
+    length = xstring_cstr_length(char_array);
+    if (length == 0 || out == XTD_NULL) return XTD_NO_OP;
+    changed_case = (char *) allocator.memory_calloc(length+1, sizeof(char));
+    if (!changed_case) return XTD_ALLOC_ERR;
+    for (index = 0; index < length; index++) {
+        changed_case[index] = xstring_cstr_char_to_upper(char_array[index]);
+    }
+    changed_case[length] = '\0';
+    *out = changed_case;
+
+    return XTD_OK;
+}
+
+/*!
+
+*/
+static char *xstring_cstr_to_upper_case_ref(char *char_array) {
+    size_t length = 0;
+    for (; char_array[length] != '\0';) {
+        xstring_cstr_char_to_upper_ref(char_array[length]);
+        length++;
+    }
+    return char_array;
+}
+
 /* TODO */
 #define xstring_cstr_hash
 #define xstring_cstr_replace
 #define xstring_cstr_replace_first
 #define xstring_cstr_replace_last
-#define xstring_cstr_to_lower_case
-#define xstring_cstr_to_upper_case
 #define xstring_cstr_trim
 
 /*

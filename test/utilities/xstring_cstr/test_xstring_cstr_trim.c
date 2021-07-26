@@ -8,12 +8,19 @@
 #include <exotic/xtd/xiterator.h>
 
 #define cester_assert_str_equal_(x,y) cester_assert_true(xstring_cstr_equals(x,y))
+#define cester_assert_str_not_equal_(x,y) cester_assert_false(xstring_cstr_equals(x,y))
 
-CESTER_TODO_TEST(xstring_cstr_to_lower_case, _, {
+#ifdef __XTD_STDC_VERSION__
+#define TEST_CASE_CHAR_ARRAY_HELLO_WORLD {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'}
+#else
+#define TEST_CASE_CHAR_ARRAY_HELLO_WORLD "Hello world"
+#endif
+
+CESTER_TODO_TEST(xstring_cstr_trim_front, _, {
     
 })
 
-CESTER_TODO_TEST(xstring_cstr_to_upper_case, _, {
+CESTER_TODO_TEST(xstring_cstr_trim_back, _, {
     
 })
 
@@ -21,7 +28,16 @@ CESTER_TODO_TEST(xstring_cstr_trim, _, {
     
 })
 
+CESTER_TODO_TEST(xstring_cstr_trim_char, _, {
+    remove a dupplicate char in successon
+})
+
+CESTER_TODO_TEST(xstring_cstr_trim_white_space, _, {
+    
+})
+
 CESTER_OPTIONS(
     CESTER_VERBOSE_LEVEL(2);
 )
+
 
