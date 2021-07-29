@@ -13,8 +13,8 @@
 CESTER_BODY(
     typedef char* str;
     typedef char** char_array;
-    SETUP_XVECTOR_FOR(char);
-    SETUP_XVECTOR_FOR(int);
+    SETUP_XVECTOR_FOR(char)
+    SETUP_XVECTOR_FOR(int)
     SETUP_XHASHTABLE_FOR(char, int)
     SETUP_GET_KEYS_VALUES_XVECTOR_FOR_XHASHTABLE(char, int)
 

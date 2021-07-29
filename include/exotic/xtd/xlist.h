@@ -34,28 +34,28 @@ extern "C" {
     void  (*memory_free)   (void *block);\
 } xlist_##T;\
 \
-enum x_stat xlist_##T##_new(xlist_##T **out);\
-enum x_stat xlist_##T##_new_config(struct xcontainer_config * const config, xlist_##T **out);\
+static enum x_stat xlist_##T##_new(xlist_##T **out);\
+static enum x_stat xlist_##T##_new_config(struct xcontainer_config * const config, xlist_##T **out);\
 static T xlist_##T##_unlink(xlist_##T *container, xnode_##T *node);\
 static bool xlist_##T##_unlink_all(xlist_##T *container, void (*cb) (T));\
 static enum x_stat xlist_##T##_get_node_at(xlist_##T *container, size_t index, xnode_##T **out);\
 static xnode_##T *xlist_##T##_get_node(xlist_##T *container, T element);\
 \
-enum x_stat xlist_##T##_new(xlist_##T **out) \
+static enum x_stat xlist_##T##_new(xlist_##T **out) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config(&config);\
     return xlist_##T##_new_config(&config, out);\
 }\
 \
-enum x_stat xlist_##T##_new_max_size(xlist_##T **out, size_t max_size) \
+static enum x_stat xlist_##T##_new_max_size(xlist_##T **out, size_t max_size) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config_max_size(&config, max_size);\
     return xlist_##T##_new_config(&config, out);\
 }\
 \
-enum x_stat xlist_##T##_new_config(struct xcontainer_config * const config, xlist_##T **out) \
+static enum x_stat xlist_##T##_new_config(struct xcontainer_config * const config, xlist_##T **out) \
 {\
     xlist_##T *container = (xlist_##T *) config->allocator.memory_calloc(1, sizeof(xlist_##T));\
     if (!container) {\
@@ -70,13 +70,13 @@ enum x_stat xlist_##T##_new_config(struct xcontainer_config * const config, xlis
     return XTD_OK;\
 }\
 \
-enum x_stat xlist_##T##_destroy(xlist_##T *container) \
+static enum x_stat xlist_##T##_destroy(xlist_##T *container) \
 {\
     container->memory_free((void *)container);\
     return XTD_OK;\
 }\
 \
-enum x_stat xlist_##T##_add_front(xlist_##T *container, T element)\
+static enum x_stat xlist_##T##_add_front(xlist_##T *container, T element)\
 {\
     xnode_##T *node;\
     if (container->size >= container->max_size) {\
@@ -99,7 +99,7 @@ enum x_stat xlist_##T##_add_front(xlist_##T *container, T element)\
     return XTD_OK;\
 }\
 \
-enum x_stat xlist_##T##_add_back(xlist_##T *container, T element)\
+static enum x_stat xlist_##T##_add_back(xlist_##T *container, T element)\
 {\
     xnode_##T *node;\
     if (container->size >= container->max_size) {\
@@ -122,12 +122,12 @@ enum x_stat xlist_##T##_add_back(xlist_##T *container, T element)\
     return XTD_OK;\
 }\
 \
-enum x_stat xlist_##T##_add(xlist_##T *container, T element)\
+static enum x_stat xlist_##T##_add(xlist_##T *container, T element)\
 {\
     return xlist_##T##_add_back(container, element);\
 }\
 \
-enum x_stat xlist_##T##_add_at(xlist_##T *container, T element, size_t index)\
+static enum x_stat xlist_##T##_add_at(xlist_##T *container, T element, size_t index)\
 {\
     xnode_##T *new_node;\
     xnode_##T *last_node;\
@@ -155,7 +155,7 @@ enum x_stat xlist_##T##_add_at(xlist_##T *container, T element, size_t index)\
     return XTD_OK;\
 }\
 \
-enum x_stat xlist_##T##_get_at(xlist_##T *container, size_t index, T *out)\
+static enum x_stat xlist_##T##_get_at(xlist_##T *container, size_t index, T *out)\
 {\
     enum x_stat status;\
     xnode_##T *node;\
@@ -172,7 +172,7 @@ enum x_stat xlist_##T##_get_at(xlist_##T *container, size_t index, T *out)\
     return status;\
 }\
 \
-enum x_stat xlist_##T##_get_front(xlist_##T *container, T *out)\
+static enum x_stat xlist_##T##_get_front(xlist_##T *container, T *out)\
 {\
     if (!out) {\
         return XTD_OUT_PARAM_NULL_ERR;\
@@ -184,7 +184,7 @@ enum x_stat xlist_##T##_get_front(xlist_##T *container, T *out)\
     return XTD_OK;\
 }\
 \
-enum x_stat xlist_##T##_get_back(xlist_##T *container, T *out)\
+static enum x_stat xlist_##T##_get_back(xlist_##T *container, T *out)\
 {\
     size_t last;\
     if (!out) {\
@@ -197,7 +197,7 @@ enum x_stat xlist_##T##_get_back(xlist_##T *container, T *out)\
     return XTD_OK;\
 }\
 \
-enum x_stat xlist_##T##_replace_at(xlist_##T *container, size_t index, T element, T *out)\
+static enum x_stat xlist_##T##_replace_at(xlist_##T *container, size_t index, T element, T *out)\
 {\
     enum x_stat status;\
     xnode_##T *node;\
@@ -216,7 +216,7 @@ enum x_stat xlist_##T##_replace_at(xlist_##T *container, size_t index, T element
     return XTD_OK;\
 }\
 \
-enum x_stat xlist_##T##_remove(xlist_##T *container, T element, T *out)\
+static enum x_stat xlist_##T##_remove(xlist_##T *container, T element, T *out)\
 {\
     xnode_##T *node = xlist_##T##_get_node(container, element);\
     if (!node) {\
@@ -229,7 +229,7 @@ enum x_stat xlist_##T##_remove(xlist_##T *container, T element, T *out)\
     return XTD_OK;\
 }\
 \
-enum x_stat xlist_##T##_remove_at(xlist_##T *container, size_t index, T *out)\
+static enum x_stat xlist_##T##_remove_at(xlist_##T *container, size_t index, T *out)\
 {\
     xnode_##T *node;\
     enum x_stat status = xlist_##T##_get_node_at(container, index, &node);\
@@ -243,7 +243,7 @@ enum x_stat xlist_##T##_remove_at(xlist_##T *container, size_t index, T *out)\
     return XTD_OK;\
 }\
 \
-enum x_stat xlist_##T##_remove_front(xlist_##T *container, T *out)\
+static enum x_stat xlist_##T##_remove_front(xlist_##T *container, T *out)\
 {\
     T element;\
     if (container->size == 0) {\
@@ -256,7 +256,7 @@ enum x_stat xlist_##T##_remove_front(xlist_##T *container, T *out)\
     return XTD_OK;\
 }\
 \
-enum x_stat xlist_##T##_remove_back(xlist_##T *container, T *out)\
+static enum x_stat xlist_##T##_remove_back(xlist_##T *container, T *out)\
 {\
     T element;\
     if (container->size == 0) {\
@@ -269,7 +269,7 @@ enum x_stat xlist_##T##_remove_back(xlist_##T *container, T *out)\
     return XTD_OK;\
 }\
 \
-enum x_stat xlist_##T##_clear(xlist_##T *container)\
+static enum x_stat xlist_##T##_clear(xlist_##T *container)\
 {\
     bool unlinked_all = xlist_##T##_unlink_all(container, NULL);\
     if (unlinked_all) {\
@@ -354,6 +354,48 @@ static xnode_##T *xlist_##T##_get_node(xlist_##T *container, T element)\
     return NULL;\
 }\
 \
+static enum x_stat xlist_##T##_index_of(xlist_##T *container, T element, size_t *index)\
+{\
+    size_t iter_index = 0;\
+    xnode_##T *node = container->head;\
+    while (node) {\
+        if (node->data == element) {\
+            *index = iter_index;\
+            return XTD_OK;\
+        }\
+        node = node->next;\
+        iter_index++;\
+    }\
+    return XTD_OUT_OF_RANGE_ERR;\
+}\
+\
+static bool xlist_##T##_contains(xlist_##T *container, T element)\
+{\
+    size_t iter_index = 0;\
+    xnode_##T *node = container->head;\
+    while (node) {\
+        if (node->data == element) return TRUE;\
+        node = node->next;\
+        iter_index++;\
+    }\
+    return FALSE;\
+}\
+\
+static size_t xlist_##T##_element_count(xlist_##T *container, T element)\
+{\
+    size_t iter_index;\
+    size_t occurence_count = 0;\
+    xnode_##T *node = container->head;\
+    while (node) {\
+        if (node->data == element) {\
+            occurence_count++;\
+        }\
+        node = node->next;\
+        iter_index++;\
+    }\
+    return occurence_count;\
+}\
+\
 \
 \
 
@@ -366,7 +408,7 @@ static xnode_##T *xlist_##T##_get_node(xlist_##T *container, T element)\
     xlist_##T *container;\
 } xlist_iterator_##T;\
 \
-void xlist_iterator_##T##_reset_forward(void *iterator_) {\
+static void xlist_iterator_##T##_reset_forward(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -379,7 +421,7 @@ void xlist_iterator_##T##_reset_forward(void *iterator_) {\
     iterator->forward_index = 0;\
 }\
 \
-void xlist_iterator_##T##_reset_backward(void *iterator_) {\
+static void xlist_iterator_##T##_reset_backward(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -392,7 +434,7 @@ void xlist_iterator_##T##_reset_backward(void *iterator_) {\
     iterator->backward_index = container->size-1;\
 }\
 \
-void xlist_iterator_##T##_reset(void *iterator_) {\
+static void xlist_iterator_##T##_reset(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -407,7 +449,7 @@ void xlist_iterator_##T##_reset(void *iterator_) {\
     iterator->backward_index = container->size-1;\
 }\
 \
-void xlist_iterator_##T##_destroy(void *iterator_) {\
+static void xlist_iterator_##T##_destroy(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -424,7 +466,7 @@ void xlist_iterator_##T##_destroy(void *iterator_) {\
     container->memory_free(iterator);\
 }\
 \
-void xlist_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
+static void xlist_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -439,7 +481,7 @@ void xlist_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
     }\
 }\
 \
-void xlist_iterator_##T##_decrement(void *iterator_) {\
+static void xlist_iterator_##T##_decrement(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -457,7 +499,7 @@ void xlist_iterator_##T##_decrement(void *iterator_) {\
     }\
 }\
 \
-void xlist_iterator_##T##_increment(void *iterator_) {\
+static void xlist_iterator_##T##_increment(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -475,7 +517,7 @@ void xlist_iterator_##T##_increment(void *iterator_) {\
     }\
 }\
 \
-bool xlist_iterator_##T##_has_next(void *iterator_) {\
+static bool xlist_iterator_##T##_has_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -487,7 +529,7 @@ bool xlist_iterator_##T##_has_next(void *iterator_) {\
     return (container != XTD_NULL && xlist_iterator->forward_iter != XTD_NULL && xnode_has_data(xlist_iterator->forward_iter));\
 }\
 \
-void *xlist_iterator_##T##_next(void *iterator_) {\
+static void *xlist_iterator_##T##_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -503,7 +545,7 @@ void *xlist_iterator_##T##_next(void *iterator_) {\
     return (void *) value;\
 }\
 \
-bool xlist_iterator_##T##_has_prev(void *iterator_) {\
+static bool xlist_iterator_##T##_has_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -515,7 +557,7 @@ bool xlist_iterator_##T##_has_prev(void *iterator_) {\
     return (container != XTD_NULL && xlist_iterator->backward_iter != XTD_NULL && xnode_has_data(xlist_iterator->backward_iter));\
 }\
 \
-void *xlist_iterator_##T##_prev(void *iterator_) {\
+static void *xlist_iterator_##T##_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -589,6 +631,21 @@ static XIterator *xiterator_init_xlist_##T(xlist_##T *container) \
 
 */
 #define xlist_new_config(T) xlist_##T##_new_config
+
+/**
+
+*/
+#define xlist_index_of(T) xlist_##T##_index_of
+
+/**
+
+*/
+#define xlist_contains(T) xlist_##T##_contains
+
+/**
+
+*/
+#define xlist_element_count(T) xlist_##T##_element_count
 
 /**
 

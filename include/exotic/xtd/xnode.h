@@ -33,12 +33,12 @@ extern "C" {
     struct xsingle_node_##T##_s *iter;\
 } xsingle_node_##T;\
 \
-void xiterator_reset_xsingle_node_##T(xsingle_node_##T *node)\
+static void xiterator_reset_xsingle_node_##T(xsingle_node_##T *node)\
 {\
     node->iter = node;\
 }\
 \
-unsigned int xiterator_has_next_xsingle_node_##T(xsingle_node_##T *node)\
+static unsigned int xiterator_has_next_xsingle_node_##T(xsingle_node_##T *node)\
 {\
     if (node->iter == XTD_NULL) {\
         node->iter = node;\
@@ -46,7 +46,7 @@ unsigned int xiterator_has_next_xsingle_node_##T(xsingle_node_##T *node)\
     return xnode_has_next(node->iter);\
 }\
 \
-int xiterator_next_xsingle_node_##T(xsingle_node_##T *node)\
+static int xiterator_next_xsingle_node_##T(xsingle_node_##T *node)\
 {\
     T value = xnode_get_next_data(node->iter);\
     node->iter = xnode_get_next(node->iter);\
@@ -75,12 +75,12 @@ int xiterator_next_xsingle_node_##T(xsingle_node_##T *node)\
     struct xnode_##T##_s *iter;\
 } xnode_##T;\
 \
-void xiterator_reset_xnode_##T(xnode_##T *node)\
+static void xiterator_reset_xnode_##T(xnode_##T *node)\
 {\
     node->iter = node;\
 }\
 \
-unsigned int xiterator_has_next_xnode_##T(xnode_##T *node)\
+static unsigned int xiterator_has_next_xnode_##T(xnode_##T *node)\
 {\
     if (node->iter == XTD_NULL) {\
         node->iter = node;\
@@ -88,14 +88,14 @@ unsigned int xiterator_has_next_xnode_##T(xnode_##T *node)\
     return xnode_has_next(node->iter);\
 }\
 \
-T xiterator_next_xnode_##T(xnode_##T *node)\
+static T xiterator_next_xnode_##T(xnode_##T *node)\
 {\
     T value = xnode_get_next_data(node->iter);\
     node->iter = xnode_get_next(node->iter);\
     return value;\
 }\
 \
-unsigned int xiterator_has_prev_xnode_##T(xnode_##T *node)\
+static unsigned int xiterator_has_prev_xnode_##T(xnode_##T *node)\
 {\
     if (node->iter == XTD_NULL) {\
         node->iter = node;\
@@ -103,7 +103,7 @@ unsigned int xiterator_has_prev_xnode_##T(xnode_##T *node)\
     return xnode_has_prev(node->iter);\
 }\
 \
-T xiterator_prev_xnode_##T(xnode_##T *node)\
+static T xiterator_prev_xnode_##T(xnode_##T *node)\
 {\
     T value = xnode_get_prev_data(node->iter);\
     node->iter = xnode_get_prev(node->iter);\

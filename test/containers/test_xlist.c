@@ -92,6 +92,73 @@ CESTER_TEST(xlist_add_str, _, {
     xlist_destroy(str)(fruits);
 })
 
+CESTER_TEST(xlist_index_of, _, {
+    size_t index;
+    xlist(str) *fruits;
+    enum x_stat status;
+
+    status = xlist_new(str)(&fruits);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Apple"), XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Banana"), XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Coconut"), XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Mango"), XTD_OK);
+
+    cester_assert_uint_eq(xlist_index_of(str)(fruits, "Avocado", &index), XTD_OUT_OF_RANGE_ERR);
+    cester_assert_uint_eq(xlist_index_of(str)(fruits, "Banana", &index), XTD_OK);
+    cester_assert_uint_eq(index, 1);
+    cester_assert_uint_eq(xlist_index_of(str)(fruits, "Mango", &index), XTD_OK);
+    cester_assert_uint_eq(index, 3);
+    cester_assert_uint_eq(xlist_index_of(str)(fruits, "Grape", &index), XTD_OUT_OF_RANGE_ERR);
+    cester_assert_uint_eq(xlist_index_of(str)(fruits, "Apple", &index), XTD_OK);
+    cester_assert_uint_eq(index, 0);
+
+    xlist_destroy(str)(fruits);
+})
+
+CESTER_TEST(xlist_contains, _, {
+    xlist(str) *fruits;
+    enum x_stat status;
+
+    status = xlist_new(str)(&fruits);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Apple"), XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Banana"), XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Coconut"), XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Mango"), XTD_OK);
+
+    cester_assert_uint_eq(xlist_contains(str)(fruits, "Avocado"), FALSE);
+    cester_assert_uint_eq(xlist_contains(str)(fruits, "Banana"), TRUE);
+    cester_assert_uint_eq(xlist_contains(str)(fruits, "Mango"), TRUE);
+    cester_assert_uint_eq(xlist_contains(str)(fruits, "Grape"), FALSE);
+    cester_assert_uint_eq(xlist_contains(str)(fruits, "Apple"), TRUE);
+
+    xlist_destroy(str)(fruits);
+})
+
+CESTER_TEST(xlist_element_count, _, {
+    xlist(str) *fruits;
+    enum x_stat status;
+
+    status = xlist_new(str)(&fruits);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Apple"), XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Banana"), XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Coconut"), XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Mango"), XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Banana"), XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Apple"), XTD_OK);
+    cester_assert_uint_eq(xlist_add(str)(fruits, "Banana"), XTD_OK);
+
+    cester_assert_uint_eq(xlist_element_count(str)(fruits, "Avocado"), 0);
+    cester_assert_uint_eq(xlist_element_count(str)(fruits, "Banana"), 3);
+    cester_assert_uint_eq(xlist_element_count(str)(fruits, "Mango"), 1);
+    cester_assert_uint_eq(xlist_element_count(str)(fruits, "Grape"), 0);
+    cester_assert_uint_eq(xlist_element_count(str)(fruits, "Apple"), 2);
+
+    xlist_destroy(str)(fruits);
+})
+
 CESTER_TEST(xlist_add_at, _, {
     xlist(str) *fruits;
     enum x_stat status;

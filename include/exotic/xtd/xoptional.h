@@ -32,12 +32,12 @@ extern "C" {
     T value;\
 } xoptional_##T;\
 \
-bool xoptional_##T##_is_null(T value)\
+static bool xoptional_##T##_is_null(T value)\
 {\
     return 0 == value;\
 }\
 \
-xoptional_##T xoptional_##T##_new_with_cmp(T value, bool (*is_null_cmp) (T)) {\
+static xoptional_##T xoptional_##T##_new_with_cmp(T value, bool (*is_null_cmp) (T)) {\
     xoptional_##T _x_gen_optional;\
     _x_gen_optional.is_null_cmp = is_null_cmp;\
     if (_x_gen_optional.is_null_cmp(value) == TRUE) {\
@@ -49,29 +49,29 @@ xoptional_##T xoptional_##T##_new_with_cmp(T value, bool (*is_null_cmp) (T)) {\
     return _x_gen_optional;\
 }\
 \
-xoptional_##T xoptional_##T##_new(T value) {\
+static xoptional_##T xoptional_##T##_new(T value) {\
     return xoptional_##T##_new_with_cmp(value, xoptional_##T##_is_null);\
 }\
 \
-xoptional_##T xoptional_##T##_new_empty() {\
+static xoptional_##T xoptional_##T##_new_empty() {\
     xoptional_##T _x_gen_optional;\
     _x_gen_optional.is_present = FALSE;\
     return _x_gen_optional;\
 }\
 \
-void xoptional_##T##_if_present(xoptional_##T optional, \
+static void xoptional_##T##_if_present(xoptional_##T optional, \
         void (*xoption_if_##T##_present_func_ptr) (T const value)) {\
     if (xoptional_is_present(optional))  { \
         xoption_if_##T##_present_func_ptr(optional.value); \
     }\
 }\
 \
-bool xoptional_##T##_filter_is_present(xoptional_##T optional, \
+static bool xoptional_##T##_filter_is_present(xoptional_##T optional, \
         bool (*xoption_filter_if_##T##_present_func_ptr) (T const value)) {\
     return (xoptional_is_present(optional) && xoption_filter_if_##T##_present_func_ptr(optional.value));\
 }\
 \
-void xoptional_##T##_swap(xoptional_##T *optional1, xoptional_##T *optional2) {\
+static void xoptional_##T##_swap(xoptional_##T *optional1, xoptional_##T *optional2) {\
     xoptional_##T _x_gen_optional_x;\
     _x_gen_optional_x.value = optional1->value;\
     _x_gen_optional_x.is_present = optional1->is_present;\

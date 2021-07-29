@@ -107,6 +107,81 @@ CESTER_TEST(xset_add_str, _, {
     xset_destroy(fruits);
 })
 
+CESTER_TEST(xset_index_of, _, {
+    size_t index;
+    xset(str) *fruits;
+    enum x_stat status;
+
+    status = xset_new(str)(&fruits, cester_string_equals, xset_test_string_greater_than);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Banana"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Coconut"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Apple"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Pawpaw"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Mango"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Avocado"), XTD_OK);
+
+    cester_assert_uint_eq(xset_index_of(str)(fruits, "Avocado", &index), XTD_OK);
+    cester_assert_uint_eq(index, 1);
+    cester_assert_uint_eq(xset_index_of(str)(fruits, "Banana", &index), XTD_OK);
+    cester_assert_uint_eq(index, 2);
+    cester_assert_uint_eq(xset_index_of(str)(fruits, "Mango", &index), XTD_OK);
+    cester_assert_uint_eq(index, 4);
+    cester_assert_uint_eq(xset_index_of(str)(fruits, "Grape", &index), XTD_OUT_OF_RANGE_ERR);
+    cester_assert_uint_eq(xset_index_of(str)(fruits, "Apple", &index), XTD_OK);
+    cester_assert_uint_eq(index, 0);
+
+    xset_destroy(fruits);
+})
+
+CESTER_TEST(xset_contains, _, {
+    xset(str) *fruits;
+    enum x_stat status;
+
+    status = xset_new(str)(&fruits, cester_string_equals, xset_test_string_greater_than);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Banana"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Coconut"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Apple"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Pawpaw"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Mango"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Avocado"), XTD_OK);
+
+    cester_assert_uint_eq(xset_contains(str)(fruits, "Avocado"), TRUE);
+    cester_assert_uint_eq(xset_contains(str)(fruits, "Banana"), TRUE);
+    cester_assert_uint_eq(xset_contains(str)(fruits, "Mango"), TRUE);
+    cester_assert_uint_eq(xset_contains(str)(fruits, "Grape"), FALSE);
+    cester_assert_uint_eq(xset_contains(str)(fruits, "Apple"), TRUE);
+
+    xset_destroy(fruits);
+})
+
+CESTER_TEST(xset_element_count, _, {
+    xset(str) *fruits;
+    enum x_stat status;
+
+    status = xset_new(str)(&fruits, cester_string_equals, xset_test_string_greater_than);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Banana"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Coconut"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Apple"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Mango"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Pawpaw"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Banana"), XTD_ALREADY_IN_CONTAINER_ERR);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Mango"), XTD_ALREADY_IN_CONTAINER_ERR);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Banana"), XTD_ALREADY_IN_CONTAINER_ERR);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Avocado"), XTD_OK);
+    cester_assert_uint_eq(xset_add(str)(fruits, "Apple"), XTD_ALREADY_IN_CONTAINER_ERR);
+
+    cester_assert_uint_eq(xset_element_count(str)(fruits, "Avocado"), 1);
+    cester_assert_uint_eq(xset_element_count(str)(fruits, "Banana"), 1);
+    cester_assert_uint_eq(xset_element_count(str)(fruits, "Mango"), 1);
+    cester_assert_uint_eq(xset_element_count(str)(fruits, "Grape"), 0);
+    cester_assert_uint_eq(xset_element_count(str)(fruits, "Apple"), 1);
+
+    xset_destroy(fruits);
+})
+
 CESTER_TEST(xset_add_str_unique, _, {
     xset(str) *fruits;
     enum x_stat status;

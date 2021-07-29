@@ -17,7 +17,7 @@ extern "C" {
 
 */
 #define SETUP_XALGORITHM_FOR(T)                                         \
-size_t xliner_search_##T(T *array_of_t, size_t array_of_t_size, T t)    \
+static size_t xliner_search_##T(T *array_of_t, size_t array_of_t_size, T t)    \
 {                                                                       \
     size_t index = 0;                                                   \
     for (; index < array_of_t_size; index++) {                          \
@@ -28,7 +28,7 @@ size_t xliner_search_##T(T *array_of_t, size_t array_of_t_size, T t)    \
     return -1;                                                          \
 }                                                                       \
 \
-size_t xbinary_search_in_range_##T(T *array_of_t, size_t begin, size_t end, T t) \
+static size_t xbinary_search_in_range_##T(T *array_of_t, size_t begin, size_t end, T t) \
 {                                                                       \
     if (begin <= end) {                                                 \
         size_t middle = (begin + end) / 2;                              \
@@ -45,7 +45,7 @@ size_t xbinary_search_in_range_##T(T *array_of_t, size_t begin, size_t end, T t)
     return -1;                                                          \
 }                                                                       \
 \
-size_t xbinary_search_##T(T *array_of_t, size_t array_of_t_size, T t)   \
+static size_t xbinary_search_##T(T *array_of_t, size_t array_of_t_size, T t)   \
 {                                                                       \
     return xbinary_search_in_range_##T(array_of_t, 0, array_of_t_size-1, t); \
 }                                                                       \
@@ -54,7 +54,7 @@ size_t xbinary_search_##T(T *array_of_t, size_t array_of_t_size, T t)   \
 
 */
 #define SETUP_XALGORITHM_SWAP_FOR(T)                                    \
-void xswap_##T(T *ptr1, T *ptr2)                                        \
+static void xswap_##T(T *ptr1, T *ptr2)                                        \
 {                                                                       \
     T tmp = *ptr1;                                                      \
     *ptr1 = *ptr2;                                                      \

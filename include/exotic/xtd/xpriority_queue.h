@@ -43,26 +43,26 @@ extern "C" {
     bool  (*cmp) (const T a, const T b);\
 } xpriority_queue_##T;\
 \
-enum x_stat xpriority_queue_##T##_new(xpriority_queue_##T **out, bool  (*cmp) (const T a, const T b));\
-enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * const config, xpriority_queue_##T **out, bool  (*cmp) (const T a, const T b));\
+static enum x_stat xpriority_queue_##T##_new(xpriority_queue_##T **out, bool  (*cmp) (const T a, const T b));\
+static enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * const config, xpriority_queue_##T **out, bool  (*cmp) (const T a, const T b));\
 static enum x_stat xpriority_queue_##T##_expand_capacity(xpriority_queue_##T *container);\
 static void xpriority_queue_##T##_heapify(xpriority_queue_##T *container, size_t index);\
 \
-enum x_stat xpriority_queue_##T##_new(xpriority_queue_##T **out, bool  (*cmp) (const T a, const T b)) \
+static enum x_stat xpriority_queue_##T##_new(xpriority_queue_##T **out, bool  (*cmp) (const T a, const T b)) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config(&config);\
     return xpriority_queue_##T##_new_config(&config, out, cmp);\
 }\
 \
-enum x_stat xpriority_queue_##T##_new_max_size(xpriority_queue_##T **out, size_t max_size, bool  (*cmp) (const T a, const T b)) \
+static enum x_stat xpriority_queue_##T##_new_max_size(xpriority_queue_##T **out, size_t max_size, bool  (*cmp) (const T a, const T b)) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config_max_size(&config, max_size);\
     return xpriority_queue_##T##_new_config(&config, out, cmp);\
 }\
 \
-enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * const config, xpriority_queue_##T **out, bool  (*cmp) (const T a, const T b)) \
+static enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * const config, xpriority_queue_##T **out, bool  (*cmp) (const T a, const T b)) \
 {\
     size_t expansion_rate;\
     xpriority_queue_##T *container;\
@@ -100,7 +100,7 @@ enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * const co
     return XTD_OK;\
 }\
 \
-enum x_stat xpriority_queue_##T##_push(xpriority_queue_##T *container, T element)\
+static enum x_stat xpriority_queue_##T##_push(xpriority_queue_##T *container, T element)\
 {\
     enum x_stat status;\
     size_t container_size;\
@@ -134,7 +134,7 @@ enum x_stat xpriority_queue_##T##_push(xpriority_queue_##T *container, T element
     return XTD_OK;\
 }\
 \
-enum x_stat xpriority_queue_##T##_peek(xpriority_queue_##T *container, T *out)\
+static enum x_stat xpriority_queue_##T##_peek(xpriority_queue_##T *container, T *out)\
 {\
     if (container->size == 0) {\
         return XTD_OUT_OF_RANGE_ERR;\
@@ -143,7 +143,7 @@ enum x_stat xpriority_queue_##T##_peek(xpriority_queue_##T *container, T *out)\
     return XTD_OK;\
 }\
 \
-enum x_stat xpriority_queue_##T##_pop(xpriority_queue_##T *container, T *out)\
+static enum x_stat xpriority_queue_##T##_pop(xpriority_queue_##T *container, T *out)\
 {\
     T temp;\
     if (container->size == 0) {\
@@ -245,7 +245,7 @@ static void xpriority_queue_##T##_heapify(xpriority_queue_##T *container, size_t
 */
 #define SETUP_ITERATOR_FOR_XPRIORITY_QUEUE(T) \
 \
-void xpriority_queue_iterator_##T##_reset_forward(void *iterator_) {\
+static void xpriority_queue_iterator_##T##_reset_forward(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -253,7 +253,7 @@ void xpriority_queue_iterator_##T##_reset_forward(void *iterator_) {\
     iterator->forward_index = 0;\
 }\
 \
-void xpriority_queue_iterator_##T##_reset_backward(void *iterator_) {\
+static void xpriority_queue_iterator_##T##_reset_backward(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -261,7 +261,7 @@ void xpriority_queue_iterator_##T##_reset_backward(void *iterator_) {\
     iterator->backward_index = ((xpriority_queue_##T *) iterator->container)->size-1;\
 }\
 \
-void xpriority_queue_iterator_##T##_reset(void *iterator_) {\
+static void xpriority_queue_iterator_##T##_reset(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -270,7 +270,7 @@ void xpriority_queue_iterator_##T##_reset(void *iterator_) {\
     iterator->backward_index = ((xpriority_queue_##T *) iterator->container)->size-1;\
 }\
 \
-void xpriority_queue_iterator_##T##_destroy(void *iterator_) {\
+static void xpriority_queue_iterator_##T##_destroy(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xpriority_queue_##T *container;\
     if (iterator == XTD_NULL) {\
@@ -283,7 +283,7 @@ void xpriority_queue_iterator_##T##_destroy(void *iterator_) {\
     x_free(iterator);\
 }\
 \
-void xpriority_queue_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
+static void xpriority_queue_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -291,7 +291,7 @@ void xpriority_queue_iterator_##T##_advance_by(void *iterator_, size_t distance)
     iterator->forward_index += distance;\
 }\
 \
-void xpriority_queue_iterator_##T##_decrement(void *iterator_) {\
+static void xpriority_queue_iterator_##T##_decrement(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -299,7 +299,7 @@ void xpriority_queue_iterator_##T##_decrement(void *iterator_) {\
     iterator->forward_index--;\
 }\
 \
-void xpriority_queue_iterator_##T##_increment(void *iterator_) {\
+static void xpriority_queue_iterator_##T##_increment(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -307,7 +307,7 @@ void xpriority_queue_iterator_##T##_increment(void *iterator_) {\
     iterator->forward_index++;\
 }\
 \
-bool xpriority_queue_iterator_##T##_has_next(void *iterator_) {\
+static bool xpriority_queue_iterator_##T##_has_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xpriority_queue_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
@@ -317,7 +317,7 @@ bool xpriority_queue_iterator_##T##_has_next(void *iterator_) {\
     return (iterator->forward_index < container->size);\
 }\
 \
-void *xpriority_queue_iterator_##T##_next(void *iterator_) {\
+static void *xpriority_queue_iterator_##T##_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xpriority_queue_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
@@ -327,7 +327,7 @@ void *xpriority_queue_iterator_##T##_next(void *iterator_) {\
     return (void *) container->buffer[iterator->forward_index++];\
 }\
 \
-bool xpriority_queue_iterator_##T##_has_prev(void *iterator_) {\
+static bool xpriority_queue_iterator_##T##_has_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xpriority_queue_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
@@ -337,7 +337,7 @@ bool xpriority_queue_iterator_##T##_has_prev(void *iterator_) {\
     return (iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
 }\
 \
-void *xpriority_queue_iterator_##T##_prev(void *iterator_) {\
+static void *xpriority_queue_iterator_##T##_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xpriority_queue_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\

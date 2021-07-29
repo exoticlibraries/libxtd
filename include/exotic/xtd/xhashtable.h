@@ -54,25 +54,25 @@ extern "C" {
     void  (*memory_free)   (void *block);\
 } xhashtable_##T1##_##T2;\
 \
-enum x_stat xhashtable_##T1##_##T2##_new_config(struct xcontainer_config * const config, xhashtable_##T1##_##T2 **out, bool (*compare_key)(const T1, const T1), size_t (*hash_key)(const T1, int, uint32_t));\
+static enum x_stat xhashtable_##T1##_##T2##_new_config(struct xcontainer_config * const config, xhashtable_##T1##_##T2 **out, bool (*compare_key)(const T1, const T1), size_t (*hash_key)(const T1, int, uint32_t));\
 static enum x_stat xhashtable_##T1##_##T2##_resize(xhashtable_##T1##_##T2 *container, size_t new_capacity);\
 static __XTD_INLINE__ size_t xhashtable_##T1##_##T2##_get_entry_index(xhashtable_##T1##_##T2 *container, T1 key);\
 \
-enum x_stat xhashtable_##T1##_##T2##_new(xhashtable_##T1##_##T2 **out, bool (*compare_key)(const T1, const T1), size_t (*hash_key)(const T1, int, uint32_t)) \
+static enum x_stat xhashtable_##T1##_##T2##_new(xhashtable_##T1##_##T2 **out, bool (*compare_key)(const T1, const T1), size_t (*hash_key)(const T1, int, uint32_t)) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config(&config);\
     return xhashtable_##T1##_##T2##_new_config(&config, out, compare_key, hash_key);\
 }\
 \
-enum x_stat xhashtable_##T1##_##T2##_new_max_size(xhashtable_##T1##_##T2 **out, size_t max_size, bool (*compare_key)(const T1, const T1), size_t (*hash_key)(const T1, int, uint32_t)) \
+static enum x_stat xhashtable_##T1##_##T2##_new_max_size(xhashtable_##T1##_##T2 **out, size_t max_size, bool (*compare_key)(const T1, const T1), size_t (*hash_key)(const T1, int, uint32_t)) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config_max_size(&config, max_size);\
     return xhashtable_##T1##_##T2##_new_config(&config, out, compare_key, hash_key);\
 }\
 \
-enum x_stat xhashtable_##T1##_##T2##_new_config(struct xcontainer_config * const config, xhashtable_##T1##_##T2 **out, bool (*compare_key)(const T1, const T1), size_t (*hash_key)(const T1, int, uint32_t)) \
+static enum x_stat xhashtable_##T1##_##T2##_new_config(struct xcontainer_config * const config, xhashtable_##T1##_##T2 **out, bool (*compare_key)(const T1, const T1), size_t (*hash_key)(const T1, int, uint32_t)) \
 {\
 \
     xhashtable_##T1##_##T2 *container = (xhashtable_##T1##_##T2 *) config->allocator.memory_calloc(1, sizeof(xhashtable_##T1##_##T2));\
@@ -99,7 +99,7 @@ enum x_stat xhashtable_##T1##_##T2##_new_config(struct xcontainer_config * const
     return XTD_OK;\
 }\
 \
-void xhashtable_##T1##_##T2##_destroy(xhashtable_##T1##_##T2 *container) {\
+static void xhashtable_##T1##_##T2##_destroy(xhashtable_##T1##_##T2 *container) {\
     size_t index;\
     for (index = 0; index < container->capacity; index++) {\
         xhashtable_entry_##T1##_##T2 *current_entry = container->buffer[index];\
@@ -136,7 +136,7 @@ static enum x_stat xhashtable_##T1##_##T2##_put_null_key(xhashtable_##T1##_##T2 
     return XTD_OK;\
 }\
 \
-enum x_stat xhashtable_##T1##_##T2##_put(xhashtable_##T1##_##T2 *container, T1 key, T2 value) {\
+static enum x_stat xhashtable_##T1##_##T2##_put(xhashtable_##T1##_##T2 *container, T1 key, T2 value) {\
     enum x_stat status;\
     xhashtable_entry_##T1##_##T2 *existing_entry;\
     xhashtable_entry_##T1##_##T2 *new_entry;\
@@ -186,7 +186,7 @@ static enum x_stat xhashtable_##T1##_##T2##_get_null_key(xhashtable_##T1##_##T2 
     return XTD_KEY_NOT_FOUND_ERR;\
 }\
 \
-enum x_stat xhashtable_##T1##_##T2##_get(xhashtable_##T1##_##T2 *container, T1 key, T2 *out) {\
+static enum x_stat xhashtable_##T1##_##T2##_get(xhashtable_##T1##_##T2 *container, T1 key, T2 *out) {\
     size_t index;\
     xhashtable_entry_##T1##_##T2 *entry;\
     if (key == XTD_NULL) {\
@@ -204,7 +204,7 @@ enum x_stat xhashtable_##T1##_##T2##_get(xhashtable_##T1##_##T2 *container, T1 k
     return XTD_KEY_NOT_FOUND_ERR;\
 }\
 \
-enum x_stat xhashtable_##T1##_##T2##_remove_null_key(xhashtable_##T1##_##T2 *container, T2 *out) {\
+static enum x_stat xhashtable_##T1##_##T2##_remove_null_key(xhashtable_##T1##_##T2 *container, T2 *out) {\
     xhashtable_entry_##T1##_##T2 *entry = container->buffer[0];\
     xhashtable_entry_##T1##_##T2 *prev_entry = XTD_NULL;\
     xhashtable_entry_##T1##_##T2 *next_entry = XTD_NULL;\
@@ -230,7 +230,7 @@ enum x_stat xhashtable_##T1##_##T2##_remove_null_key(xhashtable_##T1##_##T2 *con
     return XTD_KEY_NOT_FOUND_ERR;\
 }\
 \
-enum x_stat xhashtable_##T1##_##T2##_remove(xhashtable_##T1##_##T2 *container, T1 key, T2 *out) {\
+static enum x_stat xhashtable_##T1##_##T2##_remove(xhashtable_##T1##_##T2 *container, T1 key, T2 *out) {\
     if (key == XTD_NULL) {\
         return xhashtable_##T1##_##T2##_remove_null_key(container, out);\
     }\
@@ -262,7 +262,7 @@ enum x_stat xhashtable_##T1##_##T2##_remove(xhashtable_##T1##_##T2 *container, T
     return XTD_KEY_NOT_FOUND_ERR;\
 }\
 \
-void xhashtable_##T1##_##T2##_remove_all(xhashtable_##T1##_##T2 *container) {\
+static void xhashtable_##T1##_##T2##_remove_all(xhashtable_##T1##_##T2 *container) {\
     size_t index;\
     for (index = 0; index < container->capacity; index++) {\
         xhashtable_entry_##T1##_##T2 *entry = container->buffer[index];\
@@ -276,7 +276,7 @@ void xhashtable_##T1##_##T2##_remove_all(xhashtable_##T1##_##T2 *container) {\
     }\
 }\
 \
-bool xhashtable_##T1##_##T2##_contains_key(xhashtable_##T1##_##T2 *container, T1 key) {\
+static bool xhashtable_##T1##_##T2##_contains_key(xhashtable_##T1##_##T2 *container, T1 key) {\
     xhashtable_entry_##T1##_##T2 *entry = container->buffer[xhashtable_##T1##_##T2##_get_entry_index(container, key)];\
     while (entry) {\
         if (container->compare_key(key, entry->key)) {\
@@ -334,7 +334,7 @@ static enum x_stat xhashtable_##T1##_##T2##_resize(xhashtable_##T1##_##T2 *conta
 */
 #define SETUP_GET_KEYS_VALUES_XVECTOR_FOR_XHASHTABLE(T1, T2)\
 \
-enum x_stat xhashtable_##T1##_##T2##_get_keys(xhashtable_##T1##_##T2 *container, xvector(T1) **out) {\
+static enum x_stat xhashtable_##T1##_##T2##_get_keys(xhashtable_##T1##_##T2 *container, xvector(T1) **out) {\
     size_t index;\
     enum x_stat status;\
     xvector(T1) *keys;\
@@ -363,7 +363,7 @@ enum x_stat xhashtable_##T1##_##T2##_get_keys(xhashtable_##T1##_##T2 *container,
     return XTD_OK;\
 }\
 \
-enum x_stat xhashtable_##T1##_##T2##_get_values(xhashtable_##T1##_##T2 *container, xvector(T2) **out) {\
+static enum x_stat xhashtable_##T1##_##T2##_get_values(xhashtable_##T1##_##T2 *container, xvector(T2) **out) {\
     size_t index;\
     enum x_stat status;\
     xvector(T2) *values;\
@@ -407,7 +407,7 @@ enum x_stat xhashtable_##T1##_##T2##_get_values(xhashtable_##T1##_##T2 *containe
     xhashtable_##T1##_##T2 *container;\
 } xhashtable_iterator_##T1##_##T2;\
 \
-void xhashtable_iterator_##T1##_##T2##_reset_forward(void *iterator_) {\
+static void xhashtable_iterator_##T1##_##T2##_reset_forward(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -415,7 +415,7 @@ void xhashtable_iterator_##T1##_##T2##_reset_forward(void *iterator_) {\
     iterator->forward_index = 0;\
 }\
 \
-void xhashtable_iterator_##T1##_##T2##_reset_backward(void *iterator_) {\
+static void xhashtable_iterator_##T1##_##T2##_reset_backward(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\
@@ -423,7 +423,7 @@ void xhashtable_iterator_##T1##_##T2##_reset_backward(void *iterator_) {\
     iterator->backward_index = ((xhashtable_##T1##_##T2 *) iterator->container)->size-1;\
 }\
 \
-void xhashtable_iterator_##T1##_##T2##_reset(void *iterator_) {\
+static void xhashtable_iterator_##T1##_##T2##_reset(void *iterator_) {\
     size_t index, reverse_index;\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
     xhashtable_##T1##_##T2 *container;\
@@ -463,7 +463,7 @@ void xhashtable_iterator_##T1##_##T2##_reset(void *iterator_) {\
     }\
 }\
 \
-void xhashtable_iterator_##T1##_##T2##_destroy(void *iterator_) {\
+static void xhashtable_iterator_##T1##_##T2##_destroy(void *iterator_) {\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL) {\
@@ -478,7 +478,7 @@ void xhashtable_iterator_##T1##_##T2##_destroy(void *iterator_) {\
     x_free(iterator);\
 }\
 \
-bool xhashtable_iterator_##T1##_##T2##_has_next(void *iterator_) {\
+static bool xhashtable_iterator_##T1##_##T2##_has_next(void *iterator_) {\
     xhashtable_##T1##_##T2 *container;\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
     XIterator *iterator = (XIterator *) iterator_;\
@@ -490,7 +490,7 @@ bool xhashtable_iterator_##T1##_##T2##_has_next(void *iterator_) {\
     return container->size > 0 && xhashtable_iterator->forward_iter != XTD_NULL;\
 }\
 \
-void *xhashtable_iterator_##T1##_##T2##_next(void *iterator_) {\
+static void *xhashtable_iterator_##T1##_##T2##_next(void *iterator_) {\
     size_t index;\
     xhashtable_##T1##_##T2 *container;\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
@@ -517,7 +517,7 @@ void *xhashtable_iterator_##T1##_##T2##_next(void *iterator_) {\
     return (void *) entry;\
 }\
 \
-bool xhashtable_iterator_##T1##_##T2##_has_prev(void *iterator_) {\
+static bool xhashtable_iterator_##T1##_##T2##_has_prev(void *iterator_) {\
     xhashtable_##T1##_##T2 *container;\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
     XIterator *iterator = (XIterator *) iterator_;\
@@ -529,7 +529,7 @@ bool xhashtable_iterator_##T1##_##T2##_has_prev(void *iterator_) {\
     return container->size > 0 && xhashtable_iterator->backward_iter != XTD_NULL;\
 }\
 \
-void *xhashtable_iterator_##T1##_##T2##_prev(void *iterator_) {\
+static void *xhashtable_iterator_##T1##_##T2##_prev(void *iterator_) {\
     size_t index;\
     xhashtable_##T1##_##T2 *container;\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
@@ -555,7 +555,7 @@ void *xhashtable_iterator_##T1##_##T2##_prev(void *iterator_) {\
     return (void *) entry;\
 }\
 \
-void xhashtable_iterator_##T1##_##T2##_advance_by(void *iterator_, size_t distance) {\
+static void xhashtable_iterator_##T1##_##T2##_advance_by(void *iterator_, size_t distance) {\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
@@ -568,7 +568,7 @@ void xhashtable_iterator_##T1##_##T2##_advance_by(void *iterator_, size_t distan
     }\
 }\
 \
-void xhashtable_iterator_##T1##_##T2##_decrement(void *iterator_) {\
+static void xhashtable_iterator_##T1##_##T2##_decrement(void *iterator_) {\
     size_t index;\
     size_t cached_buffer_reverse_index;\
     xhashtable_entry_##T1##_##T2 *cached_entry;\
@@ -593,7 +593,7 @@ void xhashtable_iterator_##T1##_##T2##_decrement(void *iterator_) {\
     iterator->forward_index--;\
 }\
 \
-void xhashtable_iterator_##T1##_##T2##_increment(void *iterator_) {\
+static void xhashtable_iterator_##T1##_##T2##_increment(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return;\

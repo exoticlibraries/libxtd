@@ -36,8 +36,7 @@ Types to be implemented
 - add_all in containers
 - extend list with other contigiuos related operations
 - add container##T##_remove to remove by element
-- add container##T##_index_of
-- add remove with cb, remove_all with cb
+- add remove, remove with cb, remove_all with cb
 
 ## Doc hints
 

@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-void *memcpy(void *dst, void const *src, size_t len) {
+static void *memcpy(void *dst, void const *src, size_t len) {
     char* pDst = (char *) dst;
     char const * pSrc = (char const *) src;
 

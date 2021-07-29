@@ -26,23 +26,23 @@ extern "C" {
 */
 #define SETUP_XUNORDERED_SET_ONLY_FOR_INTERNAL__(T) typedef xset_##T xunordered_set_##T; \
 \
-enum x_stat xunordered_set_##T##_new_config(struct xcontainer_config * const config, xset_##T **out, bool (*xset_element_equals)  (T,T));\
+static enum x_stat xunordered_set_##T##_new_config(struct xcontainer_config * const config, xset_##T **out, bool (*xset_element_equals)  (T,T));\
 \
-enum x_stat xunordered_set_##T##_new(xset_##T **out, bool (*xset_element_equals)  (T,T)) \
+static enum x_stat xunordered_set_##T##_new(xset_##T **out, bool (*xset_element_equals)  (T,T)) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config(&config);\
     return xunordered_set_##T##_new_config(&config, out, xset_element_equals);\
 }\
 \
-enum x_stat xunordered_set_##T##_new_max_size(xset_##T **out, size_t max_size, bool (*xset_element_equals)  (T,T)) \
+static enum x_stat xunordered_set_##T##_new_max_size(xset_##T **out, size_t max_size, bool (*xset_element_equals)  (T,T)) \
 {\
     struct xcontainer_config config;\
     init_xcontainer_config_max_size(&config, max_size);\
     return xunordered_set_##T##_new_config(&config, out, xset_element_equals);\
 }\
 \
-enum x_stat xunordered_set_##T##_new_config(struct xcontainer_config * const config, xset_##T **out, bool (*xset_element_equals)  (T,T)) \
+static enum x_stat xunordered_set_##T##_new_config(struct xcontainer_config * const config, xset_##T **out, bool (*xset_element_equals)  (T,T)) \
 {\
     return xset_##T##_new_config(config, out, xset_element_equals, XTD_NULL);\
 }\
@@ -81,6 +81,21 @@ static XIterator *xiterator_init_xunordered_set_##T(xset_##T *container) {\
 
 */
 #define xunordered_set_new_config(T) xunordered_set_##T##_new_config
+
+/**
+
+*/
+#define xunordered_set_index_of(T) xset_##T##_index_of
+
+/**
+
+*/
+#define xunordered_set_contains(T) xset_##T##_contains
+
+/**
+
+*/
+#define xunordered_set_element_count(T) xset_##T##_element_count
 
 /**
 
