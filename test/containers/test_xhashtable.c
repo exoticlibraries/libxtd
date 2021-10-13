@@ -1,4 +1,4 @@
-/*!gcc {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
+/*!gcc {0} -Wno-pointer-to-int-cast -Wno-int-conversion -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc  -ansi -pedantic-errors {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */

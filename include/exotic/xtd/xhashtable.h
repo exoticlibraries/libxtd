@@ -15,6 +15,7 @@ extern "C" {
 
 #include "xmath.h"
 #include "xvector.h"
+#include "xpair.h"
 
 #ifdef __cplusplus
 #if !defined(ALLOW_XTD_TYPES_WITH_ALTERNATIVES_IN_CPP) && __cplusplus >= 201103L
@@ -25,20 +26,11 @@ extern "C" {
 /*
     
 */
-#define SETUP_XHASHTABLE_ENTRY_ONLY_FOR(T1, T2) typedef struct xhashtable_entry_##T1##_##T2##_s { \
-    T1 key;\
-    T2 value;\
-    size_t hash;\
-    struct xhashtable_entry_##T1##_##T2##_s *next;\
-} xhashtable_entry_##T1##_##T2;\
+#define SETUP_XHASHTABLE_ONLY_FOR(T1, T2)\
 \
+typedef xpair_##T1##_##T2 xhashtable_entry_##T1##_##T2;\
 \
-\
-
-/*
-    
-*/
-#define SETUP_XHASHTABLE_ONLY_FOR(T1, T2) typedef struct xhashtable_##T1##_##T2##_s { \
+typedef struct xhashtable_##T1##_##T2##_s { \
     size_t capacity;\
     size_t size;\
     size_t max_size;\
@@ -46,7 +38,7 @@ extern "C" {
     uint32_t hash_seed;\
     int key_length;\
     float load_factor;\
-    xhashtable_entry_##T1##_##T2 **buffer;\
+    xpair_##T1##_##T2 **buffer;\
     bool (*compare_key)(const T1 key1, const T1 key2);\
     size_t (*hash_key)(const T1 key, int length, uint32_t seed);\
     void *(*memory_malloc)  (size_t size);\
@@ -80,7 +72,7 @@ static enum x_stat xhashtable_##T1##_##T2##_new_config(struct xcontainer_config 
         return XTD_ALLOC_ERR;\
     }\
     container->capacity = xmath_round_power_of_two(config->capacity);\
-    container->buffer  = (xhashtable_entry_##T1##_##T2 **) config->allocator.memory_calloc(container->capacity, sizeof(xhashtable_entry_##T1##_##T2 *));\
+    container->buffer  = (xpair_##T1##_##T2 **) config->allocator.memory_calloc(container->capacity, sizeof(xpair_##T1##_##T2 *));\
     if (!container->buffer) {\
         config->allocator.memory_free(container);\
         return XTD_ALLOC_ERR;\
@@ -102,9 +94,9 @@ static enum x_stat xhashtable_##T1##_##T2##_new_config(struct xcontainer_config 
 static void xhashtable_##T1##_##T2##_destroy(xhashtable_##T1##_##T2 *container) {\
     size_t index;\
     for (index = 0; index < container->capacity; index++) {\
-        xhashtable_entry_##T1##_##T2 *current_entry = container->buffer[index];\
+        xpair_##T1##_##T2 *current_entry = container->buffer[index];\
         while (current_entry) {\
-            xhashtable_entry_##T1##_##T2 *tmp_entry = current_entry->next;\
+            xpair_##T1##_##T2 *tmp_entry = current_entry->next;\
             container->memory_free(current_entry);\
             current_entry = tmp_entry;\
         }\
@@ -114,8 +106,8 @@ static void xhashtable_##T1##_##T2##_destroy(xhashtable_##T1##_##T2 *container) 
 }\
 \
 static enum x_stat xhashtable_##T1##_##T2##_put_null_key(xhashtable_##T1##_##T2 *container, T2 value) {\
-    xhashtable_entry_##T1##_##T2 *new_entry;\
-    xhashtable_entry_##T1##_##T2 *existing_entry = container->buffer[0];\
+    xpair_##T1##_##T2 *new_entry;\
+    xpair_##T1##_##T2 *existing_entry = container->buffer[0];\
     while (existing_entry) {\
         if (!existing_entry->key) {\
             existing_entry->value = value;\
@@ -123,7 +115,7 @@ static enum x_stat xhashtable_##T1##_##T2##_put_null_key(xhashtable_##T1##_##T2 
         }\
         existing_entry = existing_entry->next;\
     }\
-    new_entry = container->memory_malloc(sizeof(xhashtable_entry_##T1##_##T2));\
+    new_entry = container->memory_malloc(sizeof(xpair_##T1##_##T2));\
     if (!new_entry) {\
         return XTD_ALLOC_ERR;\
     }\
@@ -138,8 +130,8 @@ static enum x_stat xhashtable_##T1##_##T2##_put_null_key(xhashtable_##T1##_##T2 
 \
 static enum x_stat xhashtable_##T1##_##T2##_put(xhashtable_##T1##_##T2 *container, T1 key, T2 value) {\
     enum x_stat status;\
-    xhashtable_entry_##T1##_##T2 *existing_entry;\
-    xhashtable_entry_##T1##_##T2 *new_entry;\
+    xpair_##T1##_##T2 *existing_entry;\
+    xpair_##T1##_##T2 *new_entry;\
     if (container->size >= container->threshold) {\
         if ((status = xhashtable_##T1##_##T2##_resize(container, container->capacity << 1)) != XTD_OK) {\
             return status;\
@@ -160,7 +152,7 @@ static enum x_stat xhashtable_##T1##_##T2##_put(xhashtable_##T1##_##T2 *containe
             }\
             existing_entry = existing_entry->next;\
         }\
-        new_entry = container->memory_malloc(sizeof(xhashtable_entry_##T1##_##T2));\
+        new_entry = container->memory_malloc(sizeof(xpair_##T1##_##T2));\
         if (!new_entry) {\
             return XTD_ALLOC_ERR;\
         }\
@@ -175,7 +167,7 @@ static enum x_stat xhashtable_##T1##_##T2##_put(xhashtable_##T1##_##T2 *containe
 }\
 \
 static enum x_stat xhashtable_##T1##_##T2##_get_null_key(xhashtable_##T1##_##T2 *container, T2 *out) {\
-    xhashtable_entry_##T1##_##T2 *entry = container->buffer[0];\
+    xpair_##T1##_##T2 *entry = container->buffer[0];\
     while (entry) {\
         if (entry->key == XTD_NULL) {\
             *out = entry->value;\
@@ -188,7 +180,7 @@ static enum x_stat xhashtable_##T1##_##T2##_get_null_key(xhashtable_##T1##_##T2 
 \
 static enum x_stat xhashtable_##T1##_##T2##_get(xhashtable_##T1##_##T2 *container, T1 key, T2 *out) {\
     size_t index;\
-    xhashtable_entry_##T1##_##T2 *entry;\
+    xpair_##T1##_##T2 *entry;\
     if (key == XTD_NULL) {\
         return xhashtable_##T1##_##T2##_get_null_key(container, out);\
     }\
@@ -205,9 +197,9 @@ static enum x_stat xhashtable_##T1##_##T2##_get(xhashtable_##T1##_##T2 *containe
 }\
 \
 static enum x_stat xhashtable_##T1##_##T2##_remove_null_key(xhashtable_##T1##_##T2 *container, T2 *out) {\
-    xhashtable_entry_##T1##_##T2 *entry = container->buffer[0];\
-    xhashtable_entry_##T1##_##T2 *prev_entry = XTD_NULL;\
-    xhashtable_entry_##T1##_##T2 *next_entry = XTD_NULL;\
+    xpair_##T1##_##T2 *entry = container->buffer[0];\
+    xpair_##T1##_##T2 *prev_entry = XTD_NULL;\
+    xpair_##T1##_##T2 *next_entry = XTD_NULL;\
     while (entry) {\
         next_entry = entry->next;\
         if (entry->key == XTD_NULL) {\
@@ -236,9 +228,9 @@ static enum x_stat xhashtable_##T1##_##T2##_remove(xhashtable_##T1##_##T2 *conta
     }\
     {\
         const size_t index = xhashtable_##T1##_##T2##_get_entry_index(container, key);\
-        xhashtable_entry_##T1##_##T2 *entry = container->buffer[index];\
-        xhashtable_entry_##T1##_##T2 *prev_entry = XTD_NULL;\
-        xhashtable_entry_##T1##_##T2 *next_entry = XTD_NULL;\
+        xpair_##T1##_##T2 *entry = container->buffer[index];\
+        xpair_##T1##_##T2 *prev_entry = XTD_NULL;\
+        xpair_##T1##_##T2 *next_entry = XTD_NULL;\
         while (entry) {\
             next_entry = entry->next;\
             if (entry->key != XTD_NULL && container->compare_key(key, entry->key)) {\
@@ -265,9 +257,9 @@ static enum x_stat xhashtable_##T1##_##T2##_remove(xhashtable_##T1##_##T2 *conta
 static void xhashtable_##T1##_##T2##_remove_all(xhashtable_##T1##_##T2 *container) {\
     size_t index;\
     for (index = 0; index < container->capacity; index++) {\
-        xhashtable_entry_##T1##_##T2 *entry = container->buffer[index];\
+        xpair_##T1##_##T2 *entry = container->buffer[index];\
         while (entry) {\
-            xhashtable_entry_##T1##_##T2 *next = entry->next;\
+            xpair_##T1##_##T2 *next = entry->next;\
             container->memory_free(entry);\
             container->size--;\
             entry = next;\
@@ -277,7 +269,7 @@ static void xhashtable_##T1##_##T2##_remove_all(xhashtable_##T1##_##T2 *containe
 }\
 \
 static bool xhashtable_##T1##_##T2##_contains_key(xhashtable_##T1##_##T2 *container, T1 key) {\
-    xhashtable_entry_##T1##_##T2 *entry = container->buffer[xhashtable_##T1##_##T2##_get_entry_index(container, key)];\
+    xpair_##T1##_##T2 *entry = container->buffer[xhashtable_##T1##_##T2##_get_entry_index(container, key)];\
     while (entry) {\
         if (container->compare_key(key, entry->key)) {\
             return TRUE;\
@@ -292,12 +284,12 @@ static __XTD_INLINE__ size_t xhashtable_##T1##_##T2##_get_entry_index(xhashtable
     return hash & (container->capacity - 1);\
 }\
 \
-static __XTD_INLINE__ void xhashtable_##T1##_##T2##_move_buffer(xhashtable_entry_##T1##_##T2 **src_buffer, xhashtable_entry_##T1##_##T2 **dest_buffer, size_t src_size, size_t dest_size) {\
+static __XTD_INLINE__ void xhashtable_##T1##_##T2##_move_buffer(xpair_##T1##_##T2 **src_buffer, xpair_##T1##_##T2 **dest_buffer, size_t src_size, size_t dest_size) {\
     size_t pos;\
     for (pos = 0; pos < src_size; pos++) {\
-        xhashtable_entry_##T1##_##T2 *entry = src_buffer[pos];\
+        xpair_##T1##_##T2 *entry = src_buffer[pos];\
         while (entry) {\
-            xhashtable_entry_##T1##_##T2 *next  = entry->next;\
+            xpair_##T1##_##T2 *next  = entry->next;\
             size_t index = entry->hash & (dest_size - 1);\
             entry->next = dest_buffer[index];\
             dest_buffer[index] = entry;\
@@ -308,12 +300,12 @@ static __XTD_INLINE__ void xhashtable_##T1##_##T2##_move_buffer(xhashtable_entry
 \
 static enum x_stat xhashtable_##T1##_##T2##_resize(xhashtable_##T1##_##T2 *container, size_t new_capacity)\
 {\
-    xhashtable_entry_##T1##_##T2 **new_buffer;\
-    xhashtable_entry_##T1##_##T2 **old_buffer;\
+    xpair_##T1##_##T2 **new_buffer;\
+    xpair_##T1##_##T2 **old_buffer;\
     if (container->capacity == XTD_MATH_MAX_POW_TWO) {\
         return XTD_MAX_CAPACITY_ERR;\
     }\
-    new_buffer = container->memory_calloc(new_capacity, sizeof(xhashtable_entry_##T1##_##T2));\
+    new_buffer = container->memory_calloc(new_capacity, sizeof(xpair_##T1##_##T2));\
     if (!new_buffer) {\
         return XTD_ALLOC_ERR;\
     }\
@@ -349,7 +341,7 @@ static enum x_stat xhashtable_##T1##_##T2##_get_keys(xhashtable_##T1##_##T2 *con
         return status;\
     }\
     for (index = 0; index < container->capacity; index++) {\
-        xhashtable_entry_##T1##_##T2 *entry = container->buffer[index];\
+        xpair_##T1##_##T2 *entry = container->buffer[index];\
         while (entry) {\
             if ((status = xvector_add(T1)(keys, entry->key)) == XTD_OK) {\
                 entry = entry->next;\
@@ -378,7 +370,7 @@ static enum x_stat xhashtable_##T1##_##T2##_get_values(xhashtable_##T1##_##T2 *c
         return status;\
     }\
     for (index = 0; index < container->capacity; index++) {\
-        xhashtable_entry_##T1##_##T2 *entry = container->buffer[index];\
+        xpair_##T1##_##T2 *entry = container->buffer[index];\
         while (entry) {\
             if ((status = xvector_add(T2)(values, entry->value)) == XTD_OK) {\
                 entry = entry->next;\
@@ -399,9 +391,9 @@ static enum x_stat xhashtable_##T1##_##T2##_get_values(xhashtable_##T1##_##T2 *c
     
 */
 #define SETUP_ITERATOR_FOR_XHASHTABLE(T1, T2) typedef struct xhashtable_iterator_##T1##_##T2##_s { \
-    xhashtable_entry_##T1##_##T2 *forward_iter;\
-    xhashtable_entry_##T1##_##T2 *backward_iter;\
-    xhashtable_entry_##T1##_##T2 *last_forward_value;\
+    xpair_##T1##_##T2 *forward_iter;\
+    xpair_##T1##_##T2 *backward_iter;\
+    xpair_##T1##_##T2 *last_forward_value;\
     size_t buffer_index;\
     size_t buffer_reverse_index;\
     xhashtable_##T1##_##T2 *container;\
@@ -441,7 +433,7 @@ static void xhashtable_iterator_##T1##_##T2##_reset(void *iterator_) {\
     xhashtable_iterator->backward_iter = XTD_NULL;\
     for (index = 0, reverse_index = container->capacity-1; index < container->capacity, reverse_index >= 0; index++, reverse_index--) {\
         if (xhashtable_iterator->forward_iter == XTD_NULL) {\
-            xhashtable_entry_##T1##_##T2 *entry = container->buffer[index];\
+            xpair_##T1##_##T2 *entry = container->buffer[index];\
             if (entry) {\
                 xhashtable_iterator->buffer_index = index;\
                 xhashtable_iterator->forward_iter = entry;\
@@ -451,7 +443,7 @@ static void xhashtable_iterator_##T1##_##T2##_reset(void *iterator_) {\
             }\
         }\
         if (xhashtable_iterator->backward_iter == XTD_NULL) {\
-            xhashtable_entry_##T1##_##T2 *reverse_entry = container->buffer[reverse_index];\
+            xpair_##T1##_##T2 *reverse_entry = container->buffer[reverse_index];\
             if (reverse_entry) {\
                 xhashtable_iterator->buffer_reverse_index = reverse_index;\
                 xhashtable_iterator->backward_iter = reverse_entry;\
@@ -495,7 +487,7 @@ static void *xhashtable_iterator_##T1##_##T2##_next(void *iterator_) {\
     xhashtable_##T1##_##T2 *container;\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
     XIterator *iterator = (XIterator *) iterator_;\
-    xhashtable_entry_##T1##_##T2 *entry;\
+    xpair_##T1##_##T2 *entry;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return XTD_NULL;\
     }\
@@ -534,7 +526,7 @@ static void *xhashtable_iterator_##T1##_##T2##_prev(void *iterator_) {\
     xhashtable_##T1##_##T2 *container;\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
     XIterator *iterator = (XIterator *) iterator_;\
-    xhashtable_entry_##T1##_##T2 *entry;\
+    xpair_##T1##_##T2 *entry;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return XTD_NULL;\
     }\
@@ -571,7 +563,7 @@ static void xhashtable_iterator_##T1##_##T2##_advance_by(void *iterator_, size_t
 static void xhashtable_iterator_##T1##_##T2##_decrement(void *iterator_) {\
     size_t index;\
     size_t cached_buffer_reverse_index;\
-    xhashtable_entry_##T1##_##T2 *cached_entry;\
+    xpair_##T1##_##T2 *cached_entry;\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
     XIterator *iterator = (XIterator *) iterator_;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
@@ -641,7 +633,7 @@ static XIterator *xiterator_init_xhashtable_##T1##_##T2(xhashtable_##T1##_##T2 *
 /**
 
 */
-#define xhashtable_entry(T1, T2) xhashtable_entry_##T1##_##T2
+#define xhashtable_entry(T1, T2) xpair_##T1##_##T2
 
 /**
 
@@ -746,7 +738,7 @@ static XIterator *xiterator_init_xhashtable_##T1##_##T2(xhashtable_##T1##_##T2 *
 /*
 
 */
-#define SETUP_XHASHTABLE_FOR(T1, T2) SETUP_XHASHTABLE_ENTRY_ONLY_FOR(T1, T2) SETUP_XHASHTABLE_ONLY_FOR(T1, T2) SETUP_ITERATOR_FOR_XHASHTABLE(T1, T2)
+#define SETUP_XHASHTABLE_FOR(T1, T2) SETUP_XPAIR_FOR_WITH_HASH_AND_NEXT(T1, T2) SETUP_XHASHTABLE_ONLY_FOR(T1, T2) SETUP_ITERATOR_FOR_XHASHTABLE(T1, T2)
 
 
 #ifdef __cplusplus

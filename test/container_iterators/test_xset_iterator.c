@@ -22,7 +22,7 @@ CESTER_TEST(xset_iterator, _, {
     enum x_stat status;
     XIterator *iterator;
 
-    status = xset_new(str)(&fruits, cester_string_equals, xset_test_string_greater_than);;
+    status = xset_new(str)(&fruits, cester_string_equals, xset_test_string_greater_than);
     cester_assert_uint_eq(status, XTD_OK);
     status = xset_add(str)(fruits, "Apple");
     cester_assert_uint_eq(status, XTD_OK);
