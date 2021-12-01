@@ -1,8 +1,9 @@
-/*!gcc {0} -I. -I../include/ -I../../include/ -I../../../libcester/include -o out; ./out */
+/*!clang -ansi -pedantic-errors {0} -I. -I../include/ -I../../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I.-I../include/  -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc {0} -I. -I../include/ -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -std=c++11 {0} -I. -I../include/ -I../../include/ -I../../../libcester/include -o out; ./out */
 
+/*#define XTD_DONT_TRIM_MANAGED_CSTRING*/
 #include <exotic/cester.h>
 #include <exotic/xtd/xstring.h>
 #include <exotic/xtd/xiterator.h>
@@ -19,9 +20,9 @@ CESTER_TEST(xstring_cstr_char_value, _, {
     allocator.memory_realloc = realloc;
     allocator.memory_free = free;
 
-    cester_assert_str_equal_(xstring_cstr_char_value(ch1, allocator), "2");
-    cester_assert_str_equal_(xstring_cstr_char_value(ch2, allocator), "A");
-    cester_assert_str_equal_(xstring_cstr_char_value(ch3, allocator), "&");
+    cester_assert_str_equal_(xstring_cstr_char_value(allocator, ch1), "2");
+    cester_assert_str_equal_(xstring_cstr_char_value(allocator, ch2), "A");
+    cester_assert_str_equal_(xstring_cstr_char_value(allocator, ch3), "&");
 })
 
 CESTER_TEST(xstring_cstr_int_value, _, {
@@ -35,11 +36,11 @@ CESTER_TEST(xstring_cstr_int_value, _, {
     allocator.memory_realloc = realloc;
     allocator.memory_free = free;
 
-    value = (char *) xstring_cstr_int_value(int1, allocator);
+    value = (char *) xstring_cstr_int_value(allocator, int1);
     cester_assert_str_equal_(value, "0"); free(value);
-    value = (char *) xstring_cstr_int_value(int2, allocator);
+    value = (char *) xstring_cstr_int_value(allocator, int2);
     cester_assert_str_equal_(value, "-38276376"); free(value);
-    value = (char *) xstring_cstr_int_value(int3, allocator);
+    value = (char *) xstring_cstr_int_value(allocator, int3);
     cester_assert_str_equal_(value, "98895895"); free(value);
 })
 
@@ -54,11 +55,11 @@ CESTER_TEST(xstring_cstr_long_value, _, {
     allocator.memory_realloc = realloc;
     allocator.memory_free = free;
 
-    value = (char *) xstring_cstr_long_value(long1, allocator);
+    value = (char *) xstring_cstr_long_value(allocator, long1);
     cester_assert_str_equal_(value, "0"); free(value);
-    value = (char *) xstring_cstr_long_value(long2, allocator);
+    value = (char *) xstring_cstr_long_value(allocator, long2);
     cester_assert_str_equal_(value, "-2147483645"); free(value);
-    value = (char *) xstring_cstr_long_value(long3, allocator);
+    value = (char *) xstring_cstr_long_value(allocator, long3);
     cester_assert_str_equal_(value, "2147483647"); free(value);
 })
 
@@ -73,11 +74,11 @@ CESTER_TEST(xstring_cstr_double_value, _, {
     allocator.memory_realloc = realloc;
     allocator.memory_free = free;
 
-    value = (char *) xstring_cstr_double_value(double1, 2, allocator);
+    value = (char *) xstring_cstr_double_value(allocator, double1, 2);
     cester_assert_str_equal_(value, "0.00"); free(value);
-    value = (char *) xstring_cstr_double_value(double2, 2, allocator);
+    value = (char *) xstring_cstr_double_value(allocator, double2, 2);
     cester_assert_str_equal_(value, "-736627.23"); free(value);
-    value = (char *) xstring_cstr_double_value(double3, 2, allocator);
+    value = (char *) xstring_cstr_double_value(allocator, double3, 2);
     cester_assert_str_equal_(value, "998958989.88"); free(value);
 })
 
@@ -92,15 +93,15 @@ CESTER_TEST(xstring_cstr_float_value, _, {
     allocator.memory_realloc = realloc;
     allocator.memory_free = free;
 
-    value = (char *) xstring_cstr_float_value(float1, 2, allocator);
+    value = (char *) xstring_cstr_float_value(allocator, float1, 2);
     cester_assert_str_equal_(value, "0.00"); free(value);
-    value = (char *) xstring_cstr_float_value(float2, 2, allocator);
+    value = (char *) xstring_cstr_float_value(allocator, float2, 2);
     cester_assert_str_equal_(value, "-736627.25"); free(value);
-    value = (char *) xstring_cstr_float_value(float3, 2, allocator);
+    value = (char *) xstring_cstr_float_value(allocator, float3, 2);
     cester_assert_str_equal_(value, "998958.93"); free(value);
 })
 
-CESTER_TODO_TEST(xstring_cstr_pointer_value, _, {
+CESTER_TEST(xstring_cstr_pointer_value, _, {
     
 })
 

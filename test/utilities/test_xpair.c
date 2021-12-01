@@ -1,5 +1,5 @@
-/*!gcc {0} -I. -I../../include/ -I../include/  -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../include -I../../../libcester/include -o out; ./out */
+/*!gcc {0} -I. -I../../include/ -I../include/  -I../../../libcester/include -o out; ./out */
 /*!gcc {0} -I. -I../../include/ -I../include -I../../../libcester/include -o out; ./out */
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../include -I../../../libcester/include -o out; ./out */
 
@@ -27,6 +27,8 @@ bool int_is_less_than_zero(int value)
 }
 
 )
+
+#ifdef __STDC_VERSION__
 
 CESTER_TEST(xpair_initialization_str, _, {
     xpair(int, int) pair_int_int = xpair_new(1, 10);
@@ -121,6 +123,30 @@ CESTER_TEST(xpair_with_hash_and_next, _, {
 	cester_assert_char_eq(xpair_value(xpair_next(xpair_d)), 'c');
 })
 
+#else
+
+CESTER_TODO_TEST(xpair_initialization_str, _, {
+	XINIT_STRUCT_WITH_FIELDS2(Point, point, x = 90, y = 120);
+	XINIT_STRUCT_WITH_FIELDS2(xpair(int, int), pair_int_int, key = 1, value = 10);
+	XINIT_STRUCT_WITH_FIELDS2(xpair(str, str), pair_str_str, key = "name", value = "exoticlibraries");
+	XINIT_STRUCT_WITH_FIELDS2(xpair(str, int), pair_str_int, key = "string", value = 9000);
+	XINIT_STRUCT_WITH_FIELDS2(xpair(str, Point), pair_str_point, key = "ptr", value = point);
+    
+	cester_assert_int_eq(xpair_key(pair_int_int), 1);
+	cester_assert_str_equal(xpair_key(pair_str_str), "name");
+	cester_assert_str_equal(xpair_key(pair_str_int), "string");
+	cester_assert_str_equal(xpair_key(pair_str_point), "ptr");
+    
+	cester_assert_int_eq(xpair_value(pair_int_int), 10);
+	cester_assert_str_equal(xpair_value(pair_str_str), "exoticlibraries");
+	cester_assert_int_eq(xpair_value(pair_str_int), 9000);
+	cester_assert_int_eq(xpair_value(pair_str_point).x, 90);
+	cester_assert_int_eq(xpair_value(pair_str_point).y, 120);
+})
+
+#endif
+
 CESTER_OPTIONS(
     CESTER_DEBUG_LEVEL(3);
 )
+

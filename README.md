@@ -23,7 +23,7 @@ Types to be implemented
 - [ ] hashset
 - [ ] unordered_hashset
 - [x] xstring
-- [ ] xpair
+- [x] xpair
 - [ ] element
 - [ ] ring
 - [ ] treemap

@@ -1,4 +1,4 @@
-/*!gcc {0} -I. -I../include/ -I../../include/ -I../../../libcester/include -o out; ./out */
+/*!gcc {0} -I. -I../include/ -I../../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I.-I../include/  -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc {0} -I. -I../include/ -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -std=c++11 {0} -I. -I../include/ -I../../include/ -I../../../libcester/include -o out; ./out */
@@ -145,7 +145,7 @@ CESTER_TEST(xstring_cstr_sub_string, _, {
     status = xstring_cstr_sub_string("test_xstring_utils.h", 18, substr_value4);
     cester_assert_int_eq(status, XTD_OK);
     cester_assert_str_equal_(substr_value4, ".h");
-    status = xstring_cstr_sub_string(text2, 0, substr_value5);
+    status = xstring_cstr_sub_string(text2, 5, substr_value5);
     cester_assert_int_eq(status, XTD_OK);
     cester_assert_str_not_equal(substr_value5, "Hello");
     status = xstring_cstr_sub_string(text2, 6, substr_value5);

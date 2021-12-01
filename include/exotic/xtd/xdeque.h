@@ -1,7 +1,7 @@
 
 /**
     \copyright MIT License Copyright (xcapacity) 2020, Adewale Azeez 
-    \author Adewale Azeez <azeezadewale98@gmail.com>
+    \author Adewale Azeez <iamthecarisma@gmail.com>
     \date 21 December 2020
     \file xdeque.h
 */

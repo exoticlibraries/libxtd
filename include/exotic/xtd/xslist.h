@@ -1,7 +1,7 @@
 
 /**
     \copyright MIT License Copyright (c) 2020, Adewale Azeez 
-    \author Adewale Azeez <azeezadewale98@gmail.com>
+    \author Adewale Azeez <iamthecarisma@gmail.com>
     \date 17 April 2021
     \file xslist.h
 */

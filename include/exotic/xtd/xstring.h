@@ -439,7 +439,7 @@ static enum x_stat xstring_cstr_sub_string_1(char *char_array, size_t begin_inde
     
 */
 // valgrind the shit out of this function, I suspect lot of mem leaks
-static char **xstring_cstr_split_with_length_1(XAllocator allocator, size_t char_array_length, char *char_array, char *seperator) {
+static char **xstring_cstr_split_with_length_1_(XAllocator allocator, size_t char_array_length, char *char_array, char *seperator) {
     char **out;
     char *value;
     char **tmp_out;
@@ -520,6 +520,92 @@ static char **xstring_cstr_split_with_length_1(XAllocator allocator, size_t char
         }
         return XTD_NULL;
 }
+static size_t xstring_cstr_split_with_length_1(XAllocator allocator, size_t char_array_length, char *char_array, char *seperator, char ***out) {
+    char *value;
+	bool is_eos;
+    char **tmp_out;
+    size_t str_index;
+    size_t str_index_cache;
+    size_t secondary_index;
+    size_t seperator_length;
+    size_t allocated_value_size;
+    size_t last_seperator_position;
+    size_t found_words_counts = 0;
+
+	if (char_array == XTD_NULL || seperator == XTD_NULL || out == XTD_NULL) {
+        goto xstring_cstr_split_with_length_1_release_and_return_null;
+    }
+    (*out) = XTD_NULL;
+    str_index = 0;
+	is_eos = FALSE;
+    str_index_cache = 0;
+    found_words_counts = 0;
+	allocated_value_size = 0;
+    last_seperator_position = 0;
+    seperator_length = xstring_cstr_length(seperator);
+	if (char_array_length == seperator_length && xstring_cstr_equals(char_array, seperator)) return 0;
+	for (; str_index <= char_array_length; str_index++, str_index_cache = str_index, is_eos = (str_index == char_array_length)) {
+		if (char_array[str_index] == seperator[0] || seperator_length == 0 || is_eos) {
+			secondary_index = 0;
+			if (seperator_length != 0) while (char_array[str_index] != '\0' && char_array[++str_index] == seperator[++secondary_index]);
+			if (seperator_length == secondary_index || is_eos) {
+				if (seperator_length == 0) str_index_cache++;
+				if (!is_eos && str_index == char_array_length-1 && seperator_length == 0) {
+					is_eos = TRUE;
+				}
+				if (is_eos || seperator_length == 0) {
+					allocated_value_size++;
+				}
+				/*printf("is_eos=%d,%d,%d ---", is_eos, str_index, char_array_length);
+				printf("%c-%d-%d-%d-%d-%d\n", char_array[str_index_cache], str_index_cache, str_index, secondary_index, allocated_value_size, last_seperator_position);*/
+				value = (char *) allocator.memory_malloc(allocated_value_size+1 * sizeof(char));
+                if (allocated_value_size == 0) {
+                    value[0] = '\0';
+                } else {
+                    if (xstring_cstr_sub_string_in_range_1(char_array, last_seperator_position, str_index_cache, value) != XTD_OK) {
+                        allocator.memory_free(value);
+                        goto xstring_cstr_split_with_length_1_release_and_return_null;
+                    }
+                }
+				found_words_counts++;
+                tmp_out = (char **) allocator.memory_realloc((*out), found_words_counts * sizeof(char *));
+                (*out) = tmp_out;
+                if (!out) {
+                    goto xstring_cstr_split_with_length_1_release_and_return_null;
+                }
+                (*out)[found_words_counts-1] = value;
+				/*printf("AT::%d::%s::\n", found_words_counts, value);*/
+				if (seperator_length == 0) {
+					str_index_cache--;
+				} else {
+					str_index--;
+				}
+				allocated_value_size = 0;
+				last_seperator_position = str_index + (seperator_length >= 1 || seperator_length == 0 ? 1 : 0);
+				if (is_eos) break;
+				continue;
+			} else {
+				allocated_value_size++;
+			}
+		}
+		allocated_value_size++;
+	}
+	/*if (found_words_counts > 0) {
+		out[found_words_counts] = XTD_NULL;
+	}*/
+	return found_words_counts;
+	
+	xstring_cstr_split_with_length_1_release_and_return_null:
+		if (found_words_counts > 0) {
+            for (secondary_index = 0; secondary_index < found_words_counts-1; secondary_index++) {
+                allocator.memory_free(out[secondary_index]);
+            }
+			if ((*out) != XTD_NULL) {
+				allocator.memory_free(out);
+			}
+        }
+        return 0;
+}
 
 /*
     
@@ -529,8 +615,8 @@ static char **xstring_cstr_split_with_length_1(XAllocator allocator, size_t char
 /*
     
 */
-static char **xstring_cstr_split_1(XAllocator allocator, char *char_array, char *seperator) {
-    return xstring_cstr_split_with_length_1(allocator, xstring_cstr_length(char_array), char_array, seperator);
+static size_t xstring_cstr_split_1(XAllocator allocator, char *char_array, char *seperator, char ***out) {
+    return xstring_cstr_split_with_length_1(allocator, xstring_cstr_length(char_array), char_array, seperator, out);
 }
 
 /*
@@ -554,7 +640,7 @@ static void xstring_cstr_copy(char *src, char *dest, size_t len) {
 */
 static char *xstring_cstr_trim_memory_to_size(XAllocator allocator, char *mem_allocated_chars) {
     size_t length = xstring_cstr_length(mem_allocated_chars);
-    char *copy = (char *) allocator.memory_malloc(length);
+    char *copy = (char *) allocator.memory_malloc(length+1);
     xstring_cstr_copy(mem_allocated_chars, copy, length);
     copy[length] = '\0';
     allocator.memory_free(mem_allocated_chars);
@@ -1170,7 +1256,7 @@ static char *xstring_cstr_append_pointer_free_old(XAllocator allocator, char *de
 static char *xstring_cstr_format_1(XAllocator allocator, const char *str, ...) {
     va_list ap;
     unsigned argscount;
-    char *version_text = allocator.memory_malloc(2000 * sizeof(char));
+    char *version_text = (char *) allocator.memory_malloc(2000 * sizeof(char));
     va_start(ap, argscount);
     va_end(ap);
     return version_text;

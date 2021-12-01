@@ -1,7 +1,7 @@
 
 /*!
     \copyright MIT License Copyright (c) 2020, Adewale Azeez 
-    \author Adewale Azeez <azeezadewale98@gmail.com>
+    \author Adewale Azeez <iamthecarisma@gmail.com>
     \date 07 April 2020
     \file xconf.h
 */
@@ -319,6 +319,23 @@ static size_t xptp_array_size(void **p2p) {
 /*!
 
 */
+static void xfreep2p_wl(XAllocator allocator, void **p2p, size_t size) {
+    size_t index = 0;
+    if (p2p == XTD_NULL) { return; }
+    for (; index < size; index++) {
+        allocator.memory_free(p2p[index]);
+    }
+    allocator.memory_free(p2p);
+}
+
+/*!
+
+*/
+#define xptp_free_wl xfreep2p_wl
+
+/*!
+
+*/
 static void xfreep2p(XAllocator allocator, void **p2p) {
     size_t index = 0;
     if (p2p == XTD_NULL) { return; }
@@ -332,6 +349,19 @@ static void xfreep2p(XAllocator allocator, void **p2p) {
 
 */
 #define xptp_free xfreep2p
+
+/* lol */
+#ifdef __STDC_VERSION__
+/*!
+
+*/
+#define XINIT_STRUCT_WITH_FIELDS2(Struct, field_name, expr1, expr2) Struct field_name = { .expr1, .expr2 }
+#else
+/*!
+
+*/
+#define XINIT_STRUCT_WITH_FIELDS2(Struct, field_name, expr1, expr2) Struct field_name; field_name.expr1; field_name.expr2
+#endif
 
 #ifdef __cplusplus
 }

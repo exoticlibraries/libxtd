@@ -19,7 +19,7 @@ foreach(filepath ${files})
     message(STATUS "FilePath: " ${filepath}  )
     get_filename_component(filename ${filepath} NAME)
     get_filename_component(filenameonly ${filepath} NAME_WLE)
-    if("${filepath}" MATCHES "test_xstring_cstr_split.c")
+    if("${filepath}" MATCHES "test_xstring_escape_sequence")
         set(echo_var "echo")
     endif()
     
