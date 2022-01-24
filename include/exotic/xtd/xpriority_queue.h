@@ -317,14 +317,14 @@ static bool xpriority_queue_iterator_##T##_has_next(void *iterator_) {\
     return (iterator->forward_index < container->size);\
 }\
 \
-static void *xpriority_queue_iterator_##T##_next(void *iterator_) {\
+static T xpriority_queue_iterator_##T##_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xpriority_queue_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return XTD_NULL;\
     }\
     container = (xpriority_queue_##T *) iterator->container;\
-    return (void *) container->buffer[iterator->forward_index++];\
+    return container->buffer[iterator->forward_index++];\
 }\
 \
 static bool xpriority_queue_iterator_##T##_has_prev(void *iterator_) {\
@@ -337,14 +337,14 @@ static bool xpriority_queue_iterator_##T##_has_prev(void *iterator_) {\
     return (iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
 }\
 \
-static void *xpriority_queue_iterator_##T##_prev(void *iterator_) {\
+static T xpriority_queue_iterator_##T##_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xpriority_queue_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return XTD_NULL;\
     }\
     container = (xpriority_queue_##T *) iterator->container;\
-    return (void *) container->buffer[iterator->backward_index--];\
+    return container->buffer[iterator->backward_index--];\
 }\
 \
 static XIterator *xiterator_init_xpriority_queue_##T(xpriority_queue_##T *container) \
@@ -360,9 +360,9 @@ static XIterator *xiterator_init_xpriority_queue_##T(xpriority_queue_##T *contai
     iterator->forward_index = 0;\
     iterator->backward_index = container->size-1;\
     iterator->has_next = xpriority_queue_iterator_##T##_has_next;\
-    iterator->next = xpriority_queue_iterator_##T##_next;\
+    iterator->next = (xiterator_next) xpriority_queue_iterator_##T##_next;\
     iterator->has_prev = xpriority_queue_iterator_##T##_has_prev;\
-    iterator->prev = xpriority_queue_iterator_##T##_prev;\
+    iterator->prev = (xiterator_prev) xpriority_queue_iterator_##T##_prev;\
     iterator->reset_forward = xpriority_queue_iterator_##T##_reset_forward;\
     iterator->reset_backward = xpriority_queue_iterator_##T##_reset_backward;\
     iterator->reset = xpriority_queue_iterator_##T##_reset;\

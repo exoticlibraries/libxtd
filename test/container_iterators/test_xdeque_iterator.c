@@ -1,7 +1,11 @@
-/*!clang -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
+/*!gcc -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
+
+#ifndef __STDC_VERSION__
+#define inline 
+#endif
 
 #include <exotic/cester.h>
 #include <exotic/xtd/xdeque.h>

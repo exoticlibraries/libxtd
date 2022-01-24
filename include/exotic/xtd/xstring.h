@@ -1253,19 +1253,19 @@ static char *xstring_cstr_append_pointer_free_old(XAllocator allocator, char *de
     
 */
 #include <stdarg.h>
-static char *xstring_cstr_format_1(XAllocator allocator, const char *str, ...) {
+/*static char *xstring_cstr_format_1(XAllocator allocator, const char *str, ...) {
     va_list ap;
     unsigned argscount;
     char *version_text = (char *) allocator.memory_malloc(2000 * sizeof(char));
     va_start(ap, argscount);
     va_end(ap);
     return version_text;
-}
+}*/
 
 /*!
     
 */
-#define xstring_cstr_format xstring_cstr_format_1
+//#define xstring_cstr_format xstring_cstr_format_1
 
 /*!
 

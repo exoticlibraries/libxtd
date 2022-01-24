@@ -410,14 +410,14 @@ static bool xset_iterator_##T##_has_next(void *iterator_) {\
     return (container != XTD_NULL && iterator->forward_index < container->size);\
 }\
 \
-static void *xset_iterator_##T##_next(void *iterator_) {\
+static T xset_iterator_##T##_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xset_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return XTD_NULL;\
     }\
     container = (xset_##T *) iterator->container;\
-    return (void *) container->buffer[iterator->forward_index++];\
+    return container->buffer[iterator->forward_index++];\
 }\
 \
 static bool xset_iterator_##T##_has_prev(void *iterator_) {\
@@ -430,14 +430,14 @@ static bool xset_iterator_##T##_has_prev(void *iterator_) {\
     return (container != XTD_NULL && iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
 }\
 \
-static void *xset_iterator_##T##_prev(void *iterator_) {\
+static T xset_iterator_##T##_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xset_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return XTD_NULL;\
     }\
     container = (xset_##T *) iterator->container;\
-    return (void *) container->buffer[iterator->backward_index--];\
+    return container->buffer[iterator->backward_index--];\
 }\
 \
 static XIterator *xiterator_init_xset_##T(xset_##T *container) \
@@ -453,9 +453,9 @@ static XIterator *xiterator_init_xset_##T(xset_##T *container) \
     iterator->forward_index = 0;\
     iterator->backward_index = container->size-1;\
     iterator->has_next = xset_iterator_##T##_has_next;\
-    iterator->next = xset_iterator_##T##_next;\
+    iterator->next = (xiterator_next) xset_iterator_##T##_next;\
     iterator->has_prev = xset_iterator_##T##_has_prev;\
-    iterator->prev = xset_iterator_##T##_prev;\
+    iterator->prev = (xiterator_prev) xset_iterator_##T##_prev;\
     iterator->reset_forward = xset_iterator_##T##_reset_forward;\
     iterator->reset_backward = xset_iterator_##T##_reset_backward;\
     iterator->reset = xset_iterator_##T##_reset;\

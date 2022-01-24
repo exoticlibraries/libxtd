@@ -375,14 +375,14 @@ static bool xvector_iterator_##T##_has_next(void *iterator_) {\
     return (container != XTD_NULL && iterator->forward_index < container->size);\
 }\
 \
-static void *xvector_iterator_##T##_next(void *iterator_) {\
+static T xvector_iterator_##T##_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xvector_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return XTD_NULL;\
     }\
     container = (xvector_##T *) iterator->container;\
-    return (void *) container->buffer[iterator->forward_index++];\
+    return container->buffer[iterator->forward_index++];\
 }\
 \
 static bool xvector_iterator_##T##_has_prev(void *iterator_) {\
@@ -395,14 +395,14 @@ static bool xvector_iterator_##T##_has_prev(void *iterator_) {\
     return (container != XTD_NULL && iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
 }\
 \
-static void *xvector_iterator_##T##_prev(void *iterator_) {\
+static T xvector_iterator_##T##_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xvector_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return XTD_NULL;\
     }\
     container = (xvector_##T *) iterator->container;\
-    return (void *) container->buffer[iterator->backward_index--];\
+    return (T) container->buffer[iterator->backward_index--];\
 }\
 \
 static XIterator *xiterator_init_xvector_##T(xvector_##T *container) \
@@ -418,9 +418,9 @@ static XIterator *xiterator_init_xvector_##T(xvector_##T *container) \
     iterator->forward_index = 0;\
     iterator->backward_index = container->size-1;\
     iterator->has_next = xvector_iterator_##T##_has_next;\
-    iterator->next = xvector_iterator_##T##_next;\
+    iterator->next = (xiterator_next) xvector_iterator_##T##_next;\
     iterator->has_prev = xvector_iterator_##T##_has_prev;\
-    iterator->prev = xvector_iterator_##T##_prev;\
+    iterator->prev = (xiterator_prev) xvector_iterator_##T##_prev;\
     iterator->reset_forward = xvector_iterator_##T##_reset_forward;\
     iterator->reset_backward = xvector_iterator_##T##_reset_backward;\
     iterator->reset = xvector_iterator_##T##_reset;\

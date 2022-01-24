@@ -529,7 +529,7 @@ static bool xlist_iterator_##T##_has_next(void *iterator_) {\
     return (container != XTD_NULL && xlist_iterator->forward_iter != XTD_NULL && xnode_has_data(xlist_iterator->forward_iter));\
 }\
 \
-static void *xlist_iterator_##T##_next(void *iterator_) {\
+static T xlist_iterator_##T##_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -542,7 +542,7 @@ static void *xlist_iterator_##T##_next(void *iterator_) {\
     value = xnode_get_data(xlist_iterator->forward_iter);\
     xlist_iterator->forward_iter = xnode_get_next(xlist_iterator->forward_iter);\
     iterator->forward_index++;\
-    return (void *) value;\
+    return value;\
 }\
 \
 static bool xlist_iterator_##T##_has_prev(void *iterator_) {\
@@ -557,7 +557,7 @@ static bool xlist_iterator_##T##_has_prev(void *iterator_) {\
     return (container != XTD_NULL && xlist_iterator->backward_iter != XTD_NULL && xnode_has_data(xlist_iterator->backward_iter));\
 }\
 \
-static void *xlist_iterator_##T##_prev(void *iterator_) {\
+static T xlist_iterator_##T##_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xlist_iterator_##T *xlist_iterator;\
     xlist_##T *container;\
@@ -570,7 +570,7 @@ static void *xlist_iterator_##T##_prev(void *iterator_) {\
     value = xnode_get_data(xlist_iterator->backward_iter);\
     xlist_iterator->backward_iter = xnode_get_prev(xlist_iterator->backward_iter);\
     iterator->backward_index++;\
-    return (void *) value;\
+    return value;\
 }\
 \
 static XIterator *xiterator_init_xlist_##T(xlist_##T *container) \
@@ -595,9 +595,9 @@ static XIterator *xiterator_init_xlist_##T(xlist_##T *container) \
     iterator->forward_index = 0;\
     iterator->backward_index = container->size-1;\
     iterator->has_next = xlist_iterator_##T##_has_next;\
-    iterator->next = xlist_iterator_##T##_next;\
+    iterator->next = (xiterator_next) xlist_iterator_##T##_next;\
     iterator->has_prev = xlist_iterator_##T##_has_prev;\
-    iterator->prev = xlist_iterator_##T##_prev;\
+    iterator->prev = (xiterator_prev) xlist_iterator_##T##_prev;\
     iterator->reset_forward = xlist_iterator_##T##_reset_forward;\
     iterator->reset_backward = xlist_iterator_##T##_reset_backward;\
     iterator->reset = xlist_iterator_##T##_reset;\

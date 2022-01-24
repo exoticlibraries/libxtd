@@ -482,7 +482,7 @@ static bool xhashtable_iterator_##T1##_##T2##_has_next(void *iterator_) {\
     return container->size > 0 && xhashtable_iterator->forward_iter != XTD_NULL;\
 }\
 \
-static void *xhashtable_iterator_##T1##_##T2##_next(void *iterator_) {\
+static xpair_##T1##_##T2 *xhashtable_iterator_##T1##_##T2##_next(void *iterator_) {\
     size_t index;\
     xhashtable_##T1##_##T2 *container;\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
@@ -506,7 +506,7 @@ static void *xhashtable_iterator_##T1##_##T2##_next(void *iterator_) {\
             }\
         }\
     }\
-    return (void *) entry;\
+    return entry;\
 }\
 \
 static bool xhashtable_iterator_##T1##_##T2##_has_prev(void *iterator_) {\
@@ -521,7 +521,7 @@ static bool xhashtable_iterator_##T1##_##T2##_has_prev(void *iterator_) {\
     return container->size > 0 && xhashtable_iterator->backward_iter != XTD_NULL;\
 }\
 \
-static void *xhashtable_iterator_##T1##_##T2##_prev(void *iterator_) {\
+static xpair_##T1##_##T2 *xhashtable_iterator_##T1##_##T2##_prev(void *iterator_) {\
     size_t index;\
     xhashtable_##T1##_##T2 *container;\
     xhashtable_iterator_##T1##_##T2 *xhashtable_iterator;\
@@ -544,7 +544,7 @@ static void *xhashtable_iterator_##T1##_##T2##_prev(void *iterator_) {\
             }\
         }\
     }\
-    return (void *) entry;\
+    return entry;\
 }\
 \
 static void xhashtable_iterator_##T1##_##T2##_advance_by(void *iterator_, size_t distance) {\
@@ -612,9 +612,9 @@ static XIterator *xiterator_init_xhashtable_##T1##_##T2(xhashtable_##T1##_##T2 *
     iterator->forward_index = 0;\
     iterator->backward_index = container->size-1;\
     iterator->has_next = xhashtable_iterator_##T1##_##T2##_has_next;\
-    iterator->next = xhashtable_iterator_##T1##_##T2##_next;\
+    iterator->next = (xiterator_next) xhashtable_iterator_##T1##_##T2##_next;\
     iterator->has_prev = xhashtable_iterator_##T1##_##T2##_has_prev;\
-    iterator->prev = xhashtable_iterator_##T1##_##T2##_prev;\
+    iterator->prev = (xiterator_prev) xhashtable_iterator_##T1##_##T2##_prev;\
     iterator->reset_forward = xhashtable_iterator_##T1##_##T2##_reset_forward;\
     iterator->reset_backward = xhashtable_iterator_##T1##_##T2##_reset_backward;\
     iterator->reset = xhashtable_iterator_##T1##_##T2##_reset;\

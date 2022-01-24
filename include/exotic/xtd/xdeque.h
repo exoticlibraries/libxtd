@@ -551,14 +551,14 @@ static bool xdeque_iterator_##T##_has_next(void *iterator_) {\
     return (container != XTD_NULL && iterator->forward_index < container->size);\
 }\
 \
-static void *xdeque_iterator_##T##_next(void *iterator_) {\
+static T xdeque_iterator_##T##_next(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xdeque_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return XTD_NULL;\
     }\
     container = (xdeque_##T *) iterator->container;\
-    return (void *) container->buffer[iterator->forward_index++];\
+    return container->buffer[iterator->forward_index++];\
 }\
 \
 static bool xdeque_iterator_##T##_has_prev(void *iterator_) {\
@@ -571,14 +571,14 @@ static bool xdeque_iterator_##T##_has_prev(void *iterator_) {\
     return (container != XTD_NULL && iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
 }\
 \
-static void *xdeque_iterator_##T##_prev(void *iterator_) {\
+static T xdeque_iterator_##T##_prev(void *iterator_) {\
     XIterator *iterator = (XIterator *) iterator_;\
     xdeque_##T *container;\
     if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
         return XTD_NULL;\
     }\
     container = (xdeque_##T *) iterator->container;\
-    return (void *) container->buffer[iterator->backward_index--];\
+    return container->buffer[iterator->backward_index--];\
 }\
 \
 static XIterator *xiterator_init_xdeque_##T(xdeque_##T *container) \
@@ -594,9 +594,9 @@ static XIterator *xiterator_init_xdeque_##T(xdeque_##T *container) \
     iterator->forward_index = 0;\
     iterator->backward_index = container->size-1;\
     iterator->has_next = xdeque_iterator_##T##_has_next;\
-    iterator->next = xdeque_iterator_##T##_next;\
+    iterator->next = (xiterator_next) xdeque_iterator_##T##_next;\
     iterator->has_prev = xdeque_iterator_##T##_has_prev;\
-    iterator->prev = xdeque_iterator_##T##_prev;\
+    iterator->prev = (xiterator_prev) xdeque_iterator_##T##_prev;\
     iterator->reset_forward = xdeque_iterator_##T##_reset_forward;\
     iterator->reset_backward = xdeque_iterator_##T##_reset_backward;\
     iterator->reset = xdeque_iterator_##T##_reset;\
