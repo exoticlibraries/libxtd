@@ -146,6 +146,8 @@ enum x_stat {
     XTD_TERMINATED_ERR
 };
 
+/* create macro to for string value of x_stat */
+
 /*!
     
 */

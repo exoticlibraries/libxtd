@@ -162,16 +162,147 @@ static enum x_stat xcircular_buffer_##T##_dequeue(xcircular_buffer_##T *containe
 \
 \
 \
+
+/*
 // _should shift the others forward, and remove the last index;
 // xcircular_buffer_add return the status XTD_MAX_CAPACITY_ERR if the buffer is full
 // xcircular_buffer_enqueue simply replaces the oldest data in the queue
 // _enqueue_cb report the removed element before replacing it
 // _dequeue_at and _dequeue should invalidate the removed index or assign to NULL not just shift memory
+*/
 
 /*
     
 */
 #define SETUP_ITERATOR_FOR_XCIRCULAR_BUFFER(T) \
+\
+static void xcircular_buffer_iterator_##T##_reset_forward(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index = 0;\
+}\
+\
+static void xcircular_buffer_iterator_##T##_reset_backward(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->backward_index = ((xcircular_buffer_##T *) iterator->container)->size-1;\
+}\
+\
+static void xcircular_buffer_iterator_##T##_reset(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index = 0;\
+    iterator->backward_index = ((xcircular_buffer_##T *) iterator->container)->size-1;\
+}\
+\
+static void xcircular_buffer_iterator_##T##_destroy(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL) {\
+        return;\
+    }\
+    if (iterator->container != XTD_NULL) {\
+        ((xcircular_buffer_##T *) iterator->container)->memory_free(iterator);\
+        return;\
+    }\
+    x_free(iterator);\
+}\
+\
+static void xcircular_buffer_iterator_##T##_advance_by(void *iterator_, size_t distance) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index += distance;\
+}\
+\
+static void xcircular_buffer_iterator_##T##_decrement(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index--;\
+}\
+\
+static void xcircular_buffer_iterator_##T##_increment(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return;\
+    }\
+    iterator->forward_index++;\
+}\
+\
+static bool xcircular_buffer_iterator_##T##_has_next(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xcircular_buffer_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return FALSE;\
+    }\
+    container = (xcircular_buffer_##T *) iterator->container;\
+    return (container != XTD_NULL && iterator->forward_index < container->size);\
+}\
+\
+static T xcircular_buffer_iterator_##T##_next(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xcircular_buffer_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    container = (xcircular_buffer_##T *) iterator->container;\
+    return container->buffer[iterator->forward_index++];\
+}\
+\
+static bool xcircular_buffer_iterator_##T##_has_prev(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xcircular_buffer_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return FALSE;\
+    }\
+    container = (xcircular_buffer_##T *) iterator->container;\
+    return (container != XTD_NULL && iterator->backward_index != -1 && ((iterator->backward_index <= container->size) || (iterator->backward_index = container->size-1) > 0));\
+}\
+\
+static T xcircular_buffer_iterator_##T##_prev(void *iterator_) {\
+    XIterator *iterator = (XIterator *) iterator_;\
+    xcircular_buffer_##T *container;\
+    if (iterator == XTD_NULL || iterator->container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    container = (xcircular_buffer_##T *) iterator->container;\
+    return (T) container->buffer[iterator->backward_index--];\
+}\
+\
+static XIterator *xiterator_init_xcircular_buffer_##T(xcircular_buffer_##T *container) \
+{\
+    XIterator *iterator;\
+    if (container == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    iterator = (XIterator *) container->memory_malloc(sizeof(XIterator));\
+    if (iterator == XTD_NULL) {\
+        return XTD_NULL;\
+    }\
+    iterator->forward_index = 0;\
+    iterator->backward_index = container->size-1;\
+    iterator->has_next = xcircular_buffer_iterator_##T##_has_next;\
+    iterator->next = (xiterator_next) xcircular_buffer_iterator_##T##_next;\
+    iterator->has_prev = xcircular_buffer_iterator_##T##_has_prev;\
+    iterator->prev = (xiterator_prev) xcircular_buffer_iterator_##T##_prev;\
+    iterator->reset_forward = xcircular_buffer_iterator_##T##_reset_forward;\
+    iterator->reset_backward = xcircular_buffer_iterator_##T##_reset_backward;\
+    iterator->reset = xcircular_buffer_iterator_##T##_reset;\
+    iterator->destroy = xcircular_buffer_iterator_##T##_destroy;\
+    iterator->advance_by = xcircular_buffer_iterator_##T##_advance_by;\
+    iterator->increment = xcircular_buffer_iterator_##T##_increment;\
+    iterator->decrement = xcircular_buffer_iterator_##T##_decrement;\
+    iterator->container = container;\
+    return iterator;\
+}\
 \
 \
 \
