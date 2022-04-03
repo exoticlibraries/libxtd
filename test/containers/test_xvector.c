@@ -469,6 +469,7 @@ CESTER_TEST(xvector_swap, _, {
     cester_assert_uint_eq(xvector_get_back(str)(fruits, &value), XTD_OK);
     cester_assert_str_equal(value, "Fufu");
 
+    xvector_destroy(foods);
     xvector_destroy(fruits);
 })
 
@@ -516,6 +517,7 @@ CESTER_TEST(xvector_swap_buffer, _, {
     cester_assert_uint_eq(xvector_get_back(str)(fruits, &value), XTD_OK);
     cester_assert_str_equal(value, "Fufu");
 
+    xvector_destroy(foods);
     xvector_destroy(fruits);
 })
 

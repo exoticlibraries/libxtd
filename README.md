@@ -24,8 +24,7 @@ Types to be implemented
 - [ ] unordered_hashset
 - [x] xstring
 - [x] xpair
-- [ ] element
-- [ ] ring
+- [x] circular_buffer/ring
 - [ ] treemap
 - [ ] tuple
 - [ ] tree

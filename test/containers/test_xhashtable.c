@@ -45,8 +45,8 @@ CESTER_TEST(xhashtable_conf_init, _, {
     config.expansion_rate = 5;
     config.capacity       = 20;
     config.max_size       = 5000;
-    config.key_length    = -1;
-    config.load_factor   = 0.5f;
+    config.key_length     = -1;
+    config.load_factor    = 0.5f;
     status = xhashtable_new_config(char, int)(&config, &intechars, compare_char, hash_char);
     cester_assert_uint_eq(status, XTD_OK);
 
