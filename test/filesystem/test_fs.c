@@ -6,11 +6,17 @@
 #include <exotic/cester.h>
 #include <exotic/xtd/io/fs.h>
 
+/* Implements and test TEST_ASSERTION_1 and TEST_ASSERTION_@ on non Win32 platforms */
 #ifdef _WIN32
 #define TEST_ASSERTION_1 cester_assert_str_equal(full_file_path, "C:\\");
+#else
+#define TEST_ASSERTION_1 
 #endif
+
 #ifdef _WIN32
 #define TEST_ASSERTION_2 cester_assert_str_equal(full_file_path, "Y:\\..:\\Users\\thecarisma");
+#else
+#define TEST_ASSERTION_2 
 #endif
 
 

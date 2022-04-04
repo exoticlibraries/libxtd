@@ -63,6 +63,12 @@ CESTER_TEST(xstring_cstr_long_value, _, {
     cester_assert_str_equal_(value, "2147483647"); free(value);
 })
 
+#ifdef _WIN32
+#define XSTR_DOUBLE_VALUE_1 "998958989.88"
+#else
+#define XSTR_DOUBLE_VALUE_1 "998958989.0"
+#endif
+
 CESTER_TEST(xstring_cstr_double_value, _, {
     double double1 = 0.00;
     double double2 = -736627.23728378;
@@ -79,7 +85,7 @@ CESTER_TEST(xstring_cstr_double_value, _, {
     value = (char *) xstring_cstr_double_value(allocator, double2, 2);
     cester_assert_str_equal_(value, "-736627.23"); free(value);
     value = (char *) xstring_cstr_double_value(allocator, double3, 2);
-    cester_assert_str_equal_(value, "998958989.88"); free(value);
+    cester_assert_str_equal_(value, XSTR_DOUBLE_VALUE_1); free(value);
 })
 
 CESTER_TEST(xstring_cstr_float_value, _, {

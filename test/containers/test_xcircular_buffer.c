@@ -14,10 +14,10 @@
 CESTER_BODY(
     typedef char* str;
     typedef char** char_array;
-    SETUP_XCIRCULAR_BUFFER_ONLY_FOR(int)
     SETUP_XCIRCULAR_BUFFER_FOR(str)
-    SETUP_XALGORITHM_SWAP_FOR(xcircular_buffer_str)
+    SETUP_XCIRCULAR_BUFFER_ONLY_FOR(int)
     SETUP_XALGORITHM_SWAP_FOR(char_array)
+    SETUP_XALGORITHM_SWAP_FOR(xcircular_buffer_str)
 
 void on_ring_element_cb_int(int element) {
     cester_assert_uint_lt(element, 11);

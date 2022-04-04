@@ -10,6 +10,9 @@
 #ifdef _WIN32
 #define OPTIONAL_ASSERTION_1 cester_assert_false(xio_create_file("/folder/dami.txt"));
 #define OPTIONAL_ASSERTION_2 cester_assert_false(xio_create_file("dami.$#&$*$*($)$)!@#$%%^&^*&*(()"));
+#else
+#define OPTIONAL_ASSERTION_1 cester_assert_false(xio_create_file("C:/folder/dami.txt"));
+#define OPTIONAL_ASSERTION_2 cester_assert_false(xio_create_file("C:/dami.$#&$*$*($)$)!@#$%%^&^*&*(()"));
 #endif
 
 CESTER_BODY(
