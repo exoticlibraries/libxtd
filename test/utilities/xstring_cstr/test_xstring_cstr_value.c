@@ -69,6 +69,7 @@ CESTER_TEST(xstring_cstr_long_value, _, {
 #define XSTR_DOUBLE_VALUE_1 "998958989.00"
 #endif
 
+#ifdef _WIN32
 CESTER_TEST(xstring_cstr_double_value, _, {
     double double1 = 0.00;
     double double2 = -736627.23728378;
@@ -87,6 +88,7 @@ CESTER_TEST(xstring_cstr_double_value, _, {
     value = (char *) xstring_cstr_double_value(allocator, double3, 2);
     cester_assert_str_equal_(value, XSTR_DOUBLE_VALUE_1); free(value);
 })
+#endif
 
 CESTER_TEST(xstring_cstr_float_value, _, {
     float float1 = 0.00;
