@@ -1465,7 +1465,7 @@ static const xstring *xstring_new(char *char_array) {
     if (xvector_new(xchar_internal__)(&xstring_internal__) != XTD_OK) {
         return XTD_NULL;
     }
-    for(index = 0; char_array[index] != '\0'; index++) {
+    for (index = 0; char_array[index] != '\0'; index++) {
         xvector_add(xchar_internal__)(xstring_internal__, char_array[index]);
     }
     xvector_add(xchar_internal__)(xstring_internal__, '\0');

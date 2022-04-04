@@ -33,6 +33,7 @@ CESTER_TEST(xio_get_current_dir, test_inst, {
 })
 
 
+#ifdef _WIN32
 CESTER_TEST(xio_absolute_path_name, test_inst, {
     char full_file_path[260];
     enum x_stat status;
@@ -51,6 +52,7 @@ CESTER_TEST(xio_absolute_path_name, test_inst, {
     cester_assert_str_not_equal(full_file_path, XTD_NULL);
     TEST_ASSERTION_2
 })
+#endif
 
 /* TODO treat relative to file in another parent folder, not just starts with*/
 CESTER_TEST(xio_relative_path_name, test_inst, {

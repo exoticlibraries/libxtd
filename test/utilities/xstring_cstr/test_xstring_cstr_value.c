@@ -66,7 +66,7 @@ CESTER_TEST(xstring_cstr_long_value, _, {
 #ifdef _WIN32
 #define XSTR_DOUBLE_VALUE_1 "998958989.88"
 #else
-#define XSTR_DOUBLE_VALUE_1 "998958989.0"
+#define XSTR_DOUBLE_VALUE_1 "998958989.00"
 #endif
 
 CESTER_TEST(xstring_cstr_double_value, _, {
