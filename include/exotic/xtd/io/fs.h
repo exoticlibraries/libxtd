@@ -115,8 +115,8 @@ static enum x_stat xio_normalize_path(XAllocator allocator, char *rough_path, ch
 */
 static enum x_stat xio_relative_path_name(XAllocator allocator, char *parent_path, char *child_path, char seperator, char **out) {
     char *relative_path;
-    char *normalized_parent_path;
     char *normalized_child_path;
+    char *normalized_parent_path;
     size_t normalized_child_path_length;
     size_t normalized_parent_path_length;
 
