@@ -4,7 +4,7 @@
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../include -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
-#include <exotic/xtd/xtypes_bounds.h>
+#include <exotic/xtd/util/xtypes_bounds.h>
 
 CESTER_TEST(xbound_cstr_is_uppercase, _, {
     cester_assert_false(xbound_cstr_is_uppercase("a"));

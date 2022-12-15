@@ -8,7 +8,7 @@
 #endif
 
 #include <exotic/cester.h>
-#include <exotic/xtd/xdeque.h>
+#include <exotic/xtd/container/xdeque.h>
 #include <exotic/xtd/xiterator.h>
 
 CESTER_BODY(

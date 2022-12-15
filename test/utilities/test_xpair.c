@@ -4,7 +4,7 @@
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../include -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
-#include <exotic/xtd/xpair.h>
+#include <exotic/xtd/container/xpair.h>
 
 CESTER_BODY(
 typedef struct point_s {

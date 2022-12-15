@@ -15,7 +15,7 @@ extern "C" {
 
 #include <stdio.h>
 #include <exotic/xtd/xcommon.h>
-#include <exotic/xtd/xstring.h>
+#include <exotic/xtd/container/xstring.h>
 #ifdef _WIN32
 #include <direct.h>
 #include <windows.h>

@@ -2,7 +2,7 @@
 
 #include <exotic/cester.h>
 #include <exotic/xtd/xcommon.h>
-#include <exotic/xtd/xcircular_buffer.h>
+#include <exotic/xtd/container/xcircular_buffer.h>
 
 CESTER_BODY(
     SETUP_XCIRCULAR_BUFFER_FOR(int)

@@ -8,8 +8,8 @@
 
 #include <exotic/cester.h>
 #include <exotic/xtd/xiterator.h>
-#include <exotic/xtd/xalgorithm.h>
-#include <exotic/xtd/xcircular_buffer.h>
+#include <exotic/xtd/algorithm/xalgorithm.h>
+#include <exotic/xtd/container/xcircular_buffer.h>
 
 CESTER_BODY(
     typedef char* str;

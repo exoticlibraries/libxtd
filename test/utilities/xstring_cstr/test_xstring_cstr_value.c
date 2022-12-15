@@ -5,7 +5,7 @@
 
 /*#define XTD_DONT_TRIM_MANAGED_CSTRING*/
 #include <exotic/cester.h>
-#include <exotic/xtd/xstring.h>
+#include <exotic/xtd/container/xstring.h>
 #include <exotic/xtd/xiterator.h>
 
 #define cester_assert_str_equal_(x,y) cester_assert_true(xstring_cstr_equals(x,y))

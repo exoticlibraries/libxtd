@@ -4,7 +4,7 @@
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
-#include <exotic/xtd/xcircular_buffer.h>
+#include <exotic/xtd/container/xcircular_buffer.h>
 #include <exotic/xtd/xiterator.h>
 
 CESTER_BODY(
