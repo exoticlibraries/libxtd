@@ -4,7 +4,7 @@
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
-#include <exotic/xtd/xset.h>
+#include <exotic/xtd/container/xset.h>
 #include <exotic/xtd/xiterator.h>
 
 CESTER_BODY(
@@ -22,7 +22,7 @@ CESTER_TEST(xset_iterator, _, {
     enum x_stat status;
     XIterator *iterator;
 
-    status = xset_new(str)(&fruits, cester_string_equals, xset_test_string_greater_than);;
+    status = xset_new(str)(&fruits, cester_string_equals, xset_test_string_greater_than);
     cester_assert_uint_eq(status, XTD_OK);
     status = xset_add(str)(fruits, "Apple");
     cester_assert_uint_eq(status, XTD_OK);

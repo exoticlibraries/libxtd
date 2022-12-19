@@ -1,0 +1,56 @@
+
+
+@import url("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css");
+
+pre {
+	overflow: auto;
+}
+
+code {
+	line-height: 1.5 !important;
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+
+.grid-view {
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: 20px;
+    margin-bottom: 50px;
+	justify-content: space-between;
+}
+
+.grid-view > .grid-item {
+	border: 1px solid grey;
+    padding: 20px;
+    flex: 1;
+    border-radius: 6px;
+	margin: 30px;
+	cursor: pointer;
+	min-width: 200px;
+	max-width: 300px;
+	text-decoration: none !important;
+}
+
+.grid-view > .grid-item > i {
+	margin-right: 10px;
+}
+
+.grid-view > .grid-item:active {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.std-icon-pack {
+	background: yellow;
+    color: white;
+    width: fit-content;
+    height: 90px;
+    width: 90px;
+    border-radius: 100%;
+    overflow: hidden;
+	position: relative;
+}
+
+.std-icon-pack > i {
+	position: absolute;
+}

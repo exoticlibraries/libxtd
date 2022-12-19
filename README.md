@@ -23,9 +23,8 @@ Types to be implemented
 - [ ] hashset
 - [ ] unordered_hashset
 - [x] xstring
-- [ ] xpair
-- [ ] element
-- [ ] ring
+- [x] xpair
+- [x] xcircular_buffer/ring
 - [ ] treemap
 - [ ] tuple
 - [ ] tree

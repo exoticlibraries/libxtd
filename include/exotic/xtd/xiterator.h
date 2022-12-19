@@ -1,7 +1,7 @@
 
 /**
     \copyright MIT License Copyright (c) 2020, Adewale Azeez 
-    \author Adewale Azeez <azeezadewale98@gmail.com>
+    \author Adewale Azeez <iamthecarisma@gmail.com>
     \date 24 June 2020
     \file iterator.h
 */

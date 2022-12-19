@@ -1,13 +1,13 @@
-/*!gcc {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
+/*!gcc {0} -Wno-pointer-to-int-cast -Wno-int-conversion -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc  -ansi -pedantic-errors {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -ansi -pedantic-errors {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
 /*!gcc {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
-#include <exotic/xtd/xhashtable.h>
+#include <exotic/xtd/container/xhashtable.h>
 #include <exotic/xtd/xiterator.h>
-#include <exotic/xtd/xalgorithm.h>
+#include <exotic/xtd/algorithm/xalgorithm.h>
 
 CESTER_BODY(
     typedef char* str;
@@ -45,8 +45,8 @@ CESTER_TEST(xhashtable_conf_init, _, {
     config.expansion_rate = 5;
     config.capacity       = 20;
     config.max_size       = 5000;
-    config.key_length    = -1;
-    config.load_factor   = 0.5f;
+    config.key_length     = -1;
+    config.load_factor    = 0.5f;
     status = xhashtable_new_config(char, int)(&config, &intechars, compare_char, hash_char);
     cester_assert_uint_eq(status, XTD_OK);
 

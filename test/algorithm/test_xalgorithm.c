@@ -4,7 +4,7 @@
 /*!g++ -std=c++11 {0} -I. -I../../include/ -o out; ./out */
 
 #include <exotic/cester.h>
-#include <exotic/xtd/xalgorithm.h>
+#include <exotic/xtd/algorithm/xalgorithm.h>
 
 #ifdef __STDC_VERSION__
 CESTER_BODY(

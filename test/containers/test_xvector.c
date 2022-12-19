@@ -5,9 +5,9 @@
 /*!g++ -std=c++11 {0} -I. -I../../include/ -I../include/ -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
-#include <exotic/xtd/xvector.h>
+#include <exotic/xtd/container/xvector.h>
 #include <exotic/xtd/xiterator.h>
-#include <exotic/xtd/xalgorithm.h>
+#include <exotic/xtd/algorithm/xalgorithm.h>
 
 CESTER_BODY(
     typedef char* str;
@@ -469,6 +469,7 @@ CESTER_TEST(xvector_swap, _, {
     cester_assert_uint_eq(xvector_get_back(str)(fruits, &value), XTD_OK);
     cester_assert_str_equal(value, "Fufu");
 
+    xvector_destroy(foods);
     xvector_destroy(fruits);
 })
 
@@ -516,6 +517,7 @@ CESTER_TEST(xvector_swap_buffer, _, {
     cester_assert_uint_eq(xvector_get_back(str)(fruits, &value), XTD_OK);
     cester_assert_str_equal(value, "Fufu");
 
+    xvector_destroy(foods);
     xvector_destroy(fruits);
 })
 

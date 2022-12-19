@@ -4,7 +4,7 @@
 /*!g++ -std=c++11 {0} -I. -I../../include/ -o out; ./out */
 
 #include <exotic/cester.h>
-#include <exotic/xtd/x_unmanaged_apis.h>
+#include <exotic/xtd/util/x_unmanaged_apis.h>
 #include <exotic/xtd/xiterator.h>
 
 CESTER_TEST(manage_raw_ptr_array_add, _, {

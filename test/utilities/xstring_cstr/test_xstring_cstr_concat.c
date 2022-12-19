@@ -1,10 +1,10 @@
-/*!gcc {0} -I. -I../include/ -I../../include/ -I../../../libcester/include -o out; ./out */
-/*!g++ -ansi -pedantic-errors {0} -I.-I../include/  -I../../include/ -I../../../libcester/include -o out; ./out */
-/*!gcc {0} -I. -I../include/ -I../../include/ -I../../../libcester/include -o out; ./out */
-/*!g++ -std=c++11 {0} -I. -I../include/ -I../../include/ -I../../../libcester/include -o out; ./out */
+/*!gcc {0} -I. -I../include/ -I../../include/ -I../../../include/ -I../../../libcester/include -o out; ./out */
+/*!g++ -ansi -pedantic-errors {0} -I.-I../include/  -I../../include/ -I../../../include/ -I../../../libcester/include -o out; ./out */
+/*!gcc {0} -I. -I../include/ -I../../include/ -I../../../include/ -I../../../libcester/include -o out; ./out */
+/*!g++ -std=c++11 {0} -I. -I../include/ -I../../include/ -I../../../include/ -I../../../libcester/include -o out; ./out */
 
 #include <exotic/cester.h>
-#include <exotic/xtd/xstring.h>
+#include <exotic/xtd/container/xstring.h>
 #include <exotic/xtd/xiterator.h>
 
 #define cester_assert_str_equal_(x,y) cester_assert_true(xstring_cstr_equals(x,y))
@@ -65,6 +65,14 @@ CESTER_SKIP_TEST(xstring_cstr_concat_long, _, {
     cester_assert_str_equal_(value, "Year -287372021"); free(value);
 })
 
+#ifdef _WIN32
+#define HELLO_DOUBLE_CONCAT_RESULT_1 "Hello90878787.88"
+#define HELLO_DOUBLE_CONCAT_RESULT_2 "Year -678768876.88"
+#else
+#define HELLO_DOUBLE_CONCAT_RESULT_1 "Hello90878787.00"
+#define HELLO_DOUBLE_CONCAT_RESULT_2 "Year -678768876.00"
+#endif
+
 CESTER_TEST(xstring_cstr_concat_double, _, {
     char *value;
     XAllocator allocator;
@@ -74,9 +82,10 @@ CESTER_TEST(xstring_cstr_concat_double, _, {
     allocator.memory_free = free;
 
     value = (char *) xstring_cstr_concat_double(allocator, "Hello", 90878787.0);
-    cester_assert_str_equal_(value, "Hello90878787.88"); free(value);
+    cester_assert_str_equal_(value, HELLO_DOUBLE_CONCAT_RESULT_1); printf("Value 1:%s\n", value); free(value);
     value = (char *) xstring_cstr_concat_double(allocator, "Year ", -678768876.0);
-    cester_assert_str_equal_(value, "Year -678768876.88"); free(value);
+    cester_assert_str_equal_(value, HELLO_DOUBLE_CONCAT_RESULT_2); printf("Value 2:%s\n", value); free(value);
+    
 })
 
 CESTER_TEST(xstring_cstr_concat_float, _, {
