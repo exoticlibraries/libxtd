@@ -68,7 +68,7 @@ static enum x_stat xpriority_queue_##T##_new_config(struct xcontainer_config * c
     xpriority_queue_##T *container;\
     T *buffer;\
     if (!cmp) {\
-        return XTD_INVALID_PARAMETER;\
+        return XTD_INVALID_PARAMETER_ERR;\
     }\
     if (config->expansion_rate <= 1) {\
         expansion_rate = XDEFAULT_CONTAINER_EXPANSION_RATE;\

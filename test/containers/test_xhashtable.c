@@ -110,6 +110,34 @@ CESTER_TEST(xhashtable_get, _, {
     xhashtable_destroy(char, int)(intechars);
 })
 
+CESTER_TEST(xhashtable_get_with_key, _, {
+    xhashtable(char, int) *intechars;
+    enum x_stat status;
+    int value;
+    char value_key;
+
+    status = xhashtable_new(char, int)(&intechars, compare_char, hash_char);
+    cester_assert_uint_eq(status, XTD_OK);
+    cester_assert_uint_eq(xhashtable_put(char, int)(intechars, 'a', 10), XTD_OK);
+    cester_assert_uint_eq(xhashtable_put(char, int)(intechars, 'b', 20), XTD_OK);
+    cester_assert_uint_eq(xhashtable_put(char, int)(intechars, 'c', 30), XTD_OK);
+    cester_assert_uint_eq(xhashtable_put(char, int)(intechars, 'd', 40), XTD_OK);
+    cester_assert_uint_eq(xhashtable_put(char, int)(intechars, 'e', 50), XTD_OK);
+
+    cester_assert_uint_eq(xhashtable_get_with_key(char, int)(intechars, 'd', &value, XTD_NULL), XTD_OK);
+    cester_assert_uint_eq(value, 40); cester_assert_char_ne(value_key, 'd');
+    cester_assert_uint_eq(xhashtable_get_with_key(char, int)(intechars, 'b', &value, XTD_NULL), XTD_OK);
+    cester_assert_uint_eq(value, 20); cester_assert_char_ne(value_key, 'b');
+    cester_assert_uint_eq(xhashtable_get_with_key(char, int)(intechars, 'a', &value, &value_key), XTD_OK);
+    cester_assert_uint_eq(value, 10); cester_assert_char_eq(value_key, 'a');
+    cester_assert_uint_eq(xhashtable_get_with_key(char, int)(intechars, 'c', &value, &value_key), XTD_OK);
+    cester_assert_uint_eq(value, 30); cester_assert_char_eq(value_key, 'c');
+    cester_assert_uint_eq(xhashtable_get_with_key(char, int)(intechars, 'e', &value, &value_key), XTD_OK);
+    cester_assert_uint_eq(value, 50); cester_assert_char_eq(value_key, 'e');
+
+    xhashtable_destroy(char, int)(intechars);
+})
+
 CESTER_TEST(xhashtable_get_null_key, _, {
     xhashtable(char, int) *intechars;
     enum x_stat status;

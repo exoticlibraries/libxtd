@@ -7,8 +7,6 @@
 #include <exotic/xtd/container/xstring.h>
 #include <exotic/xtd/xiterator.h>
 
-#define cester_assert_str_equal_(x,y) cester_assert_true(xstring_cstr_equals(x,y))
-
 #ifdef __XTD_STDC_VERSION__
 #define TEST_CASE_CHAR_ARRAY_HELLO_WORLD {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'}
 #else
@@ -25,23 +23,23 @@ CESTER_TEST(xstring_cstr_append_cstr, _, {
     allocator.memory_free = free;
     
     value = (char *) xstring_cstr_append_cstr(allocator, "World", "Hello", 6);
-    cester_assert_str_equal_(value, XTD_NULL);
+    cester_assert_ptr_equal(value, XTD_NULL);
     value = (char *) xstring_cstr_append_cstr(allocator, "World", "Hello", 0);
-    cester_assert_str_equal_(value, "HelloWorld"); free(value);
+    cester_assert_str_equal(value, "HelloWorld"); free(value);
     value = (char *) xstring_cstr_append_cstr(allocator, "World", "Hello", 5);
-    cester_assert_str_equal_(value, "WorldHello"); free(value);
+    cester_assert_str_equal(value, "WorldHello"); free(value);
     value = (char *) xstring_cstr_append_cstr(allocator, "World", "Hello", 1);
-    cester_assert_str_equal_(value, "WHelloorld"); free(value);
+    cester_assert_str_equal(value, "WHelloorld"); free(value);
     value = (char *) xstring_cstr_append_cstr(allocator, "World", "Hello", 2);
-    cester_assert_str_equal_(value, "WoHellorld"); free(value);
+    cester_assert_str_equal(value, "WoHellorld"); free(value);
     value = (char *) xstring_cstr_append_cstr(allocator, "World", "Hello", 3);
-    cester_assert_str_equal_(value, "WorHellold"); free(value);
+    cester_assert_str_equal(value, "WorHellold"); free(value);
     value = (char *) xstring_cstr_append_cstr(allocator, "World", "Hello", 4);
-    cester_assert_str_equal_(value, "WorlHellod"); free(value);
+    cester_assert_str_equal(value, "WorlHellod"); free(value);
     value = (char *) xstring_cstr_append_cstr(allocator, text2, "Heyo :) ", 0);
-    cester_assert_str_equal_(value, "Heyo :) Hello world"); free(value);
+    cester_assert_str_equal(value, "Heyo :) Hello world"); free(value);
     value = (char *) xstring_cstr_append_cstr(allocator, text2, " Jay", 5);
-    cester_assert_str_equal_(value, "Hello Jay world"); free(value);
+    cester_assert_str_equal(value, "Hello Jay world"); free(value);
 })
 
 CESTER_TEST(xstring_cstr_append_cstr_free_old, _, {
@@ -54,19 +52,19 @@ CESTER_TEST(xstring_cstr_append_cstr_free_old, _, {
     allocator.memory_free = free;
     
     value = (char *) xstring_cstr_append_cstr(allocator, "World", "Hello", 6);
-    cester_assert_str_equal_(value, XTD_NULL);
+    cester_assert_ptr_equal(value, XTD_NULL);
     value = (char *) xstring_cstr_append_cstr(allocator, "World", "Hello", 0);
-    cester_assert_str_equal_(value, "HelloWorld");
+    cester_assert_str_equal(value, "HelloWorld");
     value = (char *) xstring_cstr_append_cstr_free_old(allocator, value, " ", 5);
-    cester_assert_str_equal_(value, "Hello World");
+    cester_assert_str_equal(value, "Hello World");
     value = (char *) xstring_cstr_append_cstr_free_old(allocator, value, " libxtd", 11);
-    cester_assert_str_equal_(value, "Hello World libxtd");
+    cester_assert_str_equal(value, "Hello World libxtd");
     value = (char *) xstring_cstr_append_cstr_free_old(allocator, value, ",", 11);
-    cester_assert_str_equal_(value, "Hello World, libxtd");
+    cester_assert_str_equal(value, "Hello World, libxtd");
     value = (char *) xstring_cstr_append_cstr_free_old(allocator, value, ":) ", 0);
-    cester_assert_str_equal_(value, ":) Hello World, libxtd");
+    cester_assert_str_equal(value, ":) Hello World, libxtd");
     value = (char *) xstring_cstr_append_cstr_free_old(allocator, value, " This is", 15);
-    cester_assert_str_equal_(value, ":) Hello World, This is libxtd");
+    cester_assert_str_equal(value, ":) Hello World, This is libxtd");
 
     free(value);
 })
@@ -81,9 +79,9 @@ CESTER_TEST(xstring_cstr_append_cstr_prefix, _, {
     allocator.memory_free = free;
     
     value = (char *) xstring_cstr_append_cstr_prefix(allocator, "World", "Hello");
-    cester_assert_str_equal_(value, "HelloWorld"); free(value);
+    cester_assert_str_equal(value, "HelloWorld"); free(value);
     value = (char *) xstring_cstr_append_cstr_prefix(allocator, "=", "+");
-    cester_assert_str_equal_(value, "+="); free(value);
+    cester_assert_str_equal(value, "+="); free(value);
 })
 
 CESTER_TEST(xstring_cstr_append_cstr_suffix, _, {
@@ -96,9 +94,9 @@ CESTER_TEST(xstring_cstr_append_cstr_suffix, _, {
     allocator.memory_free = free;
     
     value = (char *) xstring_cstr_append_cstr_suffix(allocator, "Hello", "World");
-    cester_assert_str_equal_(value, "HelloWorld"); free(value);
+    cester_assert_str_equal(value, "HelloWorld"); free(value);
     value = (char *) xstring_cstr_append_cstr_suffix(allocator, "+", "=");
-    cester_assert_str_equal_(value, "+="); free(value);
+    cester_assert_str_equal(value, "+="); free(value);
 })
 
 CESTER_TEST(xstring_cstr_append_int, _, {
@@ -111,23 +109,23 @@ CESTER_TEST(xstring_cstr_append_int, _, {
     allocator.memory_free = free;
     
     value = (char *) xstring_cstr_append_int(allocator, "World", 1, 6);
-    cester_assert_str_equal_(value, XTD_NULL);
+    cester_assert_ptr_equal(value, XTD_NULL);
     value = (char *) xstring_cstr_append_int(allocator, "World", 3232, 0);
-    cester_assert_str_equal_(value, "3232World"); free(value);
+    cester_assert_str_equal(value, "3232World"); free(value);
     value = (char *) xstring_cstr_append_int(allocator, "World", 987654321, 5);
-    cester_assert_str_equal_(value, "World987654321"); free(value);
+    cester_assert_str_equal(value, "World987654321"); free(value);
     value = (char *) xstring_cstr_append_int(allocator, "World", 122, 1);
-    cester_assert_str_equal_(value, "W122orld"); free(value);
+    cester_assert_str_equal(value, "W122orld"); free(value);
     value = (char *) xstring_cstr_append_int(allocator, "World", 23255, 2);
-    cester_assert_str_equal_(value, "Wo23255rld"); free(value);
+    cester_assert_str_equal(value, "Wo23255rld"); free(value);
     value = (char *) xstring_cstr_append_int(allocator, "World", 87, 3);
-    cester_assert_str_equal_(value, "Wor87ld"); free(value);
+    cester_assert_str_equal(value, "Wor87ld"); free(value);
     value = (char *) xstring_cstr_append_int(allocator, "World", 3233, 4);
-    cester_assert_str_equal_(value, "Worl3233d"); free(value);
+    cester_assert_str_equal(value, "Worl3233d"); free(value);
     value = (char *) xstring_cstr_append_int(allocator, text2, -4545, 0);
-    cester_assert_str_equal_(value, "-4545Hello world"); free(value);
+    cester_assert_str_equal(value, "-4545Hello world"); free(value);
     value = (char *) xstring_cstr_append_int(allocator, text2, -1234567890, 5);
-    cester_assert_str_equal_(value, "Hello-1234567890 world"); free(value);
+    cester_assert_str_equal(value, "Hello-1234567890 world"); free(value);
 })
 
 CESTER_TEST(xstring_cstr_append_int_free_old, _, {
@@ -140,11 +138,11 @@ CESTER_TEST(xstring_cstr_append_int_free_old, _, {
     allocator.memory_free = free;
     
     value = (char *) xstring_cstr_append_int(allocator, "World", 1, 0);
-    cester_assert_str_equal_(value, "1World");
+    cester_assert_str_equal(value, "1World");
     value = (char *) xstring_cstr_append_int_free_old(allocator, value, -87787, 6);
-    cester_assert_str_equal_(value, "1World-87787");
+    cester_assert_str_equal(value, "1World-87787");
     value = (char *) xstring_cstr_append_int_free_old(allocator, value, +67676, 12);
-    cester_assert_str_equal_(value, "1World-8778767676");
+    cester_assert_str_equal(value, "1World-8778767676");
 
     free(value);
 })

@@ -13,7 +13,15 @@
 extern "C" {
 #endif
 
+/* TODO IMPLEMENTS THE LIMIT MANUALLY */
+#include <limits.h>
 #include <exotic/xtd/container/xstring.h>
+
+#define XTD_INT_MAX INT_MAX
+#define XTD_LONG_MAX LONG_MAX
+
+#define XTD_INT_MIN INT_MIN
+#define XTD_LONG_MIN LONG_MIN
 
 /* char bound checks*/
 
@@ -86,6 +94,50 @@ static bool xbound_cstr_is_lowercase(char *char_array) {
         if (!xbound_char_is_lowercase(char_array[length])) return FALSE;
     }
     return length > 0;
+}
+
+/*!
+
+*/
+static bool xbound_cstr_is_mixed_case(char *char_array) {
+    size_t length = 0;
+    char has_lower = 0;
+    char has_upper = 0;
+    if (char_array == NULL) { return FALSE; }
+    for (; char_array[length] != '\0'; length++) {
+        has_lower = has_lower || xbound_char_is_lowercase(char_array[length]);
+        has_upper = has_upper || xbound_char_is_uppercase(char_array[length]);
+        if (has_lower && has_upper) return TRUE;
+    }
+    return FALSE;
+}
+
+/*!
+
+*/
+static bool xbound_cstr_is_sentence_case(char *char_array) {
+    size_t length = 0;
+    if (char_array == NULL) { return FALSE; }
+    if (!xbound_char_is_uppercase(char_array[length])) { return FALSE; }
+    for (; char_array[++length] != '\0';) {
+        if (xbound_char_is_alpha(char_array[length]) && !xbound_char_is_lowercase(char_array[length])) return FALSE;
+    }
+    return TRUE;
+}
+
+/*!
+
+*/
+static bool xbound_cstr_is_title_case(char *char_array) {
+    size_t length = 0;
+    if (char_array == NULL) { return FALSE; }
+    if (!xbound_char_is_uppercase(char_array[length])) { return FALSE; }
+    for (; char_array[++length] != '\0';) {
+        if (xbound_char_is_white_space(char_array[length-1]) && 
+            (xbound_char_is_alpha(char_array[length]) && 
+                !xbound_char_is_uppercase(char_array[length]))) return FALSE;
+    }
+    return TRUE;
 }
 
 /*!
@@ -170,31 +222,6 @@ static bool xbound_cstr_is_graphical(char *char_array) {
         if (xbound_char_is_graphical(char_array[length])) return TRUE;
     }
     return FALSE;
-}
-
-/*!
-
-*/
-static bool xbound_cstr_is_mixed_case(char *char_array) {
-    size_t length = 0;
-    char has_lower = 0;
-    char has_upper = 0;
-    if (char_array == NULL) { return FALSE; }
-    for (; char_array[length] != '\0'; length++) {
-        has_lower = has_lower || xbound_char_is_lowercase(char_array[length]);
-        has_upper = has_upper || xbound_char_is_uppercase(char_array[length]);
-        if (has_lower && has_upper) break;
-    }
-    return (has_lower && has_upper);
-}
-
-/*!
-
-*/
-static bool xbound_cstr_is_sentence_case(char *char_array) {
-    size_t length = 0;
-    if (char_array == NULL) { return FALSE; }
-    return xbound_char_is_uppercase(char_array[0]);
 }
 
 /*!

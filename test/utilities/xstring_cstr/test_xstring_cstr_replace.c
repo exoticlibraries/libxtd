@@ -7,8 +7,6 @@
 #include <exotic/xtd/container/xstring.h>
 #include <exotic/xtd/xiterator.h>
 
-#define cester_assert_str_equal_(x,y) cester_assert_true(xstring_cstr_equals(x,y))
-
 CESTER_TODO_TEST(xstring_cstr_replace, _, {
     
 })

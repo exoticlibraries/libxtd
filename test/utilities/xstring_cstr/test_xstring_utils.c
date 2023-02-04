@@ -8,11 +8,9 @@
 #include <exotic/xtd/xiterator.h>
 
 CESTER_COMMENT(
-    all cester cester_assert_ptr_not_equal, cester_assert_str_equal_ 
-    is causing segfault in a pointer to pointer scenerio, fix in libcester
+    all cester cester_assert_ptr_not_equal cester_assert_str_equal
+    is causing segfault in a pointer to pointer scenerio fix in libcester
 )
-
-#define cester_assert_str_equal_(x,y) cester_assert_true(xstring_cstr_equals(x,y))
 
 #ifdef __XTD_STDC_VERSION__
 #define TEST_CASE_CHAR_ARRAY_HELLO_WORLD {'H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'}
@@ -66,7 +64,7 @@ CESTER_TEST(xstring_cstr_equals, _, {
     char *text1 = "libxtd xstring length";
     char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
 
-    cester_assert_str_equal_(text1, "libxtd xstring length");
+    cester_assert_str_equal(text1, "libxtd xstring length");
     cester_assert_true(xstring_cstr_equals(text1, "libxtd xstring length"));
     cester_assert_true(xstring_cstr_equals_1(text1, "libxtd xstring length"));
     cester_assert_false(xstring_cstr_equals_1(text1, XTD_NULL));
@@ -143,7 +141,7 @@ CESTER_TEST(xstring_cstr_is_empty, _, {
     char *text1 = "libxtd xstring length";
     char text2[20] = TEST_CASE_CHAR_ARRAY_HELLO_WORLD;
     char *text3 = "";
-    char text4[20] = {};
+    char text4[20] = { '\0' };
 
     cester_assert_false(xstring_cstr_is_empty(text1));
     cester_assert_false(xstring_cstr_is_empty(text1));

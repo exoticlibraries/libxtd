@@ -22,6 +22,36 @@ CESTER_TEST(xbound_cstr_is_lowercase, _, {
     cester_assert_false(xbound_cstr_is_lowercase("LIBXTD"));
 })
 
+CESTER_TEST(xbound_cstr_is_mixed_case, _, {
+    cester_assert_true(xbound_cstr_is_mixed_case("LIBxtd"));
+    cester_assert_false(xbound_cstr_is_mixed_case("LIBXTD"));
+    cester_assert_false(xbound_cstr_is_mixed_case("libxtd"));
+    cester_assert_false(xbound_cstr_is_mixed_case("LIBXTD123"));
+    cester_assert_true(xbound_cstr_is_mixed_case("LIBxtd123"));
+})
+
+CESTER_TEST(xbound_cstr_is_sentence_case, _, {
+    cester_assert_true(xbound_cstr_is_sentence_case("Libxtd"));
+    cester_assert_false(xbound_cstr_is_sentence_case("LIBXTD"));
+    cester_assert_false(xbound_cstr_is_sentence_case("llIBxtd"));
+    cester_assert_true(xbound_cstr_is_sentence_case("Libxtd123"));
+    cester_assert_false(xbound_cstr_is_sentence_case("LIBXTD123"));
+    cester_assert_false(xbound_cstr_is_sentence_case("123libxtd"));
+    cester_assert_false(xbound_cstr_is_sentence_case("123libxtd"));
+    cester_assert_true(xbound_cstr_is_sentence_case("Libxtd 123 and"));
+    cester_assert_true(xbound_cstr_is_sentence_case("This is a sentence"));
+    cester_assert_false(xbound_cstr_is_sentence_case("This is a Sentence"));
+    cester_assert_true(xbound_cstr_is_sentence_case("This is a sentence. don;t care about seperator like python"));
+})
+
+CESTER_TEST(xbound_cstr_is_title_case, _, {
+    cester_assert_true(xbound_cstr_is_title_case("Libxtd"));
+    cester_assert_false(xbound_cstr_is_title_case("libxtd"));
+    cester_assert_true(xbound_cstr_is_title_case("This Is A Sentence"));
+    cester_assert_false(xbound_cstr_is_title_case("This is a Sentence"));
+    cester_assert_true(xbound_cstr_is_title_case("This\nIs \b\tA      Sentence"));
+})
+
 CESTER_TEST(xbound_cstr_is_alpha, _, {
     cester_assert_true(xbound_cstr_is_alpha("a"));
     cester_assert_true(xbound_cstr_is_alpha("A"));
@@ -94,22 +124,6 @@ CESTER_TEST(xbound_cstr_is_graphical, _, {
     cester_assert_true(xbound_cstr_is_graphical("20_LIBXTD"));
     cester_assert_true(xbound_cstr_is_graphical("\vy\t\t\n\r"));
     cester_assert_true(xbound_cstr_is_graphical("(3a"));
-})
-
-CESTER_TEST(xbound_cstr_is_mixed_case, _, {
-    cester_assert_false(xbound_cstr_is_mixed_case("LIBXTD"));
-    cester_assert_false(xbound_cstr_is_mixed_case("libxtd"));
-    cester_assert_true(xbound_cstr_is_mixed_case("LIBxtd"));
-    cester_assert_false(xbound_cstr_is_mixed_case("LIBXTD123"));
-    cester_assert_true(xbound_cstr_is_mixed_case("LIBxtd123"));
-})
-
-CESTER_TEST(xbound_cstr_is_sentence_case, _, {
-    cester_assert_true(xbound_cstr_is_sentence_case("LIBXTD"));
-    cester_assert_true(xbound_cstr_is_sentence_case("Libxtd"));
-    cester_assert_false(xbound_cstr_is_sentence_case("llIBxtd"));
-    cester_assert_true(xbound_cstr_is_sentence_case("LIBXTD123"));
-    cester_assert_false(xbound_cstr_is_sentence_case("123libxtd"));
 })
 
 CESTER_TEST(xbound_cstr_is_decimal_with_seperator, _, {

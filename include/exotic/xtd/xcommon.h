@@ -134,19 +134,33 @@ enum x_stat {
     XTD_FAILED_TO_CLEANUP_ERR,        /*!< the data type is full */    
     XTD_INDEXES_OVERLAP_ERR,          /*!< Two index value overlap each other */
     XTD_CRITICAL_ERR,                 /*!< An error impossible to recover from occur. The program should terminate immediately if encountered */
-    XTD_NO_OP,                        /*!< No operation caried out */
+    XTD_NO_OP_ERR,                        /*!< No operation caried out */
     XTD_ITER_END,                     /*!< The loop has reached the end of the iteration */
-    XTD_INVALID_PARAMETER,
+    XTD_INVALID_PARAMETER_ERR,
     XTD_DUPLICATE_ERR,
     XTD_NOT_FOUND_ERR,
     XTD_INVALID_PARAMETER_FOUND_ERR,
     XTD_MISSING_PARAM_ERR,
     XTD_PARSING_ERR,
     XTD_SCANNER_ERR,
-    XTD_TERMINATED_ERR
+    XTD_TERMINATED_ERR,
+    XTD_KEY_SWITCH_FROM_AUTO_ERR,       /*!< The xstring_cstr_format logic switches from auto key to named key */
+    XTD_UNKNOWN_FORMAT_CODE_ERR,       /*!< The xstring_cstr_format logic does not recognize a value format */
+    XTD_UNKNOWN_FORMAT_VALUE_ERR,       /*!< The xstring_cstr_format logic does not recognize a value format */
+    XTD_NOT_IMPLEMENTED_ERR,       /*!< The xstring_cstr_format logic does not recognize a value format */
+    XTD_INCONVERTIBLE_ERR,       /*!< The xstring_cstr_format logic does not recognize a value format */
+    XTD_NUMBER_TYPE_OVERFLOW_ERR,       /*!< The xstring_cstr_format logic does not recognize a value format */
+    XTD_NUMBER_TYPE_UNDERFLOW_ERR       /*!< The xstring_cstr_format logic does not recognize a value format */
 };
 
-/* create macro to for string value of x_stat */
+#define XSTAT_STRING_VALUE(status) (status == XTD_OK) ? "XTD_OK"\
+    : (status == XTD_ERR ? "XTD_ERR" \
+    : (status == XTD_ALLOC_ERR ? "XTD_ALLOC_ERR" \
+    : (status == XTD_KEY_NOT_FOUND_ERR ? "XTD_KEY_NOT_FOUND_ERR"\
+    : (status == XTD_KEY_SWITCH_FROM_AUTO_ERR ? "XTD_KEY_SWITCH_FROM_AUTO_ERR"\
+    : (status == XTD_PARSING_ERR ? "XTD_PARSING_ERR"\
+    : (status == XTD_UNKNOWN_FORMAT_CODE_ERR ? "XTD_UNKNOWN_FORMAT_CODE_ERR" : "XTD_UNKNOWN" ))))))\
+
 
 /*!
     

@@ -1,7 +1,7 @@
 
 /**
     \copyright MIT License Copyright (c) 2020, Adewale Azeez 
-    \author Adewale Azeez <azeezadewale98@gmail.com>
+    \author Adewale Azeez <iamthecarisma@gmail.com>
     \date 07 April 2020
     \file xconf.h
 */
@@ -126,7 +126,7 @@ static enum x_stat xio_relative_path_name(XAllocator allocator, char *parent_pat
     if (!xstring_cstr_starts_with(normalized_child_path, normalized_parent_path))  {
         allocator.memory_free(normalized_parent_path);
         allocator.memory_free(normalized_child_path);
-        return XTD_NO_OP;
+        return XTD_NO_OP_ERR;
     }
     normalized_child_path_length = xstring_cstr_length(normalized_child_path);
     normalized_parent_path_length = xstring_cstr_length(normalized_parent_path);

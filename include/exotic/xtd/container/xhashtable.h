@@ -178,7 +178,7 @@ static enum x_stat xhashtable_##T1##_##T2##_get_null_key(xhashtable_##T1##_##T2 
     return XTD_KEY_NOT_FOUND_ERR;\
 }\
 \
-static enum x_stat xhashtable_##T1##_##T2##_get(xhashtable_##T1##_##T2 *container, T1 key, T2 *out) {\
+static enum x_stat xhashtable_##T1##_##T2##_get_with_key(xhashtable_##T1##_##T2 *container, T1 key, T2 *out, T1 *kout) {\
     size_t index;\
     xpair_##T1##_##T2 *entry;\
     if (key == XTD_NULL) {\
@@ -188,12 +188,17 @@ static enum x_stat xhashtable_##T1##_##T2##_get(xhashtable_##T1##_##T2 *containe
     entry = container->buffer[index];\
     while (entry) {\
         if (entry->key != XTD_NULL && container->compare_key(entry->key, key)) {\
+            if (kout != XTD_NULL) *kout = entry->key;\
             *out = entry->value;\
             return XTD_OK;\
         }\
         entry = entry->next;\
     }\
     return XTD_KEY_NOT_FOUND_ERR;\
+}\
+\
+static enum x_stat xhashtable_##T1##_##T2##_get(xhashtable_##T1##_##T2 *container, T1 key, T2 *out) {\
+    return xhashtable_##T1##_##T2##_get_with_key(container, key, out, XTD_NULL);\
 }\
 \
 static enum x_stat xhashtable_##T1##_##T2##_remove_null_key(xhashtable_##T1##_##T2 *container, T2 *out) {\
@@ -674,6 +679,11 @@ static XIterator *xiterator_init_xhashtable_##T1##_##T2(xhashtable_##T1##_##T2 *
 
 */
 #define xhashtable_get(T1, T2) xhashtable_##T1##_##T2##_get
+
+/**
+
+*/
+#define xhashtable_get_with_key(T1, T2) xhashtable_##T1##_##T2##_get_with_key
 
 /**
 
